@@ -15,11 +15,11 @@
   <a href="https://www.npmjs.org/package/omcommerce">
     <img src="https://img.shields.io/npm/dm/omcommerce.svg" alt="Downloads" />
   </a>
-<a href="https://github.com/omomcode/omcommerce_production/actions/workflows/ci.yml/badge.svg">
+<!-- <a href="https://github.com/omomcode/omcommerce_production/actions/workflows/ci.yml/badge.svg">
 <img src="https://github.com/omomcode/omcommerce_production/actions/workflows/ci.yml/badge.svg" alt="CI Status" />
-</a>
-<a href="https://github.com/omomcode/omcommerce_production/actions/workflows/eslint.yml/badge.svg">
-<img src="https://github.com/omomcode/omcommerce_production/actions/workflows/eslint.yml/badge.svg" alt="EsLint" />
+</a> -->
+<a href="https://github.com/omomcode/omcommerce/actions/workflows/eslint.yml/badge.svg">
+<img src="https://github.com/omomcode/omcommerce/actions/workflows/eslint.yml/badge.svg" alt="EsLint" />
 </a>
 </p>
 
@@ -559,4 +559,4 @@ For general help using Strapi, please refer to [the official Strapi documentatio
 
 ## 📝 License
 
-[MIT License](LICENSE.md) Copyright (c) [Om om code](https://omomcode.com/)
+[MIT License](https://github.com/omomcode/omcommerce/blob/master/LICENSE) Copyright (c) [Om om code](https://omomcode.com/)
