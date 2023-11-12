@@ -18,8 +18,8 @@
 <a href="https://github.com/omomcode/omcommerce_production/actions/workflows/ci.yml/badge.svg">
 <img src="https://github.com/omomcode/omcommerce_production/actions/workflows/ci.yml/badge.svg" alt="CI Status" />
 </a>
-<a href="https://github.com/omomcode/omcommerce_production/actions/workflows/eslint.yml/badge.svg">
-<img src="https://github.com/omomcode/omcommerce_production/actions/workflows/eslint.yml/badge.svg" alt="EsLint" />
+<a href="https://github.com/omomcode/omcommerce/actions/workflows/eslint.yml/badge.svg">
+<img src="https://github.com/omomcode/omcommerce/actions/workflows/eslint.yml/badge.svg" alt="EsLint" />
 </a>
 </p>
 
