@@ -18,9 +18,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async orders(data) {
     try {
-      console.log("Is this the data?")
-      console.dir(data);
-
       const response = await createOrder(data,strapi);
       // res.json(response);
       return JSON.stringify(response);

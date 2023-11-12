@@ -1,3 +1,4 @@
+import React from "react";
 
 export interface IPackage {
   id: number,
@@ -17,4 +18,12 @@ export interface IPackageTableProps {
   setShowPackageModal: (show: boolean) => void;
   setSelectedPackage: (id: number) => void;
   selectedPackage: number
+}
+
+export interface IPackageModalProps {
+  setShowPackageModal: React.Dispatch<React.SetStateAction<boolean>>;
+  addPackage: (packageD: IPackage) => void;
+  packageId: number | undefined;
+  packageData: Object;
+  mode: string
 }

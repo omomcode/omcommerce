@@ -27,8 +27,6 @@ const conversionRequests = {
   editConversion: async (id: number, data: any) => {
     try {
 
-      console.log("DATA");
-      console.log(data);
 
       return await request(`/omcommerce/conversionrate/update/${id}`, {
         method: "PUT",

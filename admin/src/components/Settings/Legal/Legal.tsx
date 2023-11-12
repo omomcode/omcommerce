@@ -55,7 +55,6 @@ const Legal = () => {
     try {
       const lr : any = await legalRequests.getAllLegals();
       setLegalData(lr);
-      console.log("lr", lr);
       setId(lr.id);
       setChecked(() => lr.enabled);
       setOnline(lr.online);
@@ -95,7 +94,6 @@ const Legal = () => {
         returnShippingCost: radioTwo,
         online: online
       });
-      console.log(lr);
 
 
     } catch (error) {

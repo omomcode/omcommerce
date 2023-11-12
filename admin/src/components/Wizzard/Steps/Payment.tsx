@@ -82,6 +82,7 @@ const Payment = () => {
       live: selected !== "sandbox"
     };
 
+    // @ts-ignore
     Object.keys(d).forEach(key => d[key] === undefined && delete d[key]);
 
     if(!isNew)
@@ -98,7 +99,6 @@ const Payment = () => {
 
   const savePaypalSandboxSettings = async (data: IPaypalSetup) => {
 
-    console.log(isNew);
     const d = {
       // sandbox_paypal_client_id: data.sandbox_paypal_client_id ? encryptData(data.sandbox_paypal_client_id) : undefined,
       sandbox_paypal_client_id: data.sandbox_paypal_client_id ? data.sandbox_paypal_client_id : undefined,
@@ -107,6 +107,7 @@ const Payment = () => {
       sandbox_paypal_client_secret: data.sandbox_paypal_client_secret ? data.sandbox_paypal_client_secret : undefined,
       live: selected !== "sandbox"
     }
+    // @ts-ignore
     Object.keys(d).forEach(key => d[key] === undefined && delete d[key]);
 
     if(!isNew)
@@ -132,7 +133,7 @@ const Payment = () => {
             <Box marginTop="1rem" style={{paddingLeft: "28px"}}>
                 <Typography style={{paddingRight: "10px"}}>Currently we support only paypal</Typography>
 
-              <RadioGroup labelledBy="trophy-champions" onChange={e => setSelected(e.target.value)} value={selected} name="meal">
+              <RadioGroup labelledBy="trophy-champions" onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setSelected(e.target.value)} value={selected} name="meal">
                 <Radio value="sandbox">Sandbox</Radio>
                 <Radio value="live">Live</Radio>
               </RadioGroup>

@@ -34,8 +34,6 @@ const Taxes = () => {
     try {
 
       const taxes : any = await taxRequests.getAllTaxes();
-      console.log("Taxes");
-      console.dir(taxes);
       setTaxesData(taxes);
 
     } catch (error) {

@@ -1,10 +1,9 @@
-import { Strapi } from '@strapi/strapi';
+import {Strapi} from '@strapi/strapi';
 
 export default ({ strapi }: { strapi: Strapi }) => ({
 
   async find(query) {
-    console.log("kveri", query.filters);
-    const tempData = await strapi.entityService.findMany("plugin::omcommerce.product", {
+    return await strapi.entityService.findMany("plugin::omcommerce.product", {
       fields: [
         'id',
         'description',
@@ -17,12 +16,10 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         'title',
         'slug',
       ],
-      populate: { media: true, categories: true },
+      populate: {media: true, categories: true},
       filters:
-        query.filters
+      query.filters
     });
-
-    return tempData;
 
   },
 

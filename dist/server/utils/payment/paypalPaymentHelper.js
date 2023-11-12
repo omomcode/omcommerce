@@ -55,12 +55,9 @@ const capturePayment = async (orderID, strapi) => {
             },
         });
         if (response && response.data) {
-            console.log("rispons dejta", response.data);
             // const query = `populate=*&[filters][order_id][$eq]=${orderID}`
             const query = { populate: '*', filters: { order_id: { '$eq': orderID.toString() } } };
             const orderResponse = await findOrder(query, strapi);
-            console.log("Order response");
-            console.log(response.data);
             const order = orderResponse[0];
             order.email = (_b = (_a = response.data) === null || _a === void 0 ? void 0 : _a.payer) === null || _b === void 0 ? void 0 : _b.email_address;
             order.customer_name = (_e = (_d = (_c = response.data) === null || _c === void 0 ? void 0 : _c.payer) === null || _d === void 0 ? void 0 : _d.name) === null || _e === void 0 ? void 0 : _e.given_name;
@@ -74,11 +71,8 @@ const capturePayment = async (orderID, strapi) => {
             order.status = response.data.status;
             order.discount = "0";
             const gmail = await findGmail({});
-            console.log("gmailOrder", gmail);
             if (order.status === "COMPLETED" && gmail !== undefined)
                 await (0, sendmail_1.sendMail)(orderResponse[0], "this is a message", strapi, gmail);
-            console.log("OVO JE ORDER", order);
-            console.log("OVO JE ORDER ID", order.id);
             await updateOrder(order.id, order, strapi);
             return handleResponse(response);
         }
@@ -91,7 +85,6 @@ exports.capturePayment = capturePayment;
 const generateAccessToken = async () => {
     try {
         const credentials = await findCredentials({}, strapi);
-        console.log(credentials);
         // @ts-ignore
         // const STRAPI_ADMIN_SANDBOX_PAYPAL_CLIENT_ID = decryptData(credentials.sandbox_paypal_client_id);
         // @ts-ignore
@@ -130,16 +123,12 @@ const createOrder = async (data, strapi) => {
     const products = await findProduct({}, strapi);
     const cartItemIds = data.cart.map(item => item.id);
     const matchingProducts = products.filter(product => cartItemIds.includes(product.id.toString()));
-    console.log(matchingProducts);
     const totalAmount = matchingProducts.reduce((total, product) => {
         const cartItem = data.cart.find(item => item.id === product.id.toString());
         const quantity = cartItem ? parseInt(cartItem.quantity, 10) : 0;
         return total + (product.amount_value * quantity);
     }, 0);
-    console.log("shipping amount data to be");
-    console.log(data);
     const shippingAmount = await calculateShippingCost(strapi, { data });
-    console.log(shippingAmount);
     const currency = await findCurrency({}, strapi);
     const payload = {
         intent: 'CAPTURE',
@@ -175,7 +164,6 @@ const createOrder = async (data, strapi) => {
         ]
     };
     const payloadJSON = JSON.stringify(payload);
-    console.log(payloadJSON);
     try {
         const response = await axios_1.default.post(url, payloadJSON, {
             headers: {
@@ -192,7 +180,6 @@ const createOrder = async (data, strapi) => {
             status: response.data.status
         };
         // await orderRequests.addOrder(postData);
-        console.log(postData);
         await createOrderInDB(postData, strapi);
         return handleResponse(response);
     }

@@ -2,8 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ({ strapi }) => ({
     async find(query) {
-        console.log("kveri", query.filters);
-        const tempData = await strapi.entityService.findMany("plugin::omcommerce.product", {
+        return await strapi.entityService.findMany("plugin::omcommerce.product", {
             fields: [
                 'id',
                 'description',
@@ -19,7 +18,6 @@ exports.default = ({ strapi }) => ({
             populate: { media: true, categories: true },
             filters: query.filters
         });
-        return tempData;
     },
     async findOne(id) {
         return await strapi.entityService.findOne("plugin::omcommerce.product", id);

@@ -5,7 +5,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   async find(query) {
 
     const tempData = await strapi.entityService.findOne("plugin::omcommerce.profile", query);
-    console.log("get dejta services profile", tempData)
     const newData : any = {
       id: tempData.id,
       name: tempData.name,
@@ -23,7 +22,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   },
 
   async update(id, data) {
-    console.log("dejta services profile", data)
 
     const tempData =  await strapi.entityService.update("plugin::omcommerce.profile", id, data);
     const newData : any = {

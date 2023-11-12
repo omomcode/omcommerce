@@ -57,7 +57,6 @@ const Currency = () => {
 
     try {
       const currency : any = await conversionRequests.getAllConversionRate();
-      console.log("karnsiiifgsakjgikas", currency)
       setIsNew(false);
       setData(currency);
       setValue(currency.conversion_currency);

@@ -21,7 +21,6 @@ const generateEncryptionKeyIfNeeded = (envFilePath: string): KeyGenerationResult
 
     // Check if STRAPI_ADMIN_ENCRYPTION_KEY exists in the .env file
     if (envFileContent.includes('STRAPI_ADMIN_ENCRYPTION_KEY=')) {
-      console.log(envFileContent.includes('STRAPI_ADMIN_ENCRYPTION_KEY='));
       return { success: false, message: 'STRAPI_ADMIN_ENCRYPTION_KEY already exists. No need to generate a new one.' };
     } else {
       // Generate a new key using CryptoJS

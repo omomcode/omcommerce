@@ -27,8 +27,6 @@ const billingRequests = {
   editBilling: async (id: number, data: any) => {
     try {
 
-      console.log("DATA");
-      console.log(data);
 
       return await request(`/omcommerce/billing/update/${id}`, {
         method: "PUT",

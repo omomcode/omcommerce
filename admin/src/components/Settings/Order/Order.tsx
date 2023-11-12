@@ -59,11 +59,6 @@ const Order = () => {
     try {
       const or : any = await orderRequests.getAllOrders();
 
-
-      console.log("Order");
-      console.log(or);
-      console.log("duzina", or.length);
-
       let arr = new Array<IOrderDataNoJSON>(or.length)
 
       or.map((entry: { order_id: any; amount: any; status: any; currency: any; items: any; shipping_fee: any; tax_total: any; customer_name: any; customer_surname: any; email: any; address_line_1: any; postal_code: any; country_code: any; }) =>

@@ -70,8 +70,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       const timezone = await findTimezone({});
 
       const resolvedZone = findShippingZoneBasedOnCountry(country_code, sz as unknown as IShippingZone[]);
-      console.log("RESOLVED ZONE? in calculate");
-      console.log(resolvedZone);
 
       // @ts-ignore
       // const rate = resolvedZone.shippingrate[0];

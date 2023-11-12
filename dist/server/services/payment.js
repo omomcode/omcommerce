@@ -16,8 +16,6 @@ exports.default = ({ strapi }) => ({
     },
     async orders(data) {
         try {
-            console.log("Is this the data?");
-            console.dir(data);
             const response = await (0, paypalPaymentHelper_1.createOrder)(data, strapi);
             // res.json(response);
             return JSON.stringify(response);
