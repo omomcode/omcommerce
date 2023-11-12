@@ -559,4 +559,4 @@ For general help using Strapi, please refer to [the official Strapi documentatio
 
 ## 📝 License
 
-[MIT License](LICENSE.md) Copyright (c) [Om om code](https://omomcode.com/)
+[MIT License](https://github.com/omomcode/omcommerce/blob/master/LICENSE) Copyright (c) [Om om code](https://omomcode.com/)
