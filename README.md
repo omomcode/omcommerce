@@ -517,15 +517,6 @@ Want to see real-life examples of OmCommerce in action? Drop us a line at info@o
 
 ## 🤝 Contributing
 
-<div>
-  <a href="https://sharing.clickup.com/tl/omom">
-    <img src="https://img.shields.io/omom" />
-  </a>
-  <a href="https://sharing.clickup.com/b/omom">
-    <img src="https://img.shields.io/omom" />
-  </a>
-</div>
-
 Feel free to fork and make a Pull Request to this plugin project. All the input is warmly welcome!
 
 - Clone repository
