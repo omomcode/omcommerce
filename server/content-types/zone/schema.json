@@ -1,0 +1,35 @@
+{
+  "kind": "singleType",
+  "collectionName": "zones",
+  "info": {
+    "singularName": "zone",
+    "pluralName": "zones",
+    "displayName": "zone"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "comment": ""
+  },
+  "pluginOptions" : {
+    "content-manager" : {
+      "visible" : false
+    },
+    "content-type-builder" : {
+      "visible": false
+    }
+  },
+  "attributes": {
+    "timezone": {
+      "type": "string"
+    },
+    "measurement": {
+      "type": "string"
+    },
+    "unit": {
+      "type": "string"
+    },
+    "lengthUnit": {
+      "type": "string"
+    }
+  }
+}

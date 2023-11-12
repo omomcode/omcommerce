@@ -1,0 +1,74 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "order"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "comment": ""
+  },
+  "pluginOptions" : {
+    "content-manager" : {
+      "visible" : false
+    },
+    "content-type-builder" : {
+      "visible": false
+    }
+  },
+  "attributes": {
+    "order_id": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "decimal"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "items": {
+      "type": "json"
+    },
+    "shipping_fee": {
+      "type": "decimal"
+    },
+    "tax_total": {
+      "type": "decimal"
+    },
+    "discount": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "customer_surname": {
+      "type": "string"
+    },
+    "address_line_1": {
+      "type": "string"
+    },
+    "address_line_2": {
+      "type": "string"
+    },
+    "admin_area_1": {
+      "type": "string"
+    },
+    "admin_area_2": {
+      "type": "string"
+    },
+    "postal_code": {
+      "type": "string"
+    },
+    "country_code": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "kind": "singleType",
+  "collectionName": "setups",
+  "info": {
+    "singularName": "setup",
+    "pluralName": "setups",
+    "displayName": "setup",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "wizard_open": {
+      "type": "boolean",
+      "default": true,
+      "column": {
+        "defaultTo": true,
+        "notNullable": true
+      }
+    },
+    "wizard_option": {
+      "type": "integer",
+      "default": 0,
+      "column": {
+        "defaultTo": 0,
+        "notNullable": true
+      }
+    },
+    "product_type": {
+      "type": "integer",
+      "default": 0,
+      "column": {
+        "defaultTo": 0,
+        "notNullable": true
+      }
+    },
+    "wizard_state": {
+      "type": "integer",
+      "default": 1,
+      "column": {
+        "defaultTo": 1,
+        "notNullable": true
+      }
+    },
+    "initialized": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

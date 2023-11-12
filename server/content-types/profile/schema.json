@@ -1,0 +1,37 @@
+{
+  "kind": "singleType",
+  "collectionName": "profiles",
+  "info": {
+    "singularName": "profile",
+    "pluralName": "profiles",
+    "displayName": "Profile"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "comment": ""
+  },
+  "pluginOptions" : {
+    "content-manager" : {
+      "visible" : false
+    },
+    "content-type-builder" : {
+      "visible": false
+    }
+  },
+
+
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "region": {
+      "type": "string"
+    }
+  }
+}

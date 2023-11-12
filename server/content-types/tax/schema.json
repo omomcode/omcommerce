@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "taxes",
+  "info": {
+    "singularName": "tax",
+    "pluralName": "taxes",
+    "displayName": "tax"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "comment": ""
+  },
+  "pluginOptions" : {
+    "content-manager" : {
+      "visible" : false
+    },
+    "content-type-builder" : {
+      "visible": false
+    }
+  },
+  "attributes": {
+    "country_code": {
+      "type": "string"
+    },
+    "state_code": {
+      "type": "string"
+    },
+    "rate": {
+      "type": "decimal"
+    },
+    "name": {
+      "type": "string"
+    },
+    "shipping": {
+      "type": "boolean"
+    }
+  }
+}

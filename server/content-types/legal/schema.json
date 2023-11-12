@@ -1,0 +1,53 @@
+{
+  "kind": "singleType",
+  "collectionName": "legals",
+  "info": {
+    "singularName": "legal",
+    "pluralName": "legals",
+    "displayName": "legal",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions" : {
+    "content-manager" : {
+      "visible" : true
+    },
+    "content-type-builder" : {
+      "visible": false
+    }
+  },
+  "attributes": {
+    "enabled": {
+      "type": "boolean"
+    },
+    "returnPolicy": {
+      "type": "text"
+    },
+    "privacyPolicy": {
+      "type": "text"
+    },
+    "termsOfService": {
+      "type": "text"
+    },
+    "shippingPolicy": {
+      "type": "text"
+    },
+    "returnRules": {
+      "type": "string"
+    },
+    "returnShipping": {
+      "type": "string"
+    },
+    "restockingFee": {
+      "type": "float"
+    },
+    "returnWindow": {
+      "type": "string"
+    },
+    "returnShippingCost": {
+      "type": "string"
+    }
+  }
+}

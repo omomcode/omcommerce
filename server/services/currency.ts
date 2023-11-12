@@ -1,0 +1,17 @@
+import { Strapi } from '@strapi/strapi';
+
+export default ({ strapi }: { strapi: Strapi }) => ({
+
+  async find(query) {
+    return await strapi.entityService.findOne("plugin::omcommerce.currency", query);
+  },
+
+  async create(data) {
+    return await strapi.entityService.create("plugin::omcommerce.currency", data);
+  },
+
+  async update(id, data) {
+    return await strapi.entityService.update("plugin::omcommerce.currency", id, data);
+  },
+
+});

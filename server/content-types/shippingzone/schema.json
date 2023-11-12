@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "shippingzones",
+  "info": {
+    "singularName": "shippingzone",
+    "pluralName": "shippingzones",
+    "displayName": "shippingzone"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "comment": ""
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    },
+    "content-type-builder": {
+      "visible": false
+    }
+  },
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "countries": {
+      "type": "json"
+    },
+    "shippingrate": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::omcommerce.shippingrate",
+      "mappedBy": "shippingzone"
+    },
+    "products": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::omcommerce.product",
+      "mappedBy": "omcommerce_shippingzones"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "kind": "singleType",
+  "collectionName": "gmail",
+  "info": {
+    "singularName": "gmail",
+    "pluralName": "gmail",
+    "displayName": "Gmail"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "comment": ""
+  },
+  "pluginOptions" : {
+    "content-manager" : {
+      "visible" : true
+    },
+    "content-type-builder" : {
+      "visible": false
+    }
+  },
+  "attributes": {
+    "client_id": {
+      "type": "string"
+    },
+    "client_secret": {
+      "type": "string"
+    },
+    "refresh_token": {
+      "type": "string"
+    },
+    "from": {
+      "type": "email"
+    }
+  }
+}

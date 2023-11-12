@@ -1,0 +1,40 @@
+{
+  "kind": "singleType",
+  "collectionName": "paypalsetups",
+  "info": {
+    "singularName": "paypalsetup",
+    "pluralName": "paypalsetups",
+    "displayName": "paypalsetup",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    },
+    "content-type-builder": {
+      "visible": true
+    }
+  },
+  "attributes": {
+    "live_paypal_client_id": {
+      "type": "string"
+    },
+    "live_paypal_client_secret": {
+      "type": "string"
+    },
+    "sandbox_paypal_client_id": {
+      "type": "string"
+    },
+    "sandbox_paypal_client_secret": {
+      "type": "string"
+    },
+    "live": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    }
+  }
+}
