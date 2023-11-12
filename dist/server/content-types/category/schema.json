@@ -1,0 +1,52 @@
+{
+    "kind": "collectionType",
+    "collectionName": "categories",
+    "info": {
+        "singularName": "category",
+        "pluralName": "categories",
+        "displayName": "Category",
+        "description": ""
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {
+        "content-manager": {
+            "visible": true
+        },
+        "content-type-builder": {
+            "visible": true
+        }
+    },
+    "attributes": {
+        "title": {
+            "type": "string"
+        },
+        "description": {
+            "type": "text"
+        },
+        "img": {
+            "type": "media",
+            "multiple": false,
+            "required": false,
+            "allowedTypes": [
+                "images",
+                "files",
+                "videos",
+                "audios"
+            ]
+        },
+        "products": {
+            "type": "relation",
+            "relation": "manyToMany",
+            "target": "plugin::omcommerce.product",
+            "mappedBy": "omcommerce_categories"
+        },
+        "subcategories": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "plugin::omcommerce.subcategory",
+            "mappedBy": "category"
+        }
+    }
+}

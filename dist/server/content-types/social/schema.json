@@ -1,0 +1,53 @@
+{
+    "kind": "singleType",
+    "collectionName": "socials",
+    "info": {
+        "singularName": "social",
+        "pluralName": "socials",
+        "displayName": "social"
+    },
+    "options": {
+        "draftAndPublish": false,
+        "comment": ""
+    },
+    "pluginOptions": {
+        "content-manager": {
+            "visible": true
+        },
+        "content-type-builder": {
+            "visible": true
+        }
+    },
+    "attributes": {
+        "instagram_enabled": {
+            "type": "boolean"
+        },
+        "facebook_enabled": {
+            "type": "boolean"
+        },
+        "pinterest_enabled": {
+            "type": "boolean"
+        },
+        "x_enabled": {
+            "type": "boolean"
+        },
+        "tiktok_enabled": {
+            "type": "boolean"
+        },
+        "instagram": {
+            "type": "string"
+        },
+        "facebook": {
+            "type": "string"
+        },
+        "pinterest": {
+            "type": "string"
+        },
+        "x": {
+            "type": "string"
+        },
+        "tiktok": {
+            "type": "string"
+        }
+    }
+}

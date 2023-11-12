@@ -1,0 +1,26 @@
+{
+    "kind": "singleType",
+    "collectionName": "currencies",
+    "info": {
+        "singularName": "currency",
+        "pluralName": "currencies",
+        "displayName": "currency"
+    },
+    "options": {
+        "draftAndPublish": false,
+        "comment": ""
+    },
+    "pluginOptions": {
+        "content-manager": {
+            "visible": false
+        },
+        "content-type-builder": {
+            "visible": false
+        }
+    },
+    "attributes": {
+        "currency": {
+            "type": "string"
+        }
+    }
+}

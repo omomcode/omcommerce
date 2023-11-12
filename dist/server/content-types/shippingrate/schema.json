@@ -1,0 +1,38 @@
+{
+    "kind": "collectionType",
+    "collectionName": "shippingrates",
+    "info": {
+        "singularName": "shippingrate",
+        "pluralName": "shippingrates",
+        "displayName": "shippingrate"
+    },
+    "options": {
+        "draftAndPublish": false,
+        "comment": ""
+    },
+    "pluginOptions": {
+        "content-manager": {
+            "visible": false
+        },
+        "content-type-builder": {
+            "visible": false
+        }
+    },
+    "attributes": {
+        "name": {
+            "type": "string"
+        },
+        "condition": {
+            "type": "string"
+        },
+        "price": {
+            "type": "decimal"
+        },
+        "shippingzone": {
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "plugin::omcommerce.shippingzone",
+            "inversedBy": "shippingrate"
+        }
+    }
+}

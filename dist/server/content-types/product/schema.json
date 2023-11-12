@@ -1,0 +1,127 @@
+{
+    "kind": "collectionType",
+    "collectionName": "products",
+    "info": {
+        "singularName": "product",
+        "pluralName": "products",
+        "displayName": "product",
+        "description": ""
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {
+        "content-manager": {
+            "visible": true
+        },
+        "content-type-builder": {
+            "visible": true
+        }
+    },
+    "attributes": {
+        "title": {
+            "type": "string"
+        },
+        "slug": {
+            "type": "uid",
+            "targetField": "title",
+            "required": true
+        },
+        "description": {
+            "type": "string"
+        },
+        "SKU": {
+            "type": "string",
+            "required": false
+        },
+        "amount_currency_code": {
+            "type": "string"
+        },
+        "amount_value": {
+            "type": "float"
+        },
+        "tax_currency_code": {
+            "type": "string"
+        },
+        "tax_value": {
+            "type": "decimal"
+        },
+        "media": {
+            "type": "media",
+            "multiple": true,
+            "required": false,
+            "allowedTypes": [
+                "images",
+                "videos"
+            ]
+        },
+        "compare_at_price": {
+            "type": "string"
+        },
+        "cost_per_item": {
+            "type": "string",
+            "pluginOptions": {
+                "omcommerce": {
+                    "enabled": true
+                }
+            }
+        },
+        "chargeTax": {
+            "type": "boolean",
+            "default": false,
+            "required": true
+        },
+        "Quantity": {
+            "type": "integer",
+            "required": true,
+            "default": 0,
+            "min": 0
+        },
+        "Barcode": {
+            "type": "string"
+        },
+        "showQuantity": {
+            "type": "boolean",
+            "default": false,
+            "required": true
+        },
+        "weight": {
+            "type": "decimal",
+            "default": 0,
+            "required": true,
+            "min": 0
+        },
+        "measurement_unit": {
+            "type": "string"
+        },
+        "omcommerce_tax": {
+            "type": "relation",
+            "relation": "oneToOne",
+            "target": "plugin::omcommerce.tax"
+        },
+        "omcommerce_shippingzones": {
+            "type": "relation",
+            "relation": "manyToMany",
+            "target": "plugin::omcommerce.shippingzone",
+            "inversedBy": "products"
+        },
+        "categories": {
+            "type": "relation",
+            "relation": "manyToMany",
+            "target": "plugin::omcommerce.category",
+            "inversedBy": "products"
+        },
+        "subcategory": {
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "plugin::omcommerce.subcategory",
+            "inversedBy": "products"
+        },
+        "amount_value_converted": {
+            "type": "float"
+        },
+        "amount_value_converted_currency_code": {
+            "type": "string"
+        }
+    }
+}
