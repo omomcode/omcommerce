@@ -59,13 +59,10 @@ export const capturePayment = async (orderID: string, strapi) => {
     });
 
     if (response && response.data) {
-      console.log("rispons dejta", response.data);
 
       // const query = `populate=*&[filters][order_id][$eq]=${orderID}`
       const query = { populate: '*', filters: { order_id: { '$eq': orderID.toString() } } }
       const orderResponse = await findOrder(query,strapi);
-      console.log("Order response");
-      console.log(response.data);
       const order = orderResponse[0];
       order.email = response.data?.payer?.email_address;
       order.customer_name = response.data?.payer?.name?.given_name;
@@ -81,12 +78,9 @@ export const capturePayment = async (orderID: string, strapi) => {
 
 
       const gmail: any = await findGmail({});
-      console.log("gmailOrder", gmail)
 
       if (order.status === "COMPLETED" && gmail !== undefined) await sendMail(orderResponse[0], "this is a message", strapi, gmail);
 
-      console.log("OVO JE ORDER", order);
-      console.log("OVO JE ORDER ID", order.id);
       await updateOrder(order.id, order,strapi);
 
       return handleResponse(response);
@@ -98,8 +92,6 @@ export const capturePayment = async (orderID: string, strapi) => {
 const generateAccessToken = async () => {
   try {
     const credentials = await findCredentials({},strapi);
-    console.log(credentials);
-
 
     // @ts-ignore
     // const STRAPI_ADMIN_SANDBOX_PAYPAL_CLIENT_ID = decryptData(credentials.sandbox_paypal_client_id);
@@ -149,7 +141,6 @@ export const createOrder = async (data,strapi) => {
 
   const cartItemIds = data.cart.map(item => item.id);
   const matchingProducts = products.filter(product => cartItemIds.includes(product.id.toString()));
-  console.log(matchingProducts);
 
   const totalAmount = matchingProducts.reduce((total, product) => {
     const cartItem = data.cart.find(item => item.id === product.id.toString());
@@ -157,10 +148,7 @@ export const createOrder = async (data,strapi) => {
     return total + (product.amount_value * quantity);
   }, 0);
 
-  console.log("shipping amount data to be");
-  console.log(data);
   const shippingAmount = await calculateShippingCost(strapi,{data});
-  console.log(shippingAmount);
 
   const currency = await findCurrency({},strapi);
 
@@ -200,7 +188,6 @@ export const createOrder = async (data,strapi) => {
   };
 
   const payloadJSON = JSON.stringify(payload);
-  console.log(payloadJSON);
 
   try {
     const response = await axios.post(url, payloadJSON, {
@@ -221,7 +208,6 @@ export const createOrder = async (data,strapi) => {
 
     // await orderRequests.addOrder(postData);
 
-    console.log(postData);
     await createOrderInDB(postData,strapi);
 
     return handleResponse(response);

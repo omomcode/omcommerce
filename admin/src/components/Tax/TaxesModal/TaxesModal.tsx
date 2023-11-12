@@ -13,7 +13,7 @@ import {
   Radio, GridItem, Box, Grid, SingleSelect, SingleSelectOption
 } from "@strapi/design-system";
 
-import {ITaxes} from "../../../../../types/taxes";
+import {ITaxes, ITaxesModalProps} from "../../../../../types/taxes";
 import {findCountryFromCode} from "../../../utils/country-helper/country-helper";
 
 const initialData : ITaxes =
@@ -25,7 +25,7 @@ const initialData : ITaxes =
     name: "",
     shipping: true
   }
-export default function TaxesModal({ setShowTaxesModal, addTax ,taxId, taxData, mode}) {
+export default function TaxesModal({ setShowTaxesModal, addTax ,taxId, taxData, mode} :ITaxesModalProps ) {
 
   const [isLoading, setIsLoading] = useState(true);
   const [tax,setTax] = useState<ITaxes>(initialData);
@@ -39,6 +39,7 @@ export default function TaxesModal({ setShowTaxesModal, addTax ,taxId, taxData, 
 
     if(taxData !== null && taxData!= undefined)
     {
+      // @ts-ignore
       setTax(taxData);
     }
 
@@ -49,7 +50,7 @@ export default function TaxesModal({ setShowTaxesModal, addTax ,taxId, taxData, 
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void; stopPropagation: () => void; }) => {
 
     e.preventDefault();
     e.stopPropagation();

@@ -27,9 +27,6 @@ const currencyRequests = {
   editCurrency: async (id: number, data: any) => {
     try {
 
-      console.log("DATA");
-      console.log(data);
-
       return await request(`/omcommerce/currency/update/${id}`, {
         method: "PUT",
         headers: {

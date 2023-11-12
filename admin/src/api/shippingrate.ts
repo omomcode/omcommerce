@@ -27,9 +27,6 @@ const shippingRateRequests = {
   editShippingRate: async (id: number, data: any) => {
     try {
 
-      console.log("DATA");
-      console.log(data);
-
       return await request(`/omcommerce/shippingrate/update/${id}`, {
         method: "PUT",
         headers: {

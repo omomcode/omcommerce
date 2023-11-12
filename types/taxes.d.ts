@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface ITaxes {
   id: number,
   country_code: string,
@@ -13,3 +15,10 @@ export interface ITaxesTableProps {
   setShowTaxesModal: (show: boolean) => void;
 }
 
+export interface ITaxesModalProps {
+  setShowTaxesModal: React.Dispatch<React.SetStateAction<boolean>>;
+  addTax: (tax: ITaxes) => void;
+  taxId: number | undefined;
+  taxData: ITaxes | undefined;
+  mode: string;
+}

@@ -15,7 +15,7 @@ import {
 } from "@strapi/design-system";
 
 import {Plus,Pencil,Trash} from "@strapi/icons";
-import {IPackageTableProps} from "../../../../../types/package";
+import {IPackage, IPackageTableProps} from "../../../../../types/package";
 
 export default function ShippingZoneTable({
                                             packageData,
@@ -27,7 +27,7 @@ export default function ShippingZoneTable({
     setShowPackageModal(true);
   };
 
-  const renderDimensions = (packageD) => {
+  const renderDimensions = (packageD: IPackage) => {
     if (packageD.type && packageD.type === 'Envelope') {
       return (
         <Typography textColor="neutral800">

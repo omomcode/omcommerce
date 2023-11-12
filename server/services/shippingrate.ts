@@ -3,8 +3,6 @@ import { Strapi } from '@strapi/strapi';
 export default ({ strapi }: { strapi: Strapi }) => ({
 
   async find(query) {
-    console.log("QUERYQUERY");
-    console.log(query);
     return await strapi.entityService.findMany("plugin::omcommerce.shippingrate", query);
   },
 

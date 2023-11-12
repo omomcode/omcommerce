@@ -97,7 +97,6 @@ exports.default = async ({ strapi }) => {
     strapi.db.lifecycles.subscribe({
         models: ["plugin::omcommerce.setup"],
         async afterFindOne(event) {
-            // console.log(event);
             if (event.result === null) {
                 const setup = {
                     wizard_open: true,
@@ -109,14 +108,7 @@ exports.default = async ({ strapi }) => {
                 await createSetup(setup);
             }
             else if (event.result.wizard_open && event.result.wizard_option === 0 && event.result.product_type === 0 && event.result.wizard_state === 1) {
-                // console.log("CREATING PROFILE");
-                // Profile
-                // const envFilePath = path.resolve(__dirname, '../../../../../.env');
-                // console.log(envFilePath);
-                // const enc = generateEncryptionKeyIfNeeded(envFilePath);
-                // console.log(enc);
                 const p = await findProfile({});
-                // console.log(p);
                 if (p === null) {
                     const profile = {
                         name: 'Your amazing store',
@@ -187,7 +179,6 @@ exports.default = async ({ strapi }) => {
                     await createBilling(billing);
                 }
                 const cr = await findConversionRate({});
-                // console.log(cr);
                 if (cr === null) {
                     const conversionRate = {
                         rate: 0.0082327,
@@ -226,7 +217,6 @@ exports.default = async ({ strapi }) => {
             data.amount_currency_code = currency.currency;
             data.tax_currency_code = currency.currency;
             data.amount_value_converted_currency_code = cr.conversion_currency;
-            console.log(data.amount_value);
             data.amount_value_converted = Math.ceil(val);
             let tQuery;
             if (!data.omcommerce_tax || data.omcommerce_tax.connect === undefined) {

@@ -10,8 +10,6 @@ exports.default = ({ strapi }) => ({
         return tempData;
     },
     async findOne(id) {
-        console.log("find one");
-        console.log(id);
         return await strapi.entityService.findOne("plugin::omcommerce.subcategory", id);
     },
     async create(data) {

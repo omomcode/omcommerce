@@ -28,8 +28,6 @@ export default ({strapi}: { strapi: Strapi }) => ({
 
 
   async findOne(id) {
-    console.log("find one");
-    console.log(id);
     return await strapi.entityService.findOne("plugin::omcommerce.category", id);
   },
 

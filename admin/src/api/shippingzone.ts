@@ -27,9 +27,6 @@ const shippingZoneRequests = {
   editShippingZone: async (id: number, data: any) => {
     try {
 
-      console.log("DATA");
-      console.log(data);
-
       return await request(`/omcommerce/shippingzone/update/${id}`, {
         method: "PUT",
         headers: {

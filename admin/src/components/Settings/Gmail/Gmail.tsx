@@ -35,8 +35,6 @@ const Gmail = () => {
 
     try {
       const gmail: any = await gmailRequests.getAllGmail();
-      console.log("GMAIL?")
-      console.log(gmail);
       setIsNew(false);
       if(gmail !== undefined) {
         setData(gmail);
@@ -66,10 +64,8 @@ const Gmail = () => {
 
   const saveGmail = async (data: IGmail) => {
 
-    console.log(isNew);
     if(!isNew) {
       const zez: any = await gmailRequests.editGmail(data.id, data);
-      console.log("gmailData", zez)
     }
     else
       await gmailRequests.addGmail(data);
@@ -99,6 +95,7 @@ const Gmail = () => {
                   placeholder="CLIENT_ID"
                   label="CLIENT_ID"
                   hint="Client id from google console"
+                  type="password"
                 />
               </Box>
             </GridItem>
@@ -112,6 +109,7 @@ const Gmail = () => {
                   placeholder="CLIENT_SECRET"
                   label="CLIENT_SECRET"
                   hint="Client secret from google console"
+                  type="password"
                 />
               </Box>
             </GridItem>
@@ -126,6 +124,7 @@ const Gmail = () => {
                 placeholder="REFRESH_TOKEN"
                 label="REFRESH_TOKEN"
                 hint="Refresh token from google console"
+                type="password"
               />
             </Box>
           </GridItem>

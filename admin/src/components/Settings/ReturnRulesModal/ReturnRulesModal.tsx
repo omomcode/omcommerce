@@ -31,7 +31,6 @@ export default function ReturnRulesModal({
     e.preventDefault();
     e.stopPropagation();
     try {
-      console.log("radionOne", radioOne)
       handleSave();
       handleRulesShow();
     } catch (error) {

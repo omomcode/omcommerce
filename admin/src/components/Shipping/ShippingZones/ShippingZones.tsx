@@ -56,12 +56,8 @@ const ShippingZones = () => {
 
     try {
       const profile: any = await profileRequests.getAllProfiles();
-      console.log("Shipping profile");
-      console.log(profile);
       const sz : any = await shippingZoneRequests.getAllShippingZones();
-      console.log("sz",sz);
       const pkg : any = await packagesRequests.getAllPackages();
-      console.log("Packages");
       console.dir(pkg);
       setPackages(pkg);
 

@@ -42,35 +42,6 @@ const SetupPage = () => {
 
     try {
 
-      const sz = await shippingZoneRequests.getAllShippingZones();
-
-      const countryCode = "RS";
-
-      // if(sz)
-      // {
-      //   const szz = findShippingZoneBasedOnCountry(countryCode,sz as IShippingZone[]);
-      //   console.log("RESOLVED ZONE?");
-      //   console.log(szz);
-      //
-      //   const data = {
-      //       cart: [
-      //           {
-      //               id: '1',
-      //               quantity: '1',
-      //           },
-      //       ],
-      //     country_code: "RS"
-      //   };
-      //   const shipping_cost = await shippingcalclulatorRequests.calculate(data);
-      //
-      //   console.log(shipping_cost);
-      //
-      //
-      //
-      // }
-
-
-
       const s : any = await setupRequests.getAllSetups();
       setSetup(s);
       setShowHome(!s.wizard_open);
@@ -173,8 +144,6 @@ const SetupPage = () => {
         });
     }
 
-    // console.log(direction);
-    // console.log(currentStep);
 
   };
 
@@ -183,7 +152,6 @@ const SetupPage = () => {
 
   const setSetupState = (number: number) => {
 
-    console.log(selected);
     // @ts-ignore
     setupRequests.editSetup(setup.id,
       {

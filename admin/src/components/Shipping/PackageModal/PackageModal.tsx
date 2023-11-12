@@ -14,9 +14,9 @@ import {
 } from "@strapi/design-system";
 import currencyRequests from "../../../api/currency";
 import timezoneRequests from "../../../api/timezone";
-import {IPackage} from "../../../../../types/package";
+import {IPackage, IPackageModalProps} from "../../../../../types/package";
 
-export default function PackageModal({setShowPackageModal, addPackage, packageId, packageData, mode}) {
+export default function PackageModal({setShowPackageModal, addPackage, packageId, packageData, mode} : IPackageModalProps) {
 
 
   const initialData: IPackage = {
@@ -51,13 +51,13 @@ export default function PackageModal({setShowPackageModal, addPackage, packageId
     if (!isLoading) setIsLoading(true);
 
     if (packageData !== null) {
+      // @ts-ignore
       setPackageD(packageData);
     }
 
     try {
       const c : any = await currencyRequests.getAllCurrency();
       const tz : any = await timezoneRequests.getAllTimezone();
-      console.log("tz", tz)
       setCurrency(c.currency);
       setMeasurement(tz.unit);
       setLength(tz.lengthUnit);
@@ -69,7 +69,7 @@ export default function PackageModal({setShowPackageModal, addPackage, packageId
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void; stopPropagation: () => void; }) => {
 
     e.preventDefault();
     e.stopPropagation();

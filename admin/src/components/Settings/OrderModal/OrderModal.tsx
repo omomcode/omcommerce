@@ -17,8 +17,6 @@ import {
 
 export default function OrderModal({showModal, order}) {
 
-  console.log("Order thats here");
-  console.log(order);
   return (
     <ModalLayout
       onClose={() => showModal((prevState) => !prevState)}
