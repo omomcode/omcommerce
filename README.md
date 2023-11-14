@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://www.npmjs.org/package/omcommerce">
-    <img alt="Version" src="https://img.shields.io/github/package-json/v/your-username/omcommerce?label=npm&logo=npm">
+    <img alt="Version" src="https://img.shields.io/github/package-json/v/omomcode/omcommerce?label=npm&logo=npm">
   </a>
   <a href="https://www.npmjs.org/package/omcommerce">
     <img src="https://img.shields.io/npm/dm/omcommerce.svg" alt="Downloads" />
