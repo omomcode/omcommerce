@@ -6,7 +6,11 @@
     "strict": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "paths": {
+      "@strapi/strapi": ["node_modules/@strapi/strapi"]
+    }
   },
 
   "include": ["admin", "custom.d.ts"],
