@@ -15,9 +15,9 @@
   <a href="https://www.npmjs.org/package/omcommerce">
     <img src="https://img.shields.io/npm/dm/omcommerce.svg" alt="Downloads" />
   </a>
-<!-- <a href="https://github.com/omomcode/omcommerce_production/actions/workflows/ci.yml/badge.svg">
-<img src="https://github.com/omomcode/omcommerce_production/actions/workflows/ci.yml/badge.svg" alt="CI Status" />
-</a> -->
+<a href="https://github.com/omomcode/omcommerce/actions/workflows/tests.yml/badge.svg">
+<img src="https://github.com/omomcode/omcommerce/actions/workflows/tests.yml/badge.svg" alt="Tests Status" />
+</a> 
 <a href="https://github.com/omomcode/omcommerce/actions/workflows/eslint.yml/badge.svg">
 <img src="https://github.com/omomcode/omcommerce/actions/workflows/eslint.yml/badge.svg" alt="EsLint" />
 </a>
