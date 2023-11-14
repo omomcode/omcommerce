@@ -15,6 +15,7 @@
     "@strapi/design-system": "^1.6.3",
     "@strapi/helper-plugin": "^4.6.0",
     "@strapi/icons": "^1.6.3",
+    "@strapi/strapi": "^4.15.4",
     "axios": "^1.5.1",
     "crypto-js": "^4.2.0",
     "currencies.json": "^1.0.2",
