@@ -1,5 +1,14 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   preset: 'ts-jest',
-  testEnvironment: 'node'
+  testEnvironment: 'node',
+  testPathIgnorePatterns: [
+    './node_modules/',
+  ],
+  "coverageReporters": [
+    "json-summary",
+    "text",
+    "lcov"
+  ],
+  coverageDirectory: 'coverage',
 };
