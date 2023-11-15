@@ -5,7 +5,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   async find(query: any) {
     if (strapi.entityService) {
       // @ts-ignore
-      return await strapi.entityService.find("plugin::omcommerce.shippingpackage", query);
+      return await strapi.entityService.findMany("plugin::omcommerce.shippingpackage", query);
     } else {
       throw new Error('strapi.entityService is not defined');
     }

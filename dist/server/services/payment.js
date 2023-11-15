@@ -4,7 +4,6 @@ const paypalPaymentHelper_1 = require("../utils/payment/paypalPaymentHelper");
 exports.default = ({ strapi }) => ({
     async capture(data) {
         const orderID = data.orderID;
-        console.dir(data);
         try {
             const response = await (0, paypalPaymentHelper_1.capturePayment)(orderID, strapi);
             return JSON.stringify(response);
@@ -17,7 +16,6 @@ exports.default = ({ strapi }) => ({
     async orders(data) {
         try {
             const response = await (0, paypalPaymentHelper_1.createOrder)(data, strapi);
-            // res.json(response);
             return JSON.stringify(response);
         }
         catch (error) {

@@ -7,7 +7,7 @@ describe('Shipping Package Service', () => {
   beforeEach(async function () {
     strapi = {
       entityService: {
-        find: jest.fn().mockImplementation((model: string, query: any) => {
+        findMany: jest.fn().mockImplementation((model: string, query: any) => {
           // Mock the behavior of find method
           // Return an array of data based on your test scenario
           return [
@@ -130,7 +130,7 @@ describe('Shipping Package Service', () => {
     // @ts-ignore
     const foundPackages: IPackage[] = await shippingPackageService({strapi}).find();
 
-    expect(strapi.entityService.find).toBeCalledTimes(1);
+    expect(strapi.entityService.findMany).toBeCalledTimes(1);
     expect(foundPackages).not.toBeNull();
     expect(foundPackages.length).toBe(2);
     expect(foundPackages[0].id).toBe(1);

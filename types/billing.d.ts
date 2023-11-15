@@ -4,6 +4,6 @@ export interface IBilling {
   country: string;
   address: string;
   apartment: string;
-  postal: number | "";
+  postal: string;
   city: string;
-};
+}
