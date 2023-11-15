@@ -16,6 +16,7 @@
     "@strapi/helper-plugin": "^4.6.0",
     "@strapi/icons": "^1.6.3",
     "@strapi/strapi": "^4.15.4",
+    "@types/koa": "^2.13.11",
     "axios": "^1.5.1",
     "crypto-js": "^4.2.0",
     "currencies.json": "^1.0.2",
@@ -92,7 +93,7 @@
   "scripts": {
     "develop": "tsc -p tsconfig.server.json -w",
     "build": "tsc -p tsconfig.server.json",
-    "test": "jest",
+    "test": "jest --forceExit --detectOpenHandles",
     "test:coverage": "npm test -- --coverage",
     "test:badges": "npm run test:coverage  && jest-coverage-badges",
     "lint": "npm-run-all -p lint:code",

@@ -2,16 +2,27 @@ import { Strapi } from '@strapi/strapi';
 
 export default ({ strapi }: { strapi: Strapi }) => ({
 
-  async find(query) {
-    return await strapi.entityService.findOne("plugin::omcommerce.currency", query);
+  async find(query : any) {
+    if (strapi.entityService) {
+      return await strapi.entityService.findOne("plugin::omcommerce.currency", query);
+    } else {
+      throw new Error('strapi.entityService is not defined');
+    }
   },
 
-  async create(data) {
-    return await strapi.entityService.create("plugin::omcommerce.currency", data);
+  async create(data :any) {
+    if (strapi.entityService) {
+      return await strapi.entityService.create("plugin::omcommerce.currency", data);
+    } else {
+      throw new Error('strapi.entityService is not defined');
+    }
   },
 
-  async update(id, data) {
-    return await strapi.entityService.update("plugin::omcommerce.currency", id, data);
+  async update(id :any, data :any) {
+    if (strapi.entityService) {
+      return await strapi.entityService.update("plugin::omcommerce.currency", id, data);
+    } else {
+      throw new Error('strapi.entityService is not defined');
+    }
   },
-
 });
