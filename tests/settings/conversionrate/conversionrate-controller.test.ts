@@ -1,4 +1,4 @@
-import conversionRateController from "../../../server/controllers/conversionRate";
+import conversionRateController from "../../../server/controllers/conversionrate";
 import { IConversionRate } from "../../../types/conversionrate";
 
 describe('Conversion Rate Controller', () => {
