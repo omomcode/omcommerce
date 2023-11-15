@@ -7,7 +7,7 @@ export interface IUnitsData {
   [key: string]: IUnit[];
 }
 
-export interface IZoneData {
+export interface ITimeZone {
   id: number,
   timezone: string,
   measurement: string,

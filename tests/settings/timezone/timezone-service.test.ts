@@ -14,7 +14,7 @@ describe('Zone Service', () => {
             timezone: "Central Europe Standard Time",
             measurement: "Metric",
             unit: "g",
-            length_unit: "cm",
+            lengthUnit: "cm",
           };
         }),
         create: jest.fn().mockImplementation((model: string, data: any) => {
