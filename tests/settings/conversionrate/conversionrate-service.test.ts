@@ -1,4 +1,4 @@
-import conversionRateService from "../../../server/services/conversionRate";
+import conversionRateService from "../../../server/services/conversionrate";
 
 describe('Conversion Rate Service', () => {
   let strapi: { entityService: any; };
