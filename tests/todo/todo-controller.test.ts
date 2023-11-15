@@ -1,9 +1,8 @@
-import todoController from "../server/controllers/todo-controller";
+import todoController from "../../server/controllers/todo-controller";
 
 describe('Todo Controller', () => {
   let strapi: { plugin: any; };
   beforeEach(async function () {
-    // mock this teh strapi object to allow for calling of create  await strapi.plugin('todo').service('create').create({ name })
     strapi = {
       plugin: jest.fn().mockReturnValue({
         service: jest.fn().mockReturnValue({

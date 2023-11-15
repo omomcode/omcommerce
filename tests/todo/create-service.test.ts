@@ -1,4 +1,4 @@
-import create from "../server/services/todo-test"
+import create from "../../server/services/todo-test"
 describe('Create Service', () => {
 
   let strapi: { query: any; };
