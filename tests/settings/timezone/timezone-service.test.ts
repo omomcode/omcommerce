@@ -1,4 +1,6 @@
 import zoneService from "../../../server/services/timezone";
+import setupService from "../../../server/services/setup";
+import gmailService from "../../../server/services/gmail";
 
 describe('Zone Service', () => {
   let strapi: { entityService: any; };
@@ -59,6 +61,30 @@ describe('Zone Service', () => {
     // Add similar expectations for other properties
   });
 
+  it('timezone: create. Should throw an error when strapi.entityService is not defined', async function () {
+    // Arrange
+    const initialData = {
+      timezone: "Central Europe Standard Time",
+      measurement: "Metric",
+      unit: "g",
+      length_unit: "cm",
+    };
+
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await zoneService({ strapi } ).create(initialData);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
+    }
+  });
+
   it('should find a zone record', async function () {
     const query = { /* your query parameters */ };
 
@@ -76,6 +102,25 @@ describe('Zone Service', () => {
     } else {
       // Handle the case where foundZone is null if needed
       fail('Zone record not found'); // This will cause the test to fail
+    }
+  });
+
+  it('should throw an error when strapi.entityService is not defined (find)', async function () {
+    // Arrange
+    const query = { /* your query here */ };
+
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await zoneService({ strapi }).find(query);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
     }
   });
 
@@ -99,4 +144,25 @@ describe('Zone Service', () => {
       fail('Zone record not updated'); // This will cause the test to fail
     }
   });
+
+  it('should throw an error when strapi.entityService is not defined (update)', async function () {
+    // Arrange
+    const id = 1; // Replace with a valid ID for your update operation
+    const data = { /* your update data here */ };
+
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await zoneService({ strapi }).update(id, data);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
+    }
+  });
+
 });

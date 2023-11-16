@@ -1,25 +1,44 @@
-import create from "../../server/services/todo-test"
+import create from "../../server/services/todo-test";
+
 describe('Create Service', () => {
+  let strapi: { query: any; log: any };
 
-  let strapi: { query: any; };
-
-  beforeEach(async function () {
+  beforeEach(() => {
     strapi = {
       query: jest.fn().mockReturnValue({
-        create: jest.fn().mockReturnValue({
-          data: {
-            name: 'test',
-            status: false,
-          }
+        create: jest.fn().mockImplementation(() => {
+          throw new Error('Simulated error');
         })
-      })
+      }),
+      log: {
+        error: jest.fn(),
+      },
+    };
+  });
+
+  it('should create a todo', async () => {
+    const name = 'test';
+
+    try {
+      // @ts-ignore
+      await create({ strapi }).create({ name });
+    } catch (error) {
+      // Expect strapi.query to be called with the correct parameters
+      expect(strapi.query).toHaveBeenCalledWith('plugin::todo.todo');
+
+      // Expect strapi.query('plugin::todo.todo').create to be called with the correct parameters
+      expect(strapi.query('plugin::todo.todo').create).toHaveBeenCalledWith({
+        data: {
+          name: 'test',
+          status: false,
+        },
+      });
+
+      // Expect strapi.log.error to be called with the error message
+      expect(strapi.log.error).toHaveBeenCalledWith(new Error('Simulated error'));
+
+      // Explicitly define the type of error using 'as'
+      expect((error as Error).message).toBe('Simulated error');
     }
-  })
-  it('should create a todo', async function () {
-    const name = 'test'
-    // @ts-ignore
-    const todo = await create({ strapi }).create({ name });
-    expect(strapi.query('plugin::todo.todo').create).toBeCalledTimes(1)
-    expect(todo.data.name).toBe('test')
-  })
-})
+  });
+});

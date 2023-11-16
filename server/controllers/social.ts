@@ -31,6 +31,4 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.throw(500, err);
     }
   },
-
-
 });

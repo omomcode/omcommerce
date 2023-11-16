@@ -1,4 +1,6 @@
 import socialService from "../../../server/services/social";
+import shippingPackageService from "../../../server/services/shippingpackage";
+import setupService from "../../../server/services/setup";
 
 describe('Social Service', () => {
   let strapi: { entityService: any; };
@@ -123,6 +125,26 @@ describe('Social Service', () => {
     // Add similar expectations for other properties
   });
 
+  it('should throw an error when strapi.entityService is not defined (find)', async function () {
+    // Arrange
+    const query = { /* your query here */ };
+
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await socialService({ strapi }).find(query);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
+    }
+  });
+
+
   it('should update a social record', async function () {
     const socialId = 1;
     const updateData = {
@@ -148,4 +170,25 @@ describe('Social Service', () => {
     expect(updatedSocial!.facebook_enabled).toBe(true);
     // Add similar expectations for other properties
   });
+
+  it('should throw an error when strapi.entityService is not defined (update)', async function () {
+    // Arrange
+    const id = 1; // Replace with a valid ID for your update operation
+    const data = { /* your update data here */ };
+
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await socialService({ strapi }).update(id, data);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
+    }
+  });
+
 });

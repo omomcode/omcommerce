@@ -1,4 +1,5 @@
 import paypalSetupService from "../../../server/services/paypalsetup";
+import shippingPackageService from "../../../server/services/shippingpackage";
 
 describe('PayPal Setup Service', () => {
   let strapi: { entityService: any; };
@@ -63,6 +64,32 @@ describe('PayPal Setup Service', () => {
     // Add similar expectations for other properties
   });
 
+  it('paypalsetup: create. Should throw an error when strapi.entityService is not defined', async function () {
+    // Arrange
+    const initialData = {
+      live_paypal_client_id: '',
+      live_paypal_client_secret: '',
+      sandbox_paypal_client_id: '',
+      sandbox_paypal_client_secret: '',
+      live: false,
+    };
+
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await paypalSetupService({ strapi } ).create(initialData);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
+    }
+  });
+
+
   it('should find a PayPal Setup record', async function () {
     const query = { /* your query parameters */ };
 
@@ -74,6 +101,26 @@ describe('PayPal Setup Service', () => {
     expect(foundPayPalSetup!.id).toBe(1);
     expect(foundPayPalSetup!.live_paypal_client_id).toBe('');
     // Add similar expectations for other properties
+  });
+
+
+  it('should throw an error when strapi.entityService is not defined (find)', async function () {
+    // Arrange
+    const query = { /* your query here */ };
+
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await paypalSetupService({ strapi }).find(query);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
+    }
   });
 
   it('should update a PayPal Setup record', async function () {
@@ -89,4 +136,25 @@ describe('PayPal Setup Service', () => {
     expect(updatedPayPalSetup!.live_paypal_client_id).toBe('UPDATED_CLIENT_ID');
     // Add similar expectations for other properties
   });
+
+  it('should throw an error when strapi.entityService is not defined (update)', async function () {
+    // Arrange
+    const id = 1; // Replace with a valid ID for your update operation
+    const data = { /* your update data here */ };
+
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await paypalSetupService({ strapi }).update(id, data);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
+    }
+  });
+
 });

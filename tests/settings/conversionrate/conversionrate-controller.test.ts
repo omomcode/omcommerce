@@ -49,6 +49,23 @@ describe('Conversion Rate Controller', () => {
     expect(strapi.plugin('omcommerce').service('conversionRate').find).toBeCalledTimes(1);
   });
 
+  it('should handle error when finding conversion rates', async () => {
+    const ctx = {
+      query: {},
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the find method
+    strapi.plugin("omcommerce").service("conversionRate").find.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await conversionRateController({ strapi }).find(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
+
   it('should create a conversion rate', async function () {
     const ctx = {
       request: {
@@ -67,6 +84,25 @@ describe('Conversion Rate Controller', () => {
 
     // Expect create to be called once
     expect(strapi.plugin('omcommerce').service('conversionRate').create).toBeCalledTimes(1);
+  });
+
+  it('should handle error when creating a conversion rate', async () => {
+    const ctx = {
+      request: {
+        body: conversionRateData,
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the create method
+    strapi.plugin("omcommerce").service("conversionRate").create.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await conversionRateController({ strapi }).create(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
   });
 
   it('should update a conversion rate', async function () {
@@ -94,4 +130,27 @@ describe('Conversion Rate Controller', () => {
     // Expect update to be called once
     expect(strapi.plugin('omcommerce').service('conversionRate').update).toBeCalledTimes(1);
   });
+
+  it('should handle error when updating a conversion rate', async () => {
+    const ctx = {
+      params: { id: 1 },
+      request: {
+        body: {
+          rate: 0.0085, // Assuming an updated rate
+        },
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the update method
+    strapi.plugin("omcommerce").service("conversionRate").update.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await conversionRateController({ strapi }).update(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
+
 });

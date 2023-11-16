@@ -1,4 +1,5 @@
 import currencyService from "../../../server/services/currency";
+import shippingPackageService from "../../../server/services/shippingpackage";
 
 describe('Currency Service', () => {
   let strapi: { entityService: any; };
@@ -47,6 +48,28 @@ describe('Currency Service', () => {
     // Add similar expectations for other properties
   });
 
+  it('currency: create. Should throw an error when strapi.entityService is not defined', async function () {
+    // Arrange
+    const initialData = {
+      currency: "EUR",
+    };
+
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await currencyService({ strapi } ).create(initialData);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
+    }
+  });
+
+
   it('should find a currency record', async function () {
     const query = { /* your query parameters */ };
 
@@ -66,6 +89,26 @@ describe('Currency Service', () => {
       fail('Currency record not found'); // This will cause the test to fail
     }
   });
+
+  it('should throw an error when strapi.entityService is not defined (find)', async function () {
+    // Arrange
+    const query = { /* your query here */ };
+
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await currencyService({ strapi }).find(query);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
+    }
+  });
+
 
   it('should update a currency record', async function () {
     const currencyId = 1;
@@ -87,4 +130,25 @@ describe('Currency Service', () => {
       fail('Currency record not updated'); // This will cause the test to fail
     }
   });
+
+  it('should throw an error when strapi.entityService is not defined (update)', async function () {
+    // Arrange
+    const id = 1; // Replace with a valid ID for your update operation
+    const data = { /* your update data here */ };
+
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await currencyService({ strapi }).update(id, data);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
+    }
+  });
+
 });

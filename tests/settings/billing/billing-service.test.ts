@@ -1,4 +1,5 @@
 import billingService from "../../../server/services/billing";
+import shippingPackageService from "../../../server/services/shippingpackage";
 
 describe('Billing Service', () => {
   let strapi: { entityService: any; };
@@ -67,6 +68,33 @@ describe('Billing Service', () => {
     // Add similar expectations for other properties
   });
 
+
+  it('billing: create. Should throw an error when strapi.entityService is not defined', async function () {
+    // Arrange
+  const billingData = {
+    name: 'Billing Company',
+    country: 'US',
+    address: '123 Main St',
+    apartment: 'Apt 456',
+    postal: '12345',
+    city: 'Cityville',
+  };
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await billingService({ strapi } ).create(billingData);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
+    }
+  });
+
+
   it('should find a billing record', async function () {
     const query = { /* your query parameters */ };
 
@@ -88,6 +116,27 @@ describe('Billing Service', () => {
     // Add similar expectations for other properties
   });
 
+  it('should throw an error when strapi.entityService is not defined (find)', async function () {
+    // Arrange
+    const query = { /* your query here */ };
+
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await billingService({ strapi }).find(query);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
+    }
+  });
+
+
+
   it('should update a billing record', async function () {
     const billingRecordId = 1;
     const updateData = { /* your update data */ };
@@ -108,4 +157,25 @@ describe('Billing Service', () => {
       fail('Billing record not updated'); // This will cause the test to fail
     }
   });
+
+  it('should throw an error when strapi.entityService is not defined (update)', async function () {
+    // Arrange
+    const id = 1; // Replace with a valid ID for your update operation
+    const data = { /* your update data here */ };
+
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await billingService({ strapi }).update(id, data);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
+    }
+  });
+
 });

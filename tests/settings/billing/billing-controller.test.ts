@@ -52,6 +52,24 @@ describe('Billing Controller', () => {
     expect(strapi.plugin('omcommerce').service('billing').find).toBeCalledTimes(1);
   });
 
+  it('should handle error when finding billing information', async () => {
+    const ctx = {
+      query: {},
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the find method
+    strapi.plugin("omcommerce").service("billing").find.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await billingController({ strapi }).find(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
+
+
   it('should create billing information', async function () {
     const ctx = {
       request: {
@@ -71,6 +89,27 @@ describe('Billing Controller', () => {
     // Expect create to be called once
     expect(strapi.plugin('omcommerce').service('billing').create).toBeCalledTimes(1);
   });
+
+  it('should handle error when creating billing information', async () => {
+    const ctx = {
+      request: {
+        body: billingData,
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the create method
+    strapi.plugin("omcommerce").service("billing").create.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await billingController({ strapi }).create(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
+
+
 
   it('should update billing information', async function () {
     const ctx = {
@@ -97,4 +136,28 @@ describe('Billing Controller', () => {
     // Expect update to be called once
     expect(strapi.plugin('omcommerce').service('billing').update).toBeCalledTimes(1);
   });
+
+  it('should handle error when updating billing information', async () => {
+    const ctx = {
+      params: { id: 1 }, // Assuming the ID for the billing information is 1
+      request: {
+        body: {
+          name: 'Updated Billing Company',
+        },
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the update method
+    strapi.plugin("omcommerce").service("billing").update.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await billingController({ strapi }).update(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
+
+
 });

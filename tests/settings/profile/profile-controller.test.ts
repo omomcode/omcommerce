@@ -50,6 +50,23 @@ describe('Profile Controller', () => {
     expect(strapi.plugin('omcommerce').service('profile').find).toBeCalledTimes(1);
   });
 
+  it('should handle error when finding profiles', async function () {
+    const ctx = {
+      query: {},
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the find method
+    strapi.plugin("omcommerce").service("profile").find.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await profileController({ strapi }).find(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
+
   it('should create a profile', async function () {
     const ctx = {
       request: {
@@ -68,6 +85,25 @@ describe('Profile Controller', () => {
 
     // Expect create to be called once
     expect(strapi.plugin('omcommerce').service('profile').create).toBeCalledTimes(1);
+  });
+
+  it('should create a profile and handle error', async function () {
+    const ctx = {
+      request: {
+        body: profileData,
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the create method
+    strapi.plugin("omcommerce").service("profile").create.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await profileController({ strapi }).create(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
   });
 
   it('should update a profile', async function () {
@@ -94,5 +130,27 @@ describe('Profile Controller', () => {
 
     // Expect update to be called once
     expect(strapi.plugin('omcommerce').service('profile').update).toBeCalledTimes(1);
+  });
+
+  it('should update a profile and handle error', async function () {
+    const ctx = {
+      params: { id: 1 }, // Assuming the ID for the profile is 1
+      request: {
+        body: {
+          name: 'Updated Store',
+        },
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the update method
+    strapi.plugin("omcommerce").service("profile").update.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await profileController({ strapi }).update(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
   });
 });
