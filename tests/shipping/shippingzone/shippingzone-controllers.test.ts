@@ -54,6 +54,38 @@ describe('Shipping Zone Controller', () => {
     expect(strapi.plugin('omcommerce').service('shippingzone').find).toBeCalledTimes(1);
   });
 
+  it('should throw an error when finding shipping zones', async () => {
+    const ctx = {
+      query: {},
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the find method
+    strapi.plugin('omcommerce').service('shippingzone').find.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await shippingZoneController({ strapi }).find(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });it('should throw an error when finding shipping zones', async () => {
+    const ctx = {
+      query: {},
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the find method
+    strapi.plugin('omcommerce').service('shippingzone').find.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await shippingZoneController({ strapi }).find(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
+
   it('should create a shipping zone', async function () {
     const ctx = {
       request: {
@@ -73,6 +105,26 @@ describe('Shipping Zone Controller', () => {
     // Expect create to be called once
     expect(strapi.plugin('omcommerce').service('shippingzone').create).toBeCalledTimes(1);
   });
+
+  it('should throw an error when creating a shipping zone', async () => {
+    const ctx = {
+      request: {
+        body: shippingZoneData,
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the create method
+    strapi.plugin('omcommerce').service('shippingzone').create.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await shippingZoneController({ strapi }).create(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
+
 
   it('should update a shipping zone', async function () {
     const ctx = {
@@ -100,6 +152,29 @@ describe('Shipping Zone Controller', () => {
     expect(strapi.plugin('omcommerce').service('shippingzone').update).toBeCalledTimes(1);
   });
 
+  it('should throw an error when updating a shipping zone', async () => {
+    const ctx = {
+      params: { id: 1 },
+      request: {
+        body: {
+          name: 'Updated Zone',
+        },
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the update method
+    strapi.plugin('omcommerce').service('shippingzone').update.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await shippingZoneController({ strapi }).update(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
+
+
   it('should delete a shipping zone', async function () {
     const ctx = {
       params: { id: 1 },
@@ -117,4 +192,22 @@ describe('Shipping Zone Controller', () => {
       success: true,
     });
   });
+
+  it('should throw an error when deleting a shipping zone', async () => {
+    const ctx = {
+      params: { id: 1 },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the delete method
+    strapi.plugin('omcommerce').service('shippingzone').delete.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await shippingZoneController({ strapi }).delete(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
+
 });

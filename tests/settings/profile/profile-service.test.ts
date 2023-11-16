@@ -1,4 +1,6 @@
 import profileService from "../../../server/services/profile";
+import shippingPackageService from "../../../server/services/shippingpackage";
+import gmailService from "../../../server/services/gmail";
 
 describe('Profile Service', () => {
   let strapi: { entityService: any; };
@@ -58,6 +60,29 @@ describe('Profile Service', () => {
     expect(profile.name).toBe('Your amazing store');
   });
 
+  it('profile: create. Should throw an error when strapi.entityService is not defined', async function () {
+    // Arrange
+    const profileData = {
+      name: 'Your amazing store',
+      phone: '+11641112233',
+      email: 'office@amazingstore.com',
+      region: 'GB',
+    };
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await profileService({ strapi } ).create(profileData);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
+    }
+  });
+
   it('should find a profile', async function () {
     const query = { /* your query parameters */ };
 
@@ -70,6 +95,26 @@ describe('Profile Service', () => {
     expect(foundProfile.name).toBe('Your amazing store');
     // Add similar expectations for other properties
   });
+
+  it('should throw an error when strapi.entityService is not defined (find)', async function () {
+    // Arrange
+    const query = { /* your query here */ };
+
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await profileService({ strapi }).find(query);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
+    }
+  });
+
 
   it('should update a profile', async function () {
     const profileId = 1;
@@ -84,4 +129,25 @@ describe('Profile Service', () => {
     expect(updatedProfile.name).toBe('Updated Store');
     // Add similar expectations for other properties
   });
+
+  it('should throw an error when strapi.entityService is not defined (update)', async function () {
+    // Arrange
+    const id = 1; // Replace with a valid ID for your update operation
+    const data = { /* your update data here */ };
+
+    // Temporarily set strapi.entityService to undefined
+    strapi.entityService = undefined;
+
+    // Act & Assert
+    try {
+      // @ts-ignore
+      await profileService({ strapi }).update(id, data);
+      // If the above line does not throw an error, fail the test
+      fail('Expected an error but did not receive one.');
+    } catch (error: any) {
+      // Assert that the error message matches the expected message
+      expect(error.message).toBe('strapi.entityService is not defined');
+    }
+  });
+
 });

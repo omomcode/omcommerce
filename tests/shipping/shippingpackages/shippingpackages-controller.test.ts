@@ -56,6 +56,24 @@ describe('Shipping Package Controller', () => {
     expect(strapi.plugin('omcommerce').service('shippingpackage').find).toBeCalledTimes(1);
   });
 
+  it('should throw an error when finding shipping packages', async () => {
+    const ctx = {
+      query: {},
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the find method
+    strapi.plugin('omcommerce').service('shippingpackage').find.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await shippingPackageController({ strapi }).find(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
+
+
   it('should create a shipping package', async function () {
     const ctx = {
       request: {
@@ -74,6 +92,25 @@ describe('Shipping Package Controller', () => {
 
     // Expect create to be called once
     expect(strapi.plugin('omcommerce').service('shippingpackage').create).toBeCalledTimes(1);
+  });
+
+  it('should throw an error when creating a shipping package', async () => {
+    const ctx = {
+      request: {
+        body: shippingPackageData,
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the create method
+    strapi.plugin('omcommerce').service('shippingpackage').create.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await shippingPackageController({ strapi }).create(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
   });
 
   it('should update a shipping package', async function () {
@@ -102,6 +139,28 @@ describe('Shipping Package Controller', () => {
     expect(strapi.plugin('omcommerce').service('shippingpackage').update).toBeCalledTimes(1);
   });
 
+  it('should throw an error when updating a shipping package', async () => {
+    const ctx = {
+      params: { id: 1 },
+      request: {
+        body: {
+          name: 'Updated Package',
+        },
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the update method
+    strapi.plugin('omcommerce').service('shippingpackage').update.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await shippingPackageController({ strapi }).update(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
+
   it('should delete a shipping package', async function () {
     const ctx = {
       params: { id: 1 },
@@ -120,6 +179,21 @@ describe('Shipping Package Controller', () => {
     });
   });
 
+  it('should throw an error when deleting a shipping package', async () => {
+    const ctx = {
+      params: { id: 1 },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
 
+    // Simulate an error in the delete method
+    strapi.plugin('omcommerce').service('shippingpackage').delete.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await shippingPackageController({ strapi }).delete(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
 
 });

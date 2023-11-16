@@ -47,6 +47,24 @@ describe('Currency Controller', () => {
     expect(strapi.plugin('omcommerce').service('currency').find).toBeCalledTimes(1);
   });
 
+  it('should handle error when finding currencies', async () => {
+    const ctx = {
+      query: {},
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the find method
+    strapi.plugin("omcommerce").service("currency").find.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await currencyController({ strapi }).find(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
+
+
   it('should create a currency', async function () {
     const ctx = {
       request: {
@@ -65,6 +83,25 @@ describe('Currency Controller', () => {
 
     // Expect create to be called once
     expect(strapi.plugin('omcommerce').service('currency').create).toBeCalledTimes(1);
+  });
+
+  it('should handle error when creating a currency', async () => {
+    const ctx = {
+      request: {
+        body: currencyData,
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the create method
+    strapi.plugin("omcommerce").service("currency").create.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await currencyController({ strapi }).create(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
   });
 
   it('should update a currency', async function () {
@@ -92,4 +129,27 @@ describe('Currency Controller', () => {
     // Expect update to be called once
     expect(strapi.plugin('omcommerce').service('currency').update).toBeCalledTimes(1);
   });
+
+  it('should handle error when updating a currency', async () => {
+    const ctx = {
+      params: { id: 1 },
+      request: {
+        body: {
+          currency: "EUR", // Assuming an updated currency
+        },
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the update method
+    strapi.plugin("omcommerce").service("currency").update.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await currencyController({ strapi }).update(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
+
 });

@@ -50,6 +50,23 @@ describe('Timezone Controller', () => {
     expect(strapi.plugin('omcommerce').service('timezone').find).toBeCalledTimes(1);
   });
 
+  it('should throw an error when finding timezones', async function () {
+    const ctx = {
+      query: {},
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the find method
+    strapi.plugin('omcommerce').service('timezone').find.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await timezoneController({ strapi }).find(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
+
   it('should create a timezone', async function () {
     const ctx = {
       request: {
@@ -68,6 +85,25 @@ describe('Timezone Controller', () => {
 
     // Expect create to be called once
     expect(strapi.plugin('omcommerce').service('timezone').create).toBeCalledTimes(1);
+  });
+
+  it('should throw an error when creating a timezone', async function () {
+    const ctx = {
+      request: {
+        body: timezoneData,
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the create method
+    strapi.plugin('omcommerce').service('timezone').create.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await timezoneController({ strapi }).create(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
   });
 
   it('should update a timezone', async function () {
@@ -95,4 +131,27 @@ describe('Timezone Controller', () => {
     // Expect update to be called once
     expect(strapi.plugin('omcommerce').service('timezone').update).toBeCalledTimes(1);
   });
+
+  it('should throw an error when updating a timezone', async function () {
+    const ctx = {
+      params: { id: 1 },
+      request: {
+        body: {
+          timezone: "Updated Timezone", // Assuming an updated timezone
+        },
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the update method
+    strapi.plugin('omcommerce').service('timezone').update.mockRejectedValueOnce("Simulated error");
+
+    // @ts-ignore
+    await timezoneController({ strapi }).update(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+  });
+
 });
