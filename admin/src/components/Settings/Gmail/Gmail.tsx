@@ -14,6 +14,7 @@ import React, {ChangeEvent, useEffect, useState} from "react";
 import {LoadingIndicatorPage} from "@strapi/helper-plugin";
 import {IGmail} from "../../../../../../../../types/gmail";
 import gmailRequests from "../../../api/gmail";
+import { Alert } from '@strapi/design-system';
 
 
 const Gmail = () => {
@@ -29,24 +30,10 @@ const Gmail = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isNew, setIsNew] = useState(true);
   const [data, setData] = useState<IGmail>(initialData);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [nosubmit, setNoSubmit] = useState<boolean>(false);
 
-  const fetchData = async () => {
-    if (!isLoading) setIsLoading(true);
-
-    try {
-      const gmail: any = await gmailRequests.getAllGmail();
-      setIsNew(false);
-      if(gmail !== undefined) {
-        setData(gmail);
-      }
-
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   useEffect( () => {
     fetchData();
@@ -60,16 +47,65 @@ const Gmail = () => {
       ...data,
       [name]: value,
     });
+    // Clear the error message when the user starts typing
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
+    setNoSubmit(false);
+  };
+
+  const fetchData = async () => {
+    if (!isLoading) setIsLoading(true);
+
+    try {
+      const gmail: any = await gmailRequests.getAllGmail();
+
+      if(gmail !== undefined) {
+        setIsNew(false);
+        setData(gmail);
+      }
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const saveGmail = async (data: IGmail) => {
+    // Validate if all required fields are filled
+    const newErrors: Record<string, string> = {};
+    if (!data.client_id) {
+      newErrors.client_id = "CLIENT_ID is required";
+    }
+    if (!data.client_secret) {
+      newErrors.client_secret = "CLIENT_SECRET is required";
+    }
+    if (!data.refresh_token) {
+      newErrors.refresh_token = "REFRESH_TOKEN is required";
+    }
+    if (!data.from) {
+      newErrors.from = "EMAIL is required";
+    } else if (!emailRegex.test(data.from)) {
+      newErrors.from = "Enter a valid email address";
+    }
 
+    setErrors(newErrors);
+
+    // Check if there are any errors before saving
+    if (Object.keys(newErrors).length > 0) {
+      console.error("Please fill in all required fields");
+      return;
+    }
     if(!isNew) {
       const zez: any = await gmailRequests.editGmail(data.id, data);
     }
-    else
-      await gmailRequests.addGmail(data);
-
+    else {
+      const googlemail = await gmailRequests.addGmail(data);
+      console.log("googlemail", googlemail)
+      setIsNew(false)
+    }
     await fetchData();
   }
 
@@ -80,10 +116,11 @@ const Gmail = () => {
   return (
     <Layout>
       <ContentLayout>
-
-        <Box padding="2rem">
+        {nosubmit &&<Alert closeLabel="Close" onClose={() => setNoSubmit(false)} title="Error" variant="danger">
+          Fill all required fields.
+        </Alert>}
+        <Box padding="3rem">
           <Typography variant="title">Gmail</Typography>
-
           <Grid gap={5}>
             <GridItem col={6} s={12}>
               <Box marginTop="1rem">
@@ -96,7 +133,13 @@ const Gmail = () => {
                   label="CLIENT_ID"
                   hint="Client id from google console"
                   type="password"
+                  required
                 />
+                {errors.client_id && (
+                  <Typography textColor="danger600">
+                    {errors.client_id}
+                  </Typography>
+                )}
               </Box>
             </GridItem>
             <GridItem col={6} s={12}>
@@ -110,7 +153,13 @@ const Gmail = () => {
                   label="CLIENT_SECRET"
                   hint="Client secret from google console"
                   type="password"
+                  required
                 />
+                {errors.client_secret && (
+                  <Typography textColor="danger600">
+                    {errors.client_secret}
+                  </Typography>
+                )}
               </Box>
             </GridItem>
           </Grid>
@@ -125,7 +174,13 @@ const Gmail = () => {
                 label="REFRESH_TOKEN"
                 hint="Refresh token from google console"
                 type="password"
+                required
               />
+              {errors.refresh_token && (
+                <Typography textColor="danger600">
+                  {errors.refresh_token}
+                </Typography>
+              )}
             </Box>
           </GridItem>
           <GridItem col={6} s={12}>
@@ -138,7 +193,11 @@ const Gmail = () => {
                 placeholder="Email"
                 label="EMAIL"
                 hint="Email you want to send your purchase details from"
+                required
               />
+              {errors.from && (
+                <Typography textColor="danger600">{errors.from}</Typography>
+              )}
             </Box>
           </GridItem>
           <Button onClick={() => saveGmail(data)} variant="secondary">

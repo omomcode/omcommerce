@@ -55,6 +55,7 @@ const Legal = () => {
     try {
       const lr : any = await legalRequests.getAllLegals();
       setLegalData(lr);
+      console.log("lr", lr);
       setId(lr.id);
       setChecked(() => lr.enabled);
       setOnline(lr.online);
@@ -94,6 +95,7 @@ const Legal = () => {
         returnShippingCost: radioTwo,
         online: online
       });
+      console.log(lr);
 
 
     } catch (error) {
@@ -144,73 +146,73 @@ const Legal = () => {
 
   return (
 
-      <Layout>
-        <ContentLayout>
-          <Box padding={10}>
-            <Grid paddingTop={10}>
-              <GridItem padding={1} col={8}>
-                <Checkbox id="enable" onValueChange={handleCheckboxChange} value={checked}>
-                  Enable return rules
-                </Checkbox>
+    <Layout>
+      <ContentLayout>
+        <Box padding={10}>
+          <Grid paddingTop={10}>
+            <GridItem padding={1} col={8}>
+              <Checkbox id="enable" onValueChange={handleCheckboxChange} value={checked}>
+                Enable return rules
+              </Checkbox>
+            </GridItem>
+            <GridItem padding={1} col={4}>
+              <Button variant="default" onClick={handleSave}>Save</Button>
+            </GridItem>
+            {checked && !isLoading && (<><GridItem padding={1} col={12}>
+            </GridItem>
+              <GridItem padding={1} col={12}>
+                <Button variant="default" onClick={handleRulesShow}>Return Rules</Button>
               </GridItem>
-              <GridItem padding={1} col={4}>
-                <Button variant="default" onClick={handleSave}>Save</Button>
+              {modalShow && <GridItem>
+                <ReturnRulesModal handleRulesShow={handleRulesShow} setRadioOne={setRadioOne} setRadioTwo={setRadioTwo}
+                                  setRestockingFee={setRestockingFee} radioOne={radioOne} radioTwo={radioTwo}
+                                  restockingFee={restockingFee} editLegal={editLegal}/>
+              </GridItem>}
+              <GridItem padding={1} col={12}>
+                <Textarea
+                  label="Return and refund policy"
+                  name="name"
+                  value={returnPolicy}
+                  onChange={handleReturnPolicyInputChange}
+                />
               </GridItem>
-              {checked && !isLoading && (<><GridItem padding={1} col={12}>
+              <GridItem padding={1} col={12}>
+                <Textarea
+                  label="Privacy Policy"
+                  name="name"
+                  value={privacyPolicy}
+                  onChange={handlePrivacyPolicyInputChange}
+                />
               </GridItem>
-                <GridItem padding={1} col={12}>
-                  <Button variant="default" onClick={handleRulesShow}>Return Rules</Button>
-                </GridItem>
-                {modalShow && <GridItem>
-                  <ReturnRulesModal handleRulesShow={handleRulesShow} setRadioOne={setRadioOne} setRadioTwo={setRadioTwo}
-                                    setRestockingFee={setRestockingFee} radioOne={radioOne} radioTwo={radioTwo}
-                                    restockingFee={restockingFee} editLegal={editLegal}/>
-                </GridItem>}
-                <GridItem padding={1} col={12}>
-                  <Textarea
-                      label="Return and refund policy"
-                      name="name"
-                      value={returnPolicy}
-                      onChange={handleReturnPolicyInputChange}
-                  />
-                </GridItem>
-                <GridItem padding={1} col={12}>
-                  <Textarea
-                      label="Privacy Policy"
-                      name="name"
-                      value={privacyPolicy}
-                      onChange={handlePrivacyPolicyInputChange}
-                  />
-                </GridItem>
-                <GridItem padding={1} col={12}>
-                  <Textarea
-                      label="Terms of service"
-                      name="name"
-                      value={termsOfService}
-                      onChange={handleTermsOfServiceInputChange}
-                  />
-                </GridItem>
-                <GridItem padding={1} col={12}>
-                  <Textarea
-                      label="Shipping Policy"
-                      name="name"
-                      value={shippingPolicy}
-                      onChange={handleShippingPolicyInputChange}
-                  />
-                </GridItem>
-                <GridItem padding={1} col={12}>
-                  <Textarea
-                      label="Online Shopping Policy"
-                      name="name"
-                      value={online}
-                      onChange={handleOnline}
-                  />
-                </GridItem>
-              </>)}
-            </Grid>
-          </Box>
-        </ContentLayout>
-      </Layout>
+              <GridItem padding={1} col={12}>
+                <Textarea
+                  label="Terms of service"
+                  name="name"
+                  value={termsOfService}
+                  onChange={handleTermsOfServiceInputChange}
+                />
+              </GridItem>
+              <GridItem padding={1} col={12}>
+                <Textarea
+                  label="Shipping Policy"
+                  name="name"
+                  value={shippingPolicy}
+                  onChange={handleShippingPolicyInputChange}
+                />
+              </GridItem>
+              <GridItem padding={1} col={12}>
+                <Textarea
+                  label="Online Shopping Policy"
+                  name="name"
+                  value={online}
+                  onChange={handleOnline}
+                />
+              </GridItem>
+            </>)}
+          </Grid>
+        </Box>
+      </ContentLayout>
+    </Layout>
   )
 }
 
