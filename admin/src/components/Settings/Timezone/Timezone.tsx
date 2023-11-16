@@ -13,8 +13,11 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import timezones from "timezones.json";
 import timezoneRequests from "../../../api/timezone";
 import { LoadingIndicatorPage } from "@strapi/helper-plugin";
+
 import { IZoneData, IUnitsData } from "../../../../../types/timezone";
 import { Alert } from '@strapi/design-system';
+
+
 
 const unitsData: IUnitsData = {
   Metric: [
@@ -38,7 +41,7 @@ const weightUnitsData: IUnitsData = {
   ],
 }
 
-const initialData: IZoneData = {
+const initialData: ITimeZone = {
   id: 0,
   timezone: "",
   measurement: "Metric",
@@ -51,7 +54,7 @@ const Timezone = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isNew, setIsNew] = useState(true);
   const [value, setValue] = useState<string | undefined>(undefined);
-  const [data, setData] = useState<IZoneData>(initialData)
+  const [data, setData] = useState<ITimeZone>(initialData)
   const [system, setSystem] = useState<string>('Metric');
   const [unit, setUnit] = useState<string>('');
   const [lengthUnit, setLengthUnit] = useState<string>('');
@@ -106,7 +109,7 @@ const Timezone = () => {
     }
   };
 
-  const saveTimezone = async (data: IZoneData) => {
+  const saveTimezone = async (data: ITimeZone) => {
     if (!isNew)
       await timezoneRequests.editTimezone(data.id, data);
     else {

@@ -1,4 +1,4 @@
-export interface ISocialData {
+export interface ISocial{
   id: number;
   instagram_enabled: boolean;
   facebook_enabled: boolean;

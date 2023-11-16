@@ -1,12 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ({ strapi }) => ({
-    async findOne(ctx) {
+    async find(ctx) {
         try {
-            ctx.body = await strapi
-                .plugin("omcommerce")
-                .service("social")
-                .find(ctx.params.id);
+            return await strapi.plugin("omcommerce").service("social").find(ctx.query);
         }
         catch (err) {
             ctx.throw(500, err);

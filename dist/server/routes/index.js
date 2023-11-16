@@ -522,8 +522,8 @@ exports.default = [
     },
     {
         method: "GET",
-        path: "/social/find/:id",
-        handler: "social.findOne",
+        path: "/social/find",
+        handler: "social.find",
         config: {
             policies: [],
             auth: false

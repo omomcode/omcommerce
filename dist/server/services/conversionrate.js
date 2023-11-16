@@ -2,12 +2,27 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ({ strapi }) => ({
     async find(query) {
-        return await strapi.entityService.findOne("plugin::omcommerce.conversionrate", query);
+        if (strapi.entityService) {
+            return await strapi.entityService.findOne("plugin::omcommerce.conversionrate", query);
+        }
+        else {
+            throw new Error('strapi.entityService is not defined');
+        }
     },
     async create(data) {
-        return await strapi.entityService.create("plugin::omcommerce.profile", data);
+        if (strapi.entityService) {
+            return await strapi.entityService.create("plugin::omcommerce.profile", data);
+        }
+        else {
+            throw new Error('strapi.entityService is not defined');
+        }
     },
     async update(id, data) {
-        return await strapi.entityService.update("plugin::omcommerce.conversionrate", id, data);
+        if (strapi.entityService) {
+            return await strapi.entityService.update("plugin::omcommerce.conversionrate", id, data);
+        }
+        else {
+            throw new Error('strapi.entityService is not defined');
+        }
     },
 });

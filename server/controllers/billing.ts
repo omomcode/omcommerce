@@ -2,7 +2,7 @@ import {Strapi} from "@strapi/strapi";
 
 export default ({ strapi }: { strapi: Strapi }) => ({
 
-  async find(ctx) {
+  async find(ctx : any) {
     try {
       return await strapi.plugin("omcommerce").service("billing").find(ctx.query);
     } catch (err) {
@@ -10,7 +10,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     }
   },
 
-  async create(ctx) {
+  async create(ctx : any) {
     try {
       ctx.body = await strapi
         .plugin("omcommerce")
@@ -21,7 +21,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     }
   },
 
-  async update(ctx) {
+  async update(ctx : any) {
     try {
       ctx.body = await strapi
         .plugin("omcommerce")

@@ -2,18 +2,15 @@ import {Strapi} from "@strapi/strapi";
 
 export default ({ strapi }: { strapi: Strapi }) => ({
 
-  async findOne(ctx) {
+  async find(ctx : any) {
     try {
-      ctx.body = await strapi
-        .plugin("omcommerce")
-        .service("social")
-        .find(ctx.params.id);
+      return await strapi.plugin("omcommerce").service("social").find(ctx.query);
     } catch (err) {
       ctx.throw(500, err);
     }
   },
 
-  async create(ctx) {
+  async create(ctx : any) {
     try {
       ctx.body = await strapi
         .plugin("omcommerce")
@@ -24,7 +21,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     }
   },
 
-  async update(ctx) {
+  async update(ctx : any) {
     try {
       ctx.body = await strapi
         .plugin("omcommerce")

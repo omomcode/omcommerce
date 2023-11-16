@@ -10,6 +10,10 @@ describe('Welcome Controller', () => {
         service: jest.fn().mockReturnValue({
           getWelcomeMessage: jest.fn().mockReturnValue('Welcome to the app'),
         }),
+        query: jest.fn(),
+        log: {
+          error: jest.fn(),
+        },
       })
     };
   });

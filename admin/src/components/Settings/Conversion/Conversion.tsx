@@ -17,8 +17,8 @@ import { Alert } from '@strapi/design-system';
 const initialData: IConversionRate = {
   id: 1,
   conversion_currency: "USD",
-  rate: "",
-  spread: ""
+  rate: 0,
+  spread: 0
 };
 
 const Conversion = () => {

@@ -4,9 +4,8 @@ import axios from "axios";
 
 export default ({ strapi }: { strapi: Strapi }) => ({
 
-  async capture(data) {
+  async capture(data : any) {
     const orderID = data.orderID;
-    console.dir(data);
     try {
       const response = await capturePayment(orderID,strapi);
       return JSON.stringify(response);
@@ -16,10 +15,9 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     }
   },
 
-  async orders(data) {
+  async orders(data : any) {
     try {
       const response = await createOrder(data,strapi);
-      // res.json(response);
       return JSON.stringify(response);
     } catch (error) {
       console.error('Failed to create order:', error);
