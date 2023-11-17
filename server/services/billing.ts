@@ -42,8 +42,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         data.postal && data.city
       ) {
       const billing =  await strapi.entityService.update("plugin::omcommerce.billing", id, data);
-      if(billing.data === data){
-        return billing.data;
+      if(billing?.data === data){
+        return billing?.data;
       }
       else {
         throw new Error("Invalid database data")

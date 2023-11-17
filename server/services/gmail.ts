@@ -18,7 +18,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         data.from && emailRegex.test(data.from)
       ) {
       const gmail =  await strapi.entityService.create("plugin::omcommerce.gmail", data);
-      if(gmail.data){
+      if(gmail.data === data){
         return gmail.data;
       }
       else {
@@ -42,8 +42,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         data.from && emailRegex.test(data.from)
       ) {
         const gmail =  await strapi.entityService.update("plugin::omcommerce.gmail", id, data);
-        if(gmail.data){
-          return gmail.data;
+        if(gmail?.data === data){
+          return gmail?.data;
         }
         else {
           throw new Error("Invalid database data")

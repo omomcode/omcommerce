@@ -18,7 +18,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         data.lengthUnit
       ) {
       const timezone =  await strapi.entityService.create("plugin::omcommerce.zone", data);
-      if(timezone.data){
+      if(timezone.data === data){
         return timezone.data;
       }
       else {
@@ -37,8 +37,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         data.lengthUnit
       ) {
         const timezone =  await strapi.entityService.update("plugin::omcommerce.zone", id, data);
-        if(timezone.data){
-          return timezone.data;
+        if(timezone?.data === data){
+          return timezone?.data;
         }
         else {
           throw new Error("Invalid database data")

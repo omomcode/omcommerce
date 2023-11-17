@@ -20,7 +20,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         .service("conversionrate")
         .create(ctx.request.body);
       }
-      else throw new Error("Invalid data")
+      else ctx.throw(500, "Invalid data");
     } catch (err) {
       ctx.throw(500, err);
     }
@@ -36,7 +36,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
           .service("conversionrate")
           .update(ctx.params.id, ctx.request.body);
       }
-      else throw new Error("Invalid data")
+      else ctx.throw(500, "Invalid data");
     } catch (err) {
       ctx.throw(500, err);
     }
