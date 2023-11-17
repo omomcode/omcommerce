@@ -124,7 +124,12 @@ describe('Conversion Rate Service', () => {
 
   it('should update a conversion rate record', async function () {
     const conversionRateId = 1;
-    const updateData = { /* your update data */ };
+    const updateData = {
+      id: 1,
+      rate: 0.0082327,
+      spread: 0.025 / 100,
+      conversion_currency: "RSD",
+    };
 
     // @ts-ignore
     const updatedConversionRate = await conversionRateService({ strapi }).update(conversionRateId, updateData);

@@ -12,8 +12,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async create(ctx : any) {
     try {
-      if(ctx.request.body.data.id && ctx.request.body.data && ctx.request.body.data.rate
-        && ctx.request.body.data.spread && ctx.request.body.data.conversion_currency
+      if(ctx.request.body && ctx.request.body.rate
+        && ctx.request.body.spread && ctx.request.body.conversion_currency
       ) {
       ctx.body = await strapi
         .plugin("omcommerce")
@@ -28,8 +28,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async update(ctx : any) {
     try {
-      if(ctx.request.body.data.id && ctx.request.body.data && ctx.request.body.data.rate
-        && ctx.request.body.data.spread && ctx.request.body.data.conversion_currency
+      if(ctx.params.id && ctx.request.body && ctx.request.body.rate
+        && ctx.request.body.spread && ctx.request.body.conversion_currency
       ) {
         ctx.body = await strapi
           .plugin("omcommerce")

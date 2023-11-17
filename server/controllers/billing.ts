@@ -12,10 +12,10 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async create(ctx : any) {
     try {
-      if(ctx.request.body.data && ctx.request.body.data.name
-        && ctx.request.body.data.country && ctx.request.body.data.address &&
-        ctx.request.body.data.apartment &&
-        ctx.request.body.data.postal && ctx.request.body.data.city
+      if(ctx.request.body && ctx.request.body.name
+        && ctx.request.body.country && ctx.request.body.address &&
+        ctx.request.body.apartment &&
+        ctx.request.body.postal && ctx.request.body.city
       ) {
         ctx.body = await strapi
           .plugin("omcommerce")
@@ -30,10 +30,10 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async update(ctx : any) {
     try {
-      if(ctx.params.id && ctx.request.body.data && ctx.request.body.data.name
-      && ctx.request.body.data.country && ctx.request.body.data.address &&
-        ctx.request.body.data.apartment &&
-        ctx.request.body.data.postal && ctx.request.body.data.city
+      if(ctx.params.id && ctx.request.body && ctx.request.body.name
+      && ctx.request.body.country && ctx.request.body.address &&
+        ctx.request.body.apartment &&
+        ctx.request.body.postal && ctx.request.body.city
       ) {
         ctx.body = await strapi
           .plugin("omcommerce")

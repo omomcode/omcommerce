@@ -13,10 +13,10 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   async create(ctx : any) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     try {
-      if(ctx.request.body.data && ctx.request.body.data.client_id
-        && ctx.request.body.data.client_secret && ctx.request.body.data.address &&
-        ctx.request.body.data.refresh_token &&
-        ctx.request.body.data.from && emailRegex.test(ctx.request.body.data.from)
+      if(ctx.request.body && ctx.request.body.client_id
+        && ctx.request.body.client_secret &&
+        ctx.request.body.refresh_token &&
+        ctx.request.body.from && emailRegex.test(ctx.request.body.from)
       ) {
       ctx.body = await strapi
         .plugin("omcommerce")
@@ -32,10 +32,10 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   async update(ctx : any) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     try {
-      if(ctx.params.id && ctx.request.body.data && ctx.request.body.data.client_id
-        && ctx.request.body.data.client_secret && ctx.request.body.data.address &&
-        ctx.request.body.data.refresh_token &&
-        ctx.request.body.data.from && emailRegex.test(ctx.request.body.data.from)
+      if(ctx.params.id && ctx.request.body && ctx.request.body.client_id
+        && ctx.request.body.client_secret &&
+        ctx.request.body.refresh_token &&
+        ctx.request.body.from && emailRegex.test(ctx.request.body.from)
       ) {
       ctx.body = await strapi
         .plugin("omcommerce")

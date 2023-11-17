@@ -112,7 +112,7 @@ describe('Currency Service', () => {
 
   it('should update a currency record', async function () {
     const currencyId = 1;
-    const updateData = { /* your update data */ };
+    const updateData = { currency: "EUR"};
 
     // @ts-ignore
     const updatedCurrency = await currencyService({ strapi }).update(currencyId, updateData);

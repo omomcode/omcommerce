@@ -13,13 +13,13 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (strapi.entityService) {
       if(data && data.client_id
-        && data.client_secret && data.address &&
+        && data.client_secret &&
         data.refresh_token &&
         data.from && emailRegex.test(data.from)
       ) {
       const gmail =  await strapi.entityService.create("plugin::omcommerce.gmail", data);
-      if(gmail.data === data){
-        return gmail.data;
+      if(gmail){
+        return gmail;
       }
       else {
         throw new Error("Invalid database data")
@@ -36,14 +36,14 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   async update(id : any, data : any) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (strapi.entityService) {
-      if(data && data.client_id
-        && data.client_secret && data.address &&
+      if(id && data && data.client_id
+        && data.client_secret &&
         data.refresh_token &&
         data.from && emailRegex.test(data.from)
       ) {
         const gmail =  await strapi.entityService.update("plugin::omcommerce.gmail", id, data);
-        if(gmail?.data === data){
-          return gmail?.data;
+        if(gmail){
+          return gmail;
         }
         else {
           throw new Error("Invalid database data")

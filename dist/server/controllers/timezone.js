@@ -11,16 +11,16 @@ exports.default = ({ strapi }) => ({
     },
     async create(ctx) {
         try {
-            if (ctx.request.body.data && ctx.request.body.data.timezone
-                && ctx.request.body.data.measurement && ctx.request.body.data.unit &&
-                ctx.request.body.data.lengthUnit) {
+            if (ctx.request.body && ctx.request.body.timezone
+                && ctx.request.body.measurement && ctx.request.body.unit &&
+                ctx.request.body.lengthUnit) {
                 ctx.body = await strapi
                     .plugin("omcommerce")
                     .service("timezone")
                     .create(ctx.request.body);
             }
             else
-                throw new Error("Invalid data");
+                ctx.throw(500, "Invalid data");
         }
         catch (err) {
             ctx.throw(500, err);
@@ -28,16 +28,16 @@ exports.default = ({ strapi }) => ({
     },
     async update(ctx) {
         try {
-            if (ctx.request.body.data && ctx.request.body.data.timezone
-                && ctx.request.body.data.measurement && ctx.request.body.data.unit &&
-                ctx.request.body.data.lengthUnit) {
+            if (ctx.params.id && ctx.request.body && ctx.request.body.timezone
+                && ctx.request.body.measurement && ctx.request.body.unit &&
+                ctx.request.body.lengthUnit) {
                 ctx.body = await strapi
                     .plugin("omcommerce")
                     .service("timezone")
                     .update(ctx.params.id, ctx.request.body);
             }
             else
-                throw new Error("Invalid data");
+                ctx.throw(500, "Invalid data");
         }
         catch (err) {
             ctx.throw(500, err);

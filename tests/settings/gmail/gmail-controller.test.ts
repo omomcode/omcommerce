@@ -58,13 +58,13 @@ describe('Gmail Configuration Controller', () => {
     };
 
     // Simulate an error in the find method
-    strapi.plugin("omcommerce").service("gmail").find.mockRejectedValueOnce("Simulated error");
+    strapi.plugin("omcommerce").service("gmail").find.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await gmailConfigController({ strapi }).find(ctx);
 
     // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 
 
@@ -99,13 +99,13 @@ describe('Gmail Configuration Controller', () => {
     };
 
     // Simulate an error in the create method
-    strapi.plugin("omcommerce").service("gmail").create.mockRejectedValueOnce("Simulated error");
+    strapi.plugin("omcommerce").service("gmail").create.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await gmailConfigController({ strapi }).create(ctx);
 
     // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 
   it('should update a Gmail configuration', async function () {
@@ -113,6 +113,7 @@ describe('Gmail Configuration Controller', () => {
       params: { id: 1 },
       request: {
         body: {
+          ...gmailConfigData,
           from: "new_info@example.com", // Assuming an updated 'from' for testing
         },
       },
@@ -147,13 +148,13 @@ describe('Gmail Configuration Controller', () => {
     };
 
     // Simulate an error in the update method
-    strapi.plugin("omcommerce").service("gmail").update.mockRejectedValueOnce("Simulated error");
+    strapi.plugin("omcommerce").service("gmail").update.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await gmailConfigController({ strapi }).update(ctx);
 
     // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 
 });

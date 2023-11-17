@@ -17,8 +17,8 @@ exports.default = ({ strapi }) => ({
                 data.region &&
                 emailRegex.test(data.email)) {
                 const profile = await strapi.entityService.create("plugin::omcommerce.profile", data);
-                if (profile.data) {
-                    return profile.data;
+                if (profile) {
+                    return profile;
                 }
                 else {
                     throw new Error("Invalid database data");
@@ -40,8 +40,8 @@ exports.default = ({ strapi }) => ({
                 data.region &&
                 emailRegex.test(data.email)) {
                 const profile = await strapi.entityService.update("plugin::omcommerce.profile", id, data);
-                if (profile.data) {
-                    return profile.data;
+                if (profile) {
+                    return profile;
                 }
                 else {
                     throw new Error("Invalid database data");

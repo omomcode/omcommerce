@@ -12,9 +12,9 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async create(ctx : any) {
     try {
-      if(ctx.request.body.data && ctx.request.body.data.timezone
-        && ctx.request.body.data.measurement && ctx.request.body.data.unit &&
-        ctx.request.body.data.lengthUnit
+      if(ctx.request.body && ctx.request.body.timezone
+        && ctx.request.body.measurement && ctx.request.body.unit &&
+        ctx.request.body.lengthUnit
       ) {
       ctx.body = await strapi
         .plugin("omcommerce")
@@ -29,9 +29,9 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async update(ctx : any) {
     try {
-      if(ctx.request.body.data && ctx.request.body.data.timezone
-        && ctx.request.body.data.measurement && ctx.request.body.data.unit &&
-        ctx.request.body.data.lengthUnit
+      if(ctx.params.id && ctx.request.body && ctx.request.body.timezone
+        && ctx.request.body.measurement && ctx.request.body.unit &&
+        ctx.request.body.lengthUnit
       ) {
       ctx.body = await strapi
         .plugin("omcommerce")
