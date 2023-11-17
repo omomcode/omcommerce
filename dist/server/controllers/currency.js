@@ -11,10 +11,14 @@ exports.default = ({ strapi }) => ({
     },
     async create(ctx) {
         try {
-            ctx.body = await strapi
-                .plugin("omcommerce")
-                .service("currency")
-                .create(ctx.request.body);
+            if (ctx.request.body.data.id && ctx.request.body.data && ctx.request.body.data.currency) {
+                ctx.body = await strapi
+                    .plugin("omcommerce")
+                    .service("currency")
+                    .create(ctx.request.body);
+            }
+            else
+                throw new Error("Invalid data");
         }
         catch (err) {
             ctx.throw(500, err);
@@ -22,10 +26,14 @@ exports.default = ({ strapi }) => ({
     },
     async update(ctx) {
         try {
-            ctx.body = await strapi
-                .plugin("omcommerce")
-                .service("currency")
-                .update(ctx.params.id, ctx.request.body);
+            if (ctx.request.body.data.id && ctx.request.body.data && ctx.request.body.data.currency) {
+                ctx.body = await strapi
+                    .plugin("omcommerce")
+                    .service("currency")
+                    .update(ctx.params.id, ctx.request.body);
+            }
+            else
+                throw new Error("Invalid data");
         }
         catch (err) {
             ctx.throw(500, err);
