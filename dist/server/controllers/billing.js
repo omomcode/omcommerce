@@ -11,7 +11,7 @@ exports.default = ({ strapi }) => ({
     },
     async create(ctx) {
         try {
-            if (ctx.request.body.data.id && ctx.request.body.data && ctx.request.body.data.name
+            if (ctx.request.body.data && ctx.request.body.data.name
                 && ctx.request.body.data.country && ctx.request.body.data.address &&
                 ctx.request.body.data.apartment &&
                 ctx.request.body.data.postal && ctx.request.body.data.city) {

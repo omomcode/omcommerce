@@ -12,9 +12,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
 
   async create(data: any) {
-
     if (strapi.entityService) {
-      if(data.id && data && data.name
+      if(data && data.name
         && data.country && data.address &&
         data.apartment &&
         data.postal && data.city
