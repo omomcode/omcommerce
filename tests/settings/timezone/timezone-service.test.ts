@@ -56,8 +56,8 @@ describe('Zone Service', () => {
     // @ts-ignore
     const createdZone = await zoneService({ strapi }).create(initialData);
     expect(strapi.entityService.create).toBeCalledTimes(1);
-    expect(createdZone.id).toBe(1);
-    expect(createdZone.timezone).toBe("Central Europe Standard Time");
+    expect(createdZone?.id).toBe(1);
+    expect(createdZone?.timezone).toBe("Central Europe Standard Time");
     // Add similar expectations for other properties
   });
 
@@ -126,7 +126,12 @@ describe('Zone Service', () => {
 
   it('should update a zone record', async function () {
     const zoneId = 1;
-    const updateData = { /* your update data */ };
+    const updateData = {
+      timezone: "Central Europe Standard Time",
+      measurement: "Metric",
+      unit: "g",
+      length_unit: "cm",
+    };
 
     // @ts-ignore
     const updatedZone = await zoneService({ strapi }).update(zoneId, updateData);

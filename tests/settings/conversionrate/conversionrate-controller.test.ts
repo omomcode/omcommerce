@@ -57,13 +57,13 @@ describe('Conversion Rate Controller', () => {
     };
 
     // Simulate an error in the find method
-    strapi.plugin("omcommerce").service("conversionRate").find.mockRejectedValueOnce("Simulated error");
+    strapi.plugin("omcommerce").service("conversionRate").find.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await conversionRateController({ strapi }).find(ctx);
 
     // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 
   it('should create a conversion rate', async function () {
@@ -96,13 +96,13 @@ describe('Conversion Rate Controller', () => {
     };
 
     // Simulate an error in the create method
-    strapi.plugin("omcommerce").service("conversionRate").create.mockRejectedValueOnce("Simulated error");
+    strapi.plugin("omcommerce").service("conversionRate").create.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await conversionRateController({ strapi }).create(ctx);
 
     // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 
   it('should update a conversion rate', async function () {
@@ -110,6 +110,7 @@ describe('Conversion Rate Controller', () => {
       params: { id: 1 },
       request: {
         body: {
+          ...conversionRateData,
           rate: 0.0085, // Assuming an updated rate
         },
       },
@@ -144,13 +145,13 @@ describe('Conversion Rate Controller', () => {
     };
 
     // Simulate an error in the update method
-    strapi.plugin("omcommerce").service("conversionRate").update.mockRejectedValueOnce("Simulated error");
+    strapi.plugin("omcommerce").service("conversionRate").update.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await conversionRateController({ strapi }).update(ctx);
 
     // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 
 });

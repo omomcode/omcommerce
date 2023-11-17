@@ -1,9 +1,9 @@
 import socialController from "../../../server/controllers/social";
-import { ISocial } from "../../../types/social";
+import { ISocialData } from "../../../types/social";
 
 describe('Social Controller', () => {
   let strapi: { plugin: any; };
-  let socialData: ISocial;
+  let socialData: ISocialData;
 
   beforeEach(async function () {
     socialData = {

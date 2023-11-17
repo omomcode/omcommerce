@@ -12,11 +12,11 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async create(data :any) {
     if (strapi.entityService) {
-      if(data.id && data && data.currency
+      if(data && data.currency
       ) {
       const currency = await strapi.entityService.create("plugin::omcommerce.currency", data);
-        if(currency.data === data){
-          return currency.data;
+        if(currency){
+          return currency;
         }
         else {
           throw new Error("Invalid database data")
@@ -35,8 +35,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       if(id && data && data.currency
       ) {
         const currency = await strapi.entityService.update("plugin::omcommerce.currency", id, data);
-        if(currency.data === data){
-          return currency.data;
+        if(currency){
+          return currency;
         }
         else {
           throw new Error("Invalid database data")

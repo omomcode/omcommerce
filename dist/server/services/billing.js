@@ -11,13 +11,13 @@ exports.default = ({ strapi }) => ({
     },
     async create(data) {
         if (strapi.entityService) {
-            if (data.id && data && data.name
+            if (data && data.name
                 && data.country && data.address &&
                 data.apartment &&
                 data.postal && data.city) {
                 const billing = await strapi.entityService.create("plugin::omcommerce.billing", data);
-                if (billing.data === data) {
-                    return billing.data;
+                if (billing) {
+                    return billing;
                 }
                 else {
                     throw new Error("Invalid database data");
@@ -33,13 +33,15 @@ exports.default = ({ strapi }) => ({
     },
     async update(id, data) {
         if (strapi.entityService) {
+            console.log("jebeni dejta", data);
             if (id && data && data.name
                 && data.country && data.address &&
                 data.apartment &&
                 data.postal && data.city) {
                 const billing = await strapi.entityService.update("plugin::omcommerce.billing", id, data);
-                if (billing.data === data) {
-                    return billing.data;
+                console.log("jebeni billing", billing);
+                if (billing) {
+                    return billing;
                 }
                 else {
                     throw new Error("Invalid database data");

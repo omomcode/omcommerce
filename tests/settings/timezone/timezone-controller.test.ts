@@ -1,9 +1,9 @@
 import timezoneController from "../../../server/controllers/timezone";
-import { ITimeZone } from "../../../types/timezone";
+import { IZoneData } from "../../../types/timezone";
 
 describe('Timezone Controller', () => {
   let strapi: { plugin: any; };
-  let timezoneData: ITimeZone;
+  let timezoneData: IZoneData;
 
   beforeEach(async function () {
     timezoneData = {
@@ -58,13 +58,13 @@ describe('Timezone Controller', () => {
     };
 
     // Simulate an error in the find method
-    strapi.plugin('omcommerce').service('timezone').find.mockRejectedValueOnce("Simulated error");
+    strapi.plugin('omcommerce').service('timezone').find.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await timezoneController({ strapi }).find(ctx);
 
     // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 
   it('should create a timezone', async function () {
@@ -97,13 +97,13 @@ describe('Timezone Controller', () => {
     };
 
     // Simulate an error in the create method
-    strapi.plugin('omcommerce').service('timezone').create.mockRejectedValueOnce("Simulated error");
+    strapi.plugin('omcommerce').service('timezone').create.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await timezoneController({ strapi }).create(ctx);
 
     // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 
   it('should update a timezone', async function () {
@@ -111,6 +111,7 @@ describe('Timezone Controller', () => {
       params: { id: 1 },
       request: {
         body: {
+          ...timezoneData,
           timezone: "Updated Timezone", // Assuming an updated timezone
         },
       },
@@ -145,13 +146,13 @@ describe('Timezone Controller', () => {
     };
 
     // Simulate an error in the update method
-    strapi.plugin('omcommerce').service('timezone').update.mockRejectedValueOnce("Simulated error");
+    strapi.plugin('omcommerce').service('timezone').update.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await timezoneController({ strapi }).update(ctx);
 
     // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 
 });

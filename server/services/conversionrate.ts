@@ -11,12 +11,12 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   },
   async create(data : any) {
     if (strapi.entityService) {
-      if(data.id && data && data.rate
+      if(data && data.rate
         && data.spread && data.conversion_currency
       ) {
         const conversion = await strapi.entityService.create("plugin::omcommerce.profile", data);
-        if(conversion.data === data){
-          return conversion.data;
+        if(conversion){
+          return conversion;
         }
         else {
           throw new Error("Invalid database data")
@@ -36,8 +36,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         && data.spread && data.conversion_currency
       ) {
         const conversion = await strapi.entityService.update("plugin::omcommerce.conversionrate", id, data);
-        if(conversion.data === data){
-          return conversion.data;
+        if(conversion){
+          return conversion;
         }
         else {
           throw new Error("Invalid database data")
