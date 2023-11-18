@@ -55,13 +55,13 @@ describe('Currency Controller', () => {
     };
 
     // Simulate an error in the find method
-    strapi.plugin("omcommerce").service("currency").find.mockRejectedValueOnce("Simulated error");
+    strapi.plugin("omcommerce").service("currency").find.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await currencyController({ strapi }).find(ctx);
 
     // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 
 
@@ -95,13 +95,13 @@ describe('Currency Controller', () => {
     };
 
     // Simulate an error in the create method
-    strapi.plugin("omcommerce").service("currency").create.mockRejectedValueOnce("Simulated error");
+    strapi.plugin("omcommerce").service("currency").create.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await currencyController({ strapi }).create(ctx);
 
     // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 
   it('should update a currency', async function () {
@@ -143,13 +143,13 @@ describe('Currency Controller', () => {
     };
 
     // Simulate an error in the update method
-    strapi.plugin("omcommerce").service("currency").update.mockRejectedValueOnce("Simulated error");
+    strapi.plugin("omcommerce").service("currency").update.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await currencyController({ strapi }).update(ctx);
 
     // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 
 });

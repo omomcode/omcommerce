@@ -11,7 +11,17 @@ exports.default = ({ strapi }) => ({
     },
     async create(data) {
         if (strapi.entityService) {
-            return await strapi.entityService.create("plugin::omcommerce.zone", data);
+            if (data && data.timezone
+                && data.measurement && data.unit &&
+                data.length_unit) {
+                const timezone = await strapi.entityService.create("plugin::omcommerce.zone", data);
+                if (timezone) {
+                    return timezone;
+                }
+                else {
+                    throw new Error("Invalid database data");
+                }
+            }
         }
         else {
             throw new Error('strapi.entityService is not defined');
@@ -19,7 +29,17 @@ exports.default = ({ strapi }) => ({
     },
     async update(id, data) {
         if (strapi.entityService) {
-            return await strapi.entityService.update("plugin::omcommerce.zone", id, data);
+            if (id && data && data.timezone
+                && data.measurement && data.unit &&
+                data.length_unit) {
+                const timezone = await strapi.entityService.update("plugin::omcommerce.zone", id, data);
+                if (timezone) {
+                    return timezone;
+                }
+                else {
+                    throw new Error("Invalid database data");
+                }
+            }
         }
         else {
             throw new Error('strapi.entityService is not defined');

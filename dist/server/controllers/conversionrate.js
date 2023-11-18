@@ -11,10 +11,15 @@ exports.default = ({ strapi }) => ({
     },
     async create(ctx) {
         try {
-            ctx.body = await strapi
-                .plugin("omcommerce")
-                .service("conversionrate")
-                .create(ctx.request.body);
+            if (ctx.request.body && ctx.request.body.rate
+                && ctx.request.body.spread && ctx.request.body.conversion_currency) {
+                ctx.body = await strapi
+                    .plugin("omcommerce")
+                    .service("conversionrate")
+                    .create(ctx.request.body);
+            }
+            else
+                ctx.throw(500, "Invalid data");
         }
         catch (err) {
             ctx.throw(500, err);
@@ -22,10 +27,15 @@ exports.default = ({ strapi }) => ({
     },
     async update(ctx) {
         try {
-            ctx.body = await strapi
-                .plugin("omcommerce")
-                .service("conversionrate")
-                .update(ctx.params.id, ctx.request.body);
+            if (ctx.params.id && ctx.request.body && ctx.request.body.rate
+                && ctx.request.body.spread && ctx.request.body.conversion_currency) {
+                ctx.body = await strapi
+                    .plugin("omcommerce")
+                    .service("conversionrate")
+                    .update(ctx.params.id, ctx.request.body);
+            }
+            else
+                ctx.throw(500, "Invalid data");
         }
         catch (err) {
             ctx.throw(500, err);

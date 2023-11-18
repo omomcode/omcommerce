@@ -91,8 +91,8 @@ describe('Profile Service', () => {
 
     expect(strapi.entityService.findOne).toBeCalledTimes(1);
     // Add more specific expectations based on your test scenario
-    expect(foundProfile.id).toBe(1);
-    expect(foundProfile.name).toBe('Your amazing store');
+    expect(foundProfile?.id).toBe(1);
+    expect(foundProfile?.name).toBe('Your amazing store');
     // Add similar expectations for other properties
   });
 
@@ -118,7 +118,13 @@ describe('Profile Service', () => {
 
   it('should update a profile', async function () {
     const profileId = 1;
-    const updateData = { /* your update data */ };
+    const updateData = {
+      id: 1,
+      name: 'Updated Store',
+      phone: '+11641112233',
+      email: 'updated-email@example.com',
+      region: 'US',
+    };
 
     // @ts-ignore
     const updatedProfile = await profileService({ strapi }).update(profileId, updateData);

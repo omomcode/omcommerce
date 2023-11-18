@@ -12,6 +12,7 @@ import { LoadingIndicatorPage } from "@strapi/helper-plugin";
 import currencyRequests from "../../../api/currency";
 import { ICurrency } from "../../../../../types/currency";
 import { currencies } from "currencies.json";
+import { Alert } from '@strapi/design-system';
 
 const initialData: ICurrency = {
   id: 0,
@@ -23,6 +24,8 @@ const Currency = () => {
   const [isNew, setIsNew] = useState(true);
   const [data, setData] = useState<ICurrency>(initialData)
   const [value, setValue] = useState<string | undefined>(undefined);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [nosubmit, setNoSubmit] = useState<boolean>(false);
 
   const options = currencies.map((currency) => ({
     value: currency.code,
@@ -49,14 +52,22 @@ const Currency = () => {
       ...data,
       [name]: value,
     });
+    // Clear the error message when the user starts typing
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
+    setNoSubmit(false);
   };
 
   const fetchData = async () => {
     try {
       const currency : any = await currencyRequests.getAllCurrency();
-      setIsNew(false);
-      setData(currency);
-      setValue(currency.currency);
+      if(currency !== undefined) {
+        setIsNew(false);
+        setData(currency);
+        setValue(currency.currency);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -65,9 +76,25 @@ const Currency = () => {
   };
 
   const saveCurrency = async (data: ICurrency) => {
-    if (!isNew) await currencyRequests.editCurrency(data.id, data);
-    else await currencyRequests.addCurrency(data);
+    // Validate if all required fields are filled
+    const newErrors: Record<string, string> = {};
+    if (!data.currency) {
+      newErrors.currency = "Currency is required";
+    }
 
+    setErrors(newErrors);
+
+    // Check if there are any errors before saving
+    if (Object.keys(newErrors).length > 0) {
+      console.error("Please fill in all required fields");
+      return;
+    }
+    if (!isNew) await currencyRequests.editCurrency(data.id, data);
+    else {
+      const curr = await currencyRequests.addCurrency(data);
+      console.log("curr", curr)
+      setIsNew(false)
+    }
     await fetchData();
   };
 
@@ -75,7 +102,10 @@ const Currency = () => {
   return (
     <Layout>
       <ContentLayout>
-        <Box padding="2rem">
+        {nosubmit &&<Alert closeLabel="Close" onClose={() => setNoSubmit(false)} title="Error" variant="danger">
+          Fill all required fields.
+        </Alert>}
+        <Box padding="3rem">
           <Typography variant="title">Store currency</Typography>
 
           <Box marginTop="1rem">
@@ -87,6 +117,7 @@ const Currency = () => {
               }}
               value={value}
               onChange={handleSingleSelectChange}
+              required
             >
               {options.map((option) => (
                 <SingleSelectOption key={option.value} value={option.value}>
@@ -94,6 +125,9 @@ const Currency = () => {
                 </SingleSelectOption>
               ))}
             </SingleSelect>
+            {errors.currency && (
+              <Typography textColor="danger600">{errors.currency}</Typography>
+            )}
           </Box>
           <br/>
           <Button onClick={() => saveCurrency(data)} variant="secondary">

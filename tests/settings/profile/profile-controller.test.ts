@@ -58,13 +58,13 @@ describe('Profile Controller', () => {
     };
 
     // Simulate an error in the find method
-    strapi.plugin("omcommerce").service("profile").find.mockRejectedValueOnce("Simulated error");
+    strapi.plugin("omcommerce").service("profile").find.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await profileController({ strapi }).find(ctx);
 
     // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 
   it('should create a profile', async function () {
@@ -97,13 +97,13 @@ describe('Profile Controller', () => {
     };
 
     // Simulate an error in the create method
-    strapi.plugin("omcommerce").service("profile").create.mockRejectedValueOnce("Simulated error");
+    strapi.plugin("omcommerce").service("profile").create.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await profileController({ strapi }).create(ctx);
 
     // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 
   it('should update a profile', async function () {
@@ -111,6 +111,7 @@ describe('Profile Controller', () => {
       params: { id: 1 }, // Assuming the ID for the profile is 1
       request: {
         body: {
+          ...profileData,
           name: 'Updated Store',
         },
       },
@@ -145,12 +146,12 @@ describe('Profile Controller', () => {
     };
 
     // Simulate an error in the update method
-    strapi.plugin("omcommerce").service("profile").update.mockRejectedValueOnce("Simulated error");
+    strapi.plugin("omcommerce").service("profile").update.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await profileController({ strapi }).update(ctx);
 
     // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 });

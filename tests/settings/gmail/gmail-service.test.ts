@@ -53,7 +53,7 @@ describe('Gmail Service', () => {
     };
 
     // @ts-ignore
-    const createdGmail = await gmailService({ strapi }).create(initialData);
+    const createdGmail: any = await gmailService({ strapi }).create(initialData);
     expect(strapi.entityService.create).toBeCalledTimes(1);
     expect(createdGmail.id).toBe(1);
     expect(createdGmail.client_id).toBe("CLIENTID");
@@ -127,10 +127,16 @@ describe('Gmail Service', () => {
 
   it('should update a Gmail record', async function () {
     const gmailId = 1;
-    const updateData = { /* your update data */ };
+    const updateData = {
+      id: 1,
+      client_id: "UPDATEDCLIENTID", // Updated client_id for testing
+      client_secret: "UPDATEDCLIENTSECRET", // Updated client_secret for testing
+      refresh_token: "UPDATEDSECRETREFRESHCODE", // Updated refresh_token for testing
+      from: "updated_info@example.com", // Updated from for testing
+    };
 
     // @ts-ignore
-    const updatedGmail = await gmailService({ strapi }).update(gmailId, updateData);
+    const updatedGmail : any = await gmailService({ strapi }).update(gmailId, updateData);
 
     expect(strapi.entityService.update).toBeCalledTimes(1);
 

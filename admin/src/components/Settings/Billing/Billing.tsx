@@ -11,6 +11,7 @@ import {
   Button
 } from "@strapi/design-system";
 import React, {ChangeEvent, useEffect, useState} from "react";
+import { Alert } from '@strapi/design-system';
 
 import countriesData from "../../../data/countries.json";
 import billingRequests from "../../../api/billing";
@@ -42,29 +43,12 @@ const Billing = () => {
   const [data, setData] = useState<IBilling>(initialData)
   const [value, setValue] = useState<string | undefined>(undefined);
   const [options, setOptions] = useState<{ value: string; label: string, key: string }[]>(cOptions);
-
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [nosubmit, setNoSubmit] = useState<boolean>(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!isLoading) setIsLoading(true);
-
-      try {
-        const billing: any = await billingRequests.getAllBilling();
-        setIsNew(false);
-        setData(billing);
-        setValue(billing.country);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
-
-
-
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const {name, value} = e.target;
@@ -72,6 +56,11 @@ const Billing = () => {
       ...data,
       [name]: value,
     });
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
+    setNoSubmit(false);
   };
 
   const handleSingleSelectChange = (newValue: string | undefined) => {
@@ -87,18 +76,56 @@ const Billing = () => {
   const fetchData = async () => {
     if (!isLoading) setIsLoading(true);
 
-    const billing : any = await billingRequests.getAllBilling();
-    setData(billing);
-    setValue(billing.country);
-    setIsLoading(false);
+    try {
+      const billing: any = await billingRequests.getAllBilling();
+      console.log("billing", billing)
+      if(billing !== undefined) {
+        setIsNew(false);
+        setData(billing);
+        setValue(billing.country);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
 
   const saveBilling = async (data: IBilling) => {
+    const newErrors: Record<string, string> = {};
+    if (!data.name) {
+      newErrors.name = "Legal business name is required";
+    }
+    if (!data.country) {
+      newErrors.country = "Country/region is required";
+    }
+    if (!data.address) {
+      newErrors.address = "Shipping address is required";
+    }
+    if (!data.postal) {
+      newErrors.postal = "Postal code is required";
+    }
+    if (!data.city) {
+      newErrors.city = "City is required";
+    }
+    if (!data.apartment) {
+      newErrors.apartment = "Apartment is required";
+    }
+
+    setErrors(newErrors);
+
+    // Check if there are any errors before saving
+    if (Object.keys(newErrors).length > 0) {
+      setNoSubmit(true);
+      //console.error("Please fill in all required fields");
+    }
     if(!isNew)
       await billingRequests.editBilling(data.id,data);
-    else
+    else {
       await billingRequests.addBilling(data);
+      setIsNew(false)
+    }
 
     await fetchData();
   }
@@ -107,7 +134,10 @@ const Billing = () => {
   return (
     <Layout>
       <ContentLayout>
-        <Box padding="2rem">
+        {nosubmit &&<Alert closeLabel="Close" onClose={() => setNoSubmit(false)} title="Error" variant="danger">
+          Fill all required fields.
+        </Alert>}
+        <Box padding="3rem">
           <Typography variant="title">Billing information</Typography>
           <Box marginTop="2rem">
             <TextInput
@@ -116,7 +146,9 @@ const Billing = () => {
               onChange={handleInputChange}
               fullWidth
               label="Legal business name"
+              required
             />
+            {errors.name && <Typography textColor="danger600">{errors.name}</Typography>}
           </Box>
           <Box marginTop="1rem">
             <SingleSelect
@@ -127,6 +159,7 @@ const Billing = () => {
               }}
               value={value}
               onChange={handleSingleSelectChange}
+              required
             >
               {options.map((option) => (
                 <SingleSelectOption key={option.key} value={option.value}>
@@ -134,6 +167,7 @@ const Billing = () => {
                 </SingleSelectOption>
               ))}
             </SingleSelect>;
+            {errors.country && <Typography textColor="danger600">{errors.country}</Typography>}
           </Box>
 
           <Box>
@@ -143,7 +177,9 @@ const Billing = () => {
               onChange={handleInputChange}
               fullWidth
               label="Shipping address"
+              required
             />
+            {errors.address && <Typography textColor="danger600">{errors.address}</Typography>}
           </Box>
 
           <Box marginTop="1rem">
@@ -153,7 +189,9 @@ const Billing = () => {
               onChange={handleInputChange}
               fullWidth
               label="Apartment, suite, etc."
+              required
             />
+            {errors.apartment && <Typography textColor="danger600">{errors.apartment}</Typography>}
           </Box>
           <Grid gap={5}>
             <GridItem col={6} s={12}>
@@ -164,7 +202,9 @@ const Billing = () => {
                   onChange={handleInputChange}
                   fullWidth
                   label="Postal code"
+                  required
                 />
+                {errors.postal && <Typography textColor="danger600">{errors.postal}</Typography>}
               </Box>
             </GridItem>
             <GridItem col={6} s={12}>
@@ -175,7 +215,9 @@ const Billing = () => {
                   onChange={handleInputChange}
                   fullWidth
                   label="City"
+                  required
                 />
+                {errors.city && <Typography textColor="danger600">{errors.city}</Typography>}
               </Box>
             </GridItem>
           </Grid>

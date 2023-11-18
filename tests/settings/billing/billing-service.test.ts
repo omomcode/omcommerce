@@ -61,7 +61,7 @@ describe('Billing Service', () => {
     };
 
     // @ts-ignore
-    const billingRecord = await billingService({ strapi }).create(billingData);
+    const billingRecord : any = await billingService({ strapi }).create(billingData);
     expect(strapi.entityService.create).toBeCalledTimes(1);
     expect(billingRecord.id).toBe(1);
     expect(billingRecord.name).toBe('Billing Company');
@@ -139,10 +139,15 @@ describe('Billing Service', () => {
 
   it('should update a billing record', async function () {
     const billingRecordId = 1;
-    const updateData = { /* your update data */ };
+    const updateData =  { name: 'Billing Company',
+      country: 'US',
+      address: '123 Main St',
+      apartment: 'Apt 456',
+      postal: '12345',
+      city: 'Cityville' };
 
     // @ts-ignore
-    const updatedBillingRecord = await billingService({ strapi }).update(billingRecordId, updateData);
+    const updatedBillingRecord: any = await billingService({ strapi }).update(billingRecordId, updateData);
 
     expect(strapi.entityService.update).toBeCalledTimes(1);
 

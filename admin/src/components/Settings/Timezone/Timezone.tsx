@@ -13,7 +13,11 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import timezones from "timezones.json";
 import timezoneRequests from "../../../api/timezone";
 import { LoadingIndicatorPage } from "@strapi/helper-plugin";
-import { ITimeZone, IUnitsData } from "../../../../../types/timezone";
+
+import { IZoneData, IUnitsData } from "../../../../../types/timezone";
+import { Alert } from '@strapi/design-system';
+
+
 
 const unitsData: IUnitsData = {
   Metric: [
@@ -37,7 +41,7 @@ const weightUnitsData: IUnitsData = {
   ],
 }
 
-const initialData: ITimeZone = {
+const initialData: IZoneData = {
   id: 0,
   timezone: "",
   measurement: "Metric",
@@ -50,29 +54,16 @@ const Timezone = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isNew, setIsNew] = useState(true);
   const [value, setValue] = useState<string | undefined>(undefined);
-  const [data, setData] = useState<ITimeZone>(initialData)
+  const [data, setData] = useState<IZoneData>(initialData)
   const [system, setSystem] = useState<string>('Metric');
   const [unit, setUnit] = useState<string>('');
   const [lengthUnit, setLengthUnit] = useState<string>('');
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [nosubmit, setNoSubmit] = useState<boolean>(false);
+
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
 
-      try {
-        const timezone: any = await timezoneRequests.getAllTimezone();
-        setIsNew(false);
-        setData(timezone);
-        setValue(timezone.timezone);
-        setSystem(timezone.measurement);
-        setUnit(timezone.unit);
-        setLengthUnit(timezone.lengthUnit)
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
 
     fetchData();
   }, []);
@@ -80,10 +71,14 @@ const Timezone = () => {
 
   const handleSystemChange = (newSystem: string) => {
     setSystem(newSystem);
-    setData((prevData) => ({
+    setData((prevData : any) => ({
       ...prevData,
       measurement: newSystem,
     }));
+    setErrors({
+      ...errors,
+      measurement: "",
+    });
 
     setUnit('');
   };
@@ -97,21 +92,31 @@ const Timezone = () => {
   const fetchData = async () => {
     setIsLoading(true);
 
-    const timezone: any = await timezoneRequests.getAllTimezone();
-    setData(timezone);
-    setValue(timezone.timezone);
-    setSystem(timezone.measurement);
-    setUnit(timezone.unit);
-    setLengthUnit(timezone.lengthUnit)
-    setIsLoading(false);
+    try {
+      const timezone: any = await timezoneRequests.getAllTimezone();
+      if(timezone !== undefined) {
+        setIsNew(false);
+        setData(timezone);
+        setValue(timezone.timezone);
+        setSystem(timezone.measurement);
+        setUnit(timezone.unit);
+        setLengthUnit(timezone.lengthUnit)
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const saveTimezone = async (data: ITimeZone) => {
+  const saveTimezone = async (data: IZoneData) => {
     if (!isNew)
       await timezoneRequests.editTimezone(data.id, data);
-    else
-      await timezoneRequests.addTimezone(data);
-
+    else {
+      const timezone = await timezoneRequests.addTimezone(data);
+      console.log("timezone", timezone)
+      setIsNew(false)
+    }
     await fetchData();
   }
 
@@ -131,6 +136,11 @@ const Timezone = () => {
       ...data,
       [name]: value,
     });
+    setErrors({
+      ...errors,
+      [name]: "",
+    });
+    setNoSubmit(false);
   };
 
   const handleUnitChange = (newUnit: string) => {
@@ -141,6 +151,12 @@ const Timezone = () => {
       ...prevData,
       unit: newUnit,
     }));
+    setErrors({
+      ...errors,
+      unit: "",
+    });
+
+    setNoSubmit(false);
   };
 
   const handleLengthUnitChange = (newUnit: string) => {
@@ -151,6 +167,12 @@ const Timezone = () => {
       ...prevData,
       lengthUnit: newUnit,
     }));
+    setErrors({
+      ...errors,
+      lengthUnit: "",
+    });
+    setNoSubmit(false);
+
   };
 
   if (isLoading) return <LoadingIndicatorPage />;
@@ -158,9 +180,11 @@ const Timezone = () => {
   return (
     <Layout>
       <ContentLayout>
-        <Box padding="2rem">
+        {nosubmit &&<Alert closeLabel="Close" onClose={() => setNoSubmit(false)} title="Error" variant="danger">
+          Fill all required fields.
+        </Alert>}
+        <Box padding="3rem">
           <Typography variant="title">Time zone and units of measurement</Typography>
-
           <Box marginTop="1rem">
             <SingleSelect
               label="Timezone"
@@ -170,6 +194,7 @@ const Timezone = () => {
               }}
               value={value}
               onChange={handleSingleSelectChange}
+              required
             >
               {options.map((option) => (
                 <SingleSelectOption key={option.key} value={option.value}>
@@ -177,6 +202,7 @@ const Timezone = () => {
                 </SingleSelectOption>
               ))}
             </SingleSelect>
+            {errors.timezone && <Typography textColor="danger600">{errors.timezone}</Typography>}
           </Box>
 
           <Grid gap={5}>
@@ -187,6 +213,7 @@ const Timezone = () => {
                   placeholder="Select a system"
                   value={system}
                   onChange={handleSystemChange}
+                  required
                 >
                   {[
                     { value: 'Metric', label: 'Metric System' },
@@ -197,6 +224,7 @@ const Timezone = () => {
                     </SingleSelectOption>
                   ))}
                 </SingleSelect>
+                {errors.measurement && <Typography textColor="danger600">{errors.measurement}</Typography>}
               </Box>
             </GridItem>
             <GridItem col={6} s={12}>
@@ -206,6 +234,7 @@ const Timezone = () => {
                   placeholder={`Select a unit (${system})`}
                   value={unit}
                   onChange={handleUnitChange}
+                  required
                 >
                   {unitsData[system].map((option) => (
                     <SingleSelectOption key={option.value} value={option.value}>
@@ -213,6 +242,7 @@ const Timezone = () => {
                     </SingleSelectOption>
                   ))}
                 </SingleSelect>
+                {errors.unit && <Typography textColor="danger600">{errors.unit}</Typography>}
               </Box>
             </GridItem>
             <GridItem col={6} s={12}>
@@ -222,6 +252,7 @@ const Timezone = () => {
                   placeholder={`Select a unit (${system})`}
                   value={lengthUnit}
                   onChange={handleLengthUnitChange}
+                  required
                 >
                   {weightUnitsData[system].map((option) => (
                     <SingleSelectOption key={option.value} value={option.value}>
@@ -229,6 +260,7 @@ const Timezone = () => {
                     </SingleSelectOption>
                   ))}
                 </SingleSelect>
+                {errors.lengthUnit && <Typography textColor="danger600">{errors.lengthUnit}</Typography>}
               </Box>
             </GridItem>
           </Grid>

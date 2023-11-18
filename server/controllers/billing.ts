@@ -12,10 +12,17 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async create(ctx : any) {
     try {
-      ctx.body = await strapi
-        .plugin("omcommerce")
-        .service("billing")
-        .create(ctx.request.body);
+      if(ctx.request.body && ctx.request.body.name
+        && ctx.request.body.country && ctx.request.body.address &&
+        ctx.request.body.apartment &&
+        ctx.request.body.postal && ctx.request.body.city
+      ) {
+        ctx.body = await strapi
+          .plugin("omcommerce")
+          .service("billing")
+          .create(ctx.request.body);
+      }
+      else ctx.throw(500, "Invalid data");
     } catch (err) {
       ctx.throw(500, err);
     }
@@ -23,10 +30,17 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async update(ctx : any) {
     try {
-      ctx.body = await strapi
-        .plugin("omcommerce")
-        .service("billing")
-        .update(ctx.params.id, ctx.request.body);
+      if(ctx.params.id && ctx.request.body && ctx.request.body.name
+      && ctx.request.body.country && ctx.request.body.address &&
+        ctx.request.body.apartment &&
+        ctx.request.body.postal && ctx.request.body.city
+      ) {
+        ctx.body = await strapi
+          .plugin("omcommerce")
+          .service("billing")
+          .update(ctx.params.id, ctx.request.body);
+      }
+      else ctx.throw(500, "Invalid data");
     } catch (err) {
       ctx.throw(500, err);
     }
