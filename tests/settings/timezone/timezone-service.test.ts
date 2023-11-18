@@ -61,6 +61,37 @@ describe('Zone Service', () => {
     // Add similar expectations for other properties
   });
 
+  it('should handle null result from create', async () => {
+    // Arrange
+    const initialData = {
+      timezone: "Central Europe Standard Time",
+      measurement: "Metric",
+      unit: "g",
+      length_unit: "cm",
+    };
+
+    // Mock the entityService.create method to return null
+    strapi.entityService.create.mockResolvedValueOnce(null);
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(zoneService({ strapi }).create(initialData)).rejects.toThrowError('Invalid database data');
+  });
+
+  it('should throw an error for invalid data when creating timezone information', async function () {
+
+    const initialData = {
+      timezone: "Central Europe Standard Time",
+      measurement: "Metric",
+      unit: "g",
+      // length_unit: "cm",
+    };
+    // @ts-ignore
+    await expect(zoneService({ strapi }).create(initialData)).rejects.toThrowError("Invalid data");
+  });
+
+
+
   it('timezone: create. Should throw an error when strapi.entityService is not defined', async function () {
     // Arrange
     const initialData = {
@@ -168,6 +199,38 @@ describe('Zone Service', () => {
       // Assert that the error message matches the expected message
       expect(error.message).toBe('strapi.entityService is not defined');
     }
+  });
+
+  it('should handle null result from update', async () => {
+    // Arrange
+    const zoneId = 1;
+    const updateData = {
+      timezone: "Central Europe Standard Time",
+      measurement: "Metric",
+      unit: "g",
+      length_unit: "cm",
+    };
+    // Mock the entityService.update method to return null
+    strapi.entityService.update.mockResolvedValueOnce(null);
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(zoneService({ strapi }).update(zoneId, updateData)).rejects.toThrowError('Invalid database data');
+  });
+
+  it('should throw an error for invalid data when updating zone information', async () => {
+    // Arrange
+    const zoneId = 1;
+    const updateData = {
+      timezone: "Central Europe Standard Time",
+      measurement: "Metric",
+      unit: "g",
+      // length_unit: "cm",
+    };
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(zoneService({ strapi }).update(zoneId, updateData)).rejects.toThrowError('Invalid data');
   });
 
 });

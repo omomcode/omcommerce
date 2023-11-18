@@ -34,7 +34,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     if (strapi.entityService) {
       if(id && data && data.currency
       ) {
-        const currency = await strapi.entityService.update("plugin::omcommerce.currency", id, data);
+        const currency = await strapi.entityService.update("plugin::omcommerce.currency", id, {data});
         if(currency){
           return currency;
         }

@@ -90,25 +90,51 @@ describe('Billing Controller', () => {
     expect(strapi.plugin('omcommerce').service('billing').create).toBeCalledTimes(1);
   });
 
-  it('should handle error when creating billing information', async () => {
+  it('should handle invalid data entries error when creating billing information', async () => {
     const ctx = {
       request: {
-        body: billingData,
+        body: {
+          name: 'New Billing Company',
+          // Omit one of the required fields to simulate an invalid data entry
+        },
       },
       body: null,
-      throw: jest.fn(), // Mocking the throw function
+      throw: jest.fn(),
     };
-
-    // Simulate an error in the create method
-    strapi.plugin("omcommerce").service("billing").create.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await billingController({ strapi }).create(ctx);
 
-    // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
+    // Expect throw to be called with the correct parameters for a 400 error
+    expect(ctx.throw).toHaveBeenCalledWith(400, "Invalid data");
   });
 
+  it('should handle error when creating billing information', async () => {
+    const ctx = {
+      request: {
+        body: {
+          name: 'New Billing Company',
+          // Include all required fields to simulate a successful create
+          country: 'Some Country',
+          address: 'Some Address',
+          apartment: 'Some Apartment',
+          postal: '12345',
+          city: 'Some City',
+        },
+      },
+      body: null,
+      throw: jest.fn(),
+    };
+
+    // Simulate an error in the create method that triggers a 500 error
+    strapi.plugin("omcommerce").service("billing").create.mockRejectedValueOnce("Internal Server Error");
+
+    // @ts-ignore
+    await billingController({ strapi }).create(ctx);
+
+    // Expect throw to be called with the correct parameters for a 500 error
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Internal Server Error");
+  });
 
 
   it('should update billing information', async function () {
@@ -138,26 +164,52 @@ describe('Billing Controller', () => {
     expect(strapi.plugin('omcommerce').service('billing').update).toBeCalledTimes(1);
   });
 
-  it('should handle error when updating billing information', async () => {
+  it('should handle invalid data entries error when updating billing information', async () => {
     const ctx = {
-      params: { id: 1 }, // Assuming the ID for the billing information is 1
+      params: { id: 1 },
       request: {
         body: {
           name: 'Updated Billing Company',
+          // Omit one of the required fields to simulate an invalid data entry
         },
       },
       body: null,
-      throw: jest.fn(), // Mocking the throw function
+      throw: jest.fn(),
     };
-
-    // Simulate an error in the update method
-    strapi.plugin("omcommerce").service("billing").update.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await billingController({ strapi }).update(ctx);
 
-    // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
+    // Expect throw to be called with the correct parameters for a 400 error
+    expect(ctx.throw).toHaveBeenCalledWith(400, "Invalid data");
+  });
+
+  it('should handle error when updating billing information', async () => {
+    const ctx = {
+      params: { id: 1 },
+      request: {
+        body: {
+          name: 'Updated Billing Company',
+          // Include all required fields to simulate a successful update
+          country: 'Some Country',
+          address: 'Some Address',
+          apartment: 'Some Apartment',
+          postal: '12345',
+          city: 'Some City',
+        },
+      },
+      body: null,
+      throw: jest.fn(),
+    };
+
+    // Simulate an error in the update method that triggers a 500 error
+    strapi.plugin("omcommerce").service("billing").update.mockRejectedValueOnce("Internal Server Error");
+
+    // @ts-ignore
+    await billingController({ strapi }).update(ctx);
+
+    // Expect throw to be called with the correct parameters for a 500 error
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Internal Server Error");
   });
 
 
