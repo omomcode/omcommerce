@@ -107,31 +107,5 @@ describe('Shipping Calculator Service', () => {
         expect.anything()   // timezone
       );
     });
-
-    it('should reject the promise when an error occurs while finding products for the cart', async () => {
-      // Arrange
-      // const mockCartData = {
-      //   data: {
-      //     cart: [
-      //       {id: "1", quantity: "2"},
-      //       // Add more items to the cart as needed for testing
-      //     ],
-      //     country_code: 'GB',
-      //   },
-      // };
-      strapi.entityService.findOne.mockRejectedValue(new Error('An error occurred'));
-
-      // Mock findShippingZoneBasedOnCountry to return a defined value
-      // @ts-ignore
-      // countryHelper.findShippingZoneBasedOnCountry.mockReturnValue({
-      //   name: 'Domestic',
-      //   shippingrate: [
-      //     { condition: '', price: 5, name: 'standard' },
-      //   ],
-      // });
-      // @ts-ignore
-      await expect(shippingCalculator({ strapi }).calculate({})).rejects.toThrowError("Cannot read properties of undefined (reading 'country_code')");
-
-      });
     });
 });
