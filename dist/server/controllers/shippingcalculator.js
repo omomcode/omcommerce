@@ -10,6 +10,7 @@ exports.default = ({ strapi }) => ({
         }
         catch (err) {
             ctx.throw(500, err);
+            ctx.body = {};
         }
     },
 });
