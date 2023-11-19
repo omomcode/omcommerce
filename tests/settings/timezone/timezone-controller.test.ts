@@ -87,24 +87,48 @@ describe('Timezone Controller', () => {
     expect(strapi.plugin('omcommerce').service('timezone').create).toBeCalledTimes(1);
   });
 
-  it('should throw an error when creating a timezone', async function () {
+  it('should handle invalid data entries error when creating a timezone', async () => {
     const ctx = {
       request: {
-        body: timezoneData,
+        body: {
+          timezone: 'UTC',
+          // Omit one of the required fields to simulate an invalid data entry
+        },
       },
-      body: null,
-      throw: jest.fn(), // Mocking the throw function
+      throw: jest.fn(),
     };
-
-    // Simulate an error in the create method
-    strapi.plugin('omcommerce').service('timezone').create.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await timezoneController({ strapi }).create(ctx);
 
-    // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
+    // Expect throw to be called with the correct parameters for a 400 error
+    expect(ctx.throw).toHaveBeenCalledWith(400, "Invalid data");
   });
+
+  it('should handle error when creating a timezone', async () => {
+    const ctx = {
+      request: {
+        body: {
+          timezone: 'UTC',
+          measurement: 'Metric',
+          unit: 'Meter',
+          lengthUnit: 'Kilometer',
+          // Include all required fields to simulate a successful create
+        },
+      },
+      throw: jest.fn(),
+    };
+
+    // Simulate an error in the create method that triggers a 500 error
+    strapi.plugin("omcommerce").service("timezone").create.mockRejectedValueOnce("Internal Server Error");
+
+    // @ts-ignore
+    await timezoneController({ strapi }).create(ctx);
+
+    // Expect throw to be called with the correct parameters for a 500 error
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Internal Server Error");
+  });
+
 
   it('should update a timezone', async function () {
     const ctx = {
@@ -133,26 +157,49 @@ describe('Timezone Controller', () => {
     expect(strapi.plugin('omcommerce').service('timezone').update).toBeCalledTimes(1);
   });
 
-  it('should throw an error when updating a timezone', async function () {
+  it('should handle invalid data entries error when updating a timezone', async () => {
     const ctx = {
       params: { id: 1 },
       request: {
         body: {
-          timezone: "Updated Timezone", // Assuming an updated timezone
+          timezone: 'UTC',
+          // Omit one of the required fields to simulate an invalid data entry
         },
       },
-      body: null,
-      throw: jest.fn(), // Mocking the throw function
+      throw: jest.fn(),
     };
-
-    // Simulate an error in the update method
-    strapi.plugin('omcommerce').service('timezone').update.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await timezoneController({ strapi }).update(ctx);
 
-    // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
+    // Expect throw to be called with the correct parameters for a 400 error
+    expect(ctx.throw).toHaveBeenCalledWith(400, "Invalid data");
   });
+
+  it('should handle error when updating a timezone', async () => {
+    const ctx = {
+      params: { id: 1 },
+      request: {
+        body: {
+          timezone: 'UTC',
+          measurement: 'Metric',
+          unit: 'Meter',
+          lengthUnit: 'Kilometer',
+          // Include all required fields to simulate a successful update
+        },
+      },
+      throw: jest.fn(),
+    };
+
+    // Simulate an error in the update method that triggers a 500 error
+    strapi.plugin("omcommerce").service("timezone").update.mockRejectedValueOnce("Internal Server Error");
+
+    // @ts-ignore
+    await timezoneController({ strapi }).update(ctx);
+
+    // Expect throw to be called with the correct parameters for a 500 error
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Internal Server Error");
+  });
+
 
 });

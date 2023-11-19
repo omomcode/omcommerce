@@ -1,6 +1,5 @@
 import countriesData from "../../data/countries.json";
 import {IShippingZone} from "../../../../types/zonetable";
-import {ICountry} from "../../../../types/country";
 
 export const findCountryFromCode = (code: string) => {
   return  countriesData.find((country) => country.code === code);

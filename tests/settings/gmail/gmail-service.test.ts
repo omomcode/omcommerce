@@ -1,5 +1,6 @@
 import gmailService from "../../../server/services/gmail";
 import shippingPackageService from "../../../server/services/shippingpackage";
+import currencyService from "../../../server/services/currency";
 
 describe('Gmail Service', () => {
   let strapi: { entityService: any; };
@@ -59,6 +60,36 @@ describe('Gmail Service', () => {
     expect(createdGmail.client_id).toBe("CLIENTID");
     // Add similar expectations for other properties
   });
+
+  it('should handle null result from create', async () => {
+    // Arrange
+    const initialData = {
+      client_id: "CLIENTID",
+      client_secret: "CLIENTSECRET",
+      refresh_token: "SECRETREFRESHCODE",
+      from: "info@example.com",
+    };
+
+    // Mock the entityService.create method to return null
+    strapi.entityService.create.mockResolvedValueOnce(null);
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(gmailService({ strapi }).create(initialData)).rejects.toThrowError('Invalid database data');
+  });
+
+  it('should throw an error for invalid data when creating billing information', async function () {
+
+    const initialData = {
+      client_id: "CLIENTID",
+      client_secret: "CLIENTSECRET",
+      refresh_token: "SECRETREFRESHCODE",
+      // from: "info@example.com",
+    };
+    // @ts-ignore
+    await expect(gmailService({ strapi }).create(initialData)).rejects.toThrowError("Invalid data");
+  });
+
 
   it('gmail: create. Should throw an error when strapi.entityService is not defined', async function () {
     // Arrange
@@ -170,6 +201,40 @@ describe('Gmail Service', () => {
       // Assert that the error message matches the expected message
       expect(error.message).toBe('strapi.entityService is not defined');
     }
+  });
+
+  it('should handle null result from update', async () => {
+    // Arrange
+    const gmailId = 1;
+    const updateData = {
+      id: 1,
+      client_id: "UPDATEDCLIENTID", // Updated client_id for testing
+      client_secret: "UPDATEDCLIENTSECRET", // Updated client_secret for testing
+      refresh_token: "UPDATEDSECRETREFRESHCODE", // Updated refresh_token for testing
+      from: "updated_info@example.com", // Updated from for testing
+    };
+    // Mock the entityService.update method to return null
+    strapi.entityService.update.mockResolvedValueOnce(null);
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(gmailService({ strapi }).update(gmailId, updateData)).rejects.toThrowError('Invalid database data');
+  });
+
+  it('should throw an error for invalid data when updating gmail information', async () => {
+    // Arrange
+    const gmailId = 1;
+    const updateData = {
+      id: 1,
+      client_id: "UPDATEDCLIENTID", // Updated client_id for testing
+      client_secret: "UPDATEDCLIENTSECRET", // Updated client_secret for testing
+      refresh_token: "UPDATEDSECRETREFRESHCODE", // Updated refresh_token for testing
+      // from: "updated_info@example.com", // Updated from for testing
+    };
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(gmailService({ strapi }).update(gmailId, updateData)).rejects.toThrowError('Invalid data');
   });
 
 });

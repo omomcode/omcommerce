@@ -9,7 +9,7 @@ exports.default = ({ strapi }) => ({
                     'description',
                     'amount_currency_code',
                     'amount_value',
-                    'amount_value_rsd',
+                    'amount_value_converted',
                     'Quantity',
                     'weight',
                     'measurement_unit',

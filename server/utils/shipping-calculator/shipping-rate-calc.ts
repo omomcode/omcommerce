@@ -8,7 +8,7 @@ const calculateMaxRate = (
   currency: { currency: string },
   timezone: { unit: string }
 ): number | undefined => {
-  let maxRate: number | undefined = undefined;
+  let maxRate = 0;
 
   if (shippingRates && Array.isArray(shippingRates)) {
     for (const rate of shippingRates) {
@@ -19,17 +19,19 @@ const calculateMaxRate = (
         const isWithinRange = totalAmountValue >= parseFloat(minPrice) && totalAmountValue <= parseFloat(maxPrice);
 
         if (maxRate === undefined || price > maxRate) {
-          maxRate = isWithinRange ? rate.price : 0;
+          maxRate = isWithinRange ? rate.price : maxRate;
         }
-      } else if (condition.includes(timezone.unit)) {
+      }
+      else if (condition.includes(timezone.unit)) {
         const { minWeight, maxWeight } = parseWeightCondition(rate.condition, timezone.unit);
         const isWithinRange = totalWeight >= parseFloat(minWeight) && totalWeight <= parseFloat(maxWeight);
 
         if (maxRate === undefined || price > maxRate) {
-          maxRate = isWithinRange ? rate.price : 0;
+          maxRate = isWithinRange ? rate.price : maxRate;
         }
-      } else {
-        if (maxRate === undefined || price > maxRate) {
+      }
+      else {
+        if (maxRate === undefined || (condition === "" && price > maxRate )) {
           maxRate = price;
         }
       }
