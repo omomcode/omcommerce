@@ -1,53 +1,12 @@
 import axios from "axios";
-// import {decryptData} from "./paypalPaymentSettings";
 import {sendMail} from "../../services/sendmail";
-import shippingcalculator from "../../services/shippingcalculator";
-
-// const getCredentials = async () => {
-//   return await paypalSetupRequests.getAllPaypalSetups();
-// }
-
-const findCredentials = async (query,strapi) => {
-  return await strapi.entityService.findOne("plugin::omcommerce.paypalsetup", query);
-}
-
-const calculateShippingCost = async (strapiInstance,data) => {
-  try {
-    return await shippingcalculator({strapi: strapiInstance}).calculate(data);
-  } catch (error) {
-    console.error('Error calculating shipping cost:', error);
-  }
-};
-
-const findProduct = async (query,strapi) => {
-  return await strapi.entityService.findMany("plugin::omcommerce.product", query);
-}
-
-const findOrder =async (query, strapi) => {
-    return await strapi.entityService.findMany("plugin::omcommerce.order", query);
-  }
-
-const updateOrder = async (id, data, strapi) => {
-    return await strapi.entityService.update("plugin::omcommerce.order", id, {data});
-  }
-
-const createOrderInDB = async (data, strapi) => {
-  return await strapi.entityService.create("plugin::omcommerce.order", {data});
-}
-
-const findCurrency = async (query,strapi) => {
-  return await strapi.entityService.findMany("plugin::omcommerce.currency", query);
-}
-const findGmail = async (query) => {
-  return await strapi.entityService.findOne("plugin::omcommerce.gmail", query);
-}
-
 
 // const { STRAPI_ADMIN_SANDBOX_PAYPAL_CLIENT_ID, STRAPI_ADMIN_SANDBOX_PAYPAL_CLIENT_SECRET,STRAPI_ADMIN_PAYPAL_ENVIRONMENT } = process.env;
 // const base = STRAPI_ADMIN_PAYPAL_ENVIRONMENT==='sandbox' ? "https://api-m.sandbox.paypal.com" : "https://api-m.paypal.com";
-export const capturePayment = async (orderID: string, strapi) => {
-  const accessToken = await generateAccessToken();
-  const base = process.env.STRAPI_ADMIN_PAYPAL_ENVIRONMENT === 'sandbox' ? "https://api-m.sandbox.paypal.com" : "https://api-m.paypal.com";
+export const capturePayment = async (orderID: string, strapi : any) => {
+  const accessToken = await generateAccessToken(strapi);
+  const credentials = await strapi.plugin("omcommerce").service("paypalsetup").find({});
+  const base = credentials.live === false ? "https://api-m.sandbox.paypal.com" : "https://api-m.paypal.com";
   const url = `${base}/v2/checkout/orders/${orderID}/capture`;
 
   try {
@@ -62,7 +21,8 @@ export const capturePayment = async (orderID: string, strapi) => {
 
       // const query = `populate=*&[filters][order_id][$eq]=${orderID}`
       const query = { populate: '*', filters: { order_id: { '$eq': orderID.toString() } } }
-      const orderResponse = await findOrder(query,strapi);
+      const orderResponse =await strapi.plugin("omcommerce").service("order").find(query);
+
       const order = orderResponse[0];
       order.email = response.data?.payer?.email_address;
       order.customer_name = response.data?.payer?.name?.given_name;
@@ -77,11 +37,14 @@ export const capturePayment = async (orderID: string, strapi) => {
       order.discount = "0"
 
 
-      const gmail: any = await findGmail({});
+      // const gmail: any = await findGmail({});
+
+      const gmail =await strapi.plugin("omcommerce").service("gmail").find({});
+
 
       if (order.status === "COMPLETED" && gmail !== undefined) await sendMail(orderResponse[0], "this is a message", strapi, gmail);
 
-      await updateOrder(order.id, order,strapi);
+      await strapi.plugin("omcommerce").service("order").update(order.id,order);
 
       return handleResponse(response);
     }
@@ -89,22 +52,14 @@ export const capturePayment = async (orderID: string, strapi) => {
     console.error('Error:', error);
   }
 };
-const generateAccessToken = async () => {
+export const generateAccessToken = async (strapi : any) => {
   try {
-    const credentials = await findCredentials({},strapi);
-
-    // @ts-ignore
-    // const STRAPI_ADMIN_SANDBOX_PAYPAL_CLIENT_ID = decryptData(credentials.sandbox_paypal_client_id);
-    // @ts-ignore
-    // const STRAPI_ADMIN_SANDBOX_PAYPAL_CLIENT_SECRET = decryptData(credentials.sandbox_paypal_client_secret);
-
-    // const PAYPAL_CLIENT_ID = credentials.live === true ? decryptData(credentials.live_paypal_client_id) : decryptData(credentials.sandbox_paypal_client_id);
+    const credentials =await strapi.plugin("omcommerce").service("paypalsetup").find({});
     const PAYPAL_CLIENT_ID = credentials.live === true ? credentials.live_paypal_client_id : credentials.sandbox_paypal_client_id;
-    // const PAYPAL_CLIENT_SECRET = credentials.live === true ? decryptData(credentials.live_paypal_client_secret) : decryptData(credentials.sandbox_paypal_client_secret);
     const PAYPAL_CLIENT_SECRET = credentials.live === true ?credentials.live_paypal_client_secret : credentials.sandbox_paypal_client_secret;
 
     const auth = Buffer.from(PAYPAL_CLIENT_ID + ":" + PAYPAL_CLIENT_SECRET).toString("base64");
-    const base = process.env.STRAPI_ADMIN_PAYPAL_ENVIRONMENT === 'sandbox' ? "https://api-m.sandbox.paypal.com" : "https://api-m.paypal.com";
+    const base = credentials.live === false ?  "https://api-m.sandbox.paypal.com" : "https://api-m.paypal.com";
 
     const response = await axios.post(`${base}/v1/oauth2/token`, "grant_type=client_credentials", {
       headers: {
@@ -120,7 +75,7 @@ const generateAccessToken = async () => {
   }
 };
 
-async function handleResponse(response) {
+export async function handleResponse(response : any) {
   if (response.status === 200 || response.status === 201) {
     return response.data
   }
@@ -129,29 +84,34 @@ async function handleResponse(response) {
   throw new Error(errorMessage);
 }
 
-export const createOrder = async (data,strapi) => {
+export const createOrder = async (data : any,strapi : any) => {
 
 
-  const accessToken = await generateAccessToken();
-  const base = process.env.STRAPI_ADMIN_PAYPAL_ENVIRONMENT === 'sandbox' ? "https://api-m.sandbox.paypal.com" : "https://api-m.paypal.com";
+  const accessToken = await generateAccessToken(strapi);
+  const credentials =await strapi.plugin("omcommerce").service("paypalsetup").find({});
+  const base = credentials.live === false ? "https://api-m.sandbox.paypal.com" : "https://api-m.paypal.com";
   const url = `${base}/v2/checkout/orders`;
 
   // const products = res.data;
-  const products = await findProduct({},strapi);
+  // const products = await findProduct({},strapi);
 
-  const cartItemIds = data.cart.map(item => item.id);
-  const matchingProducts = products.filter(product => cartItemIds.includes(product.id.toString()));
+  const products =await strapi.plugin("omcommerce").service("product").find({});
 
-  const totalAmount = matchingProducts.reduce((total, product) => {
-    const cartItem = data.cart.find(item => item.id === product.id.toString());
+  const cartItemIds = data.cart.map((item: { id: any; }) => item.id);
+  const matchingProducts = products.filter((product: { id: { toString: () => any; }; }) => {
+    return cartItemIds.includes(product.id.toString());
+  });
+  const totalAmount = matchingProducts.reduce((total: number, product: { id: { toString: () => any; }; amount_value: number; }) => {
+    const cartItem = data.cart.find((item: { id: any; }) => item.id === product.id.toString());
     const quantity = cartItem ? parseInt(cartItem.quantity, 10) : 0;
     return total + (product.amount_value * quantity);
   }, 0);
 
-  const shippingAmount = await calculateShippingCost(strapi,{data});
+  // const shippingAmount = await calculateShippingCost(strapi,{data});
+  const shippingAmount =await strapi.plugin("omcommerce").service("shippingcalculator").calculate({data});
 
-  const currency = await findCurrency({},strapi);
-
+  // const currency = await findCurrency({},strapi);
+  const currency =await strapi.plugin("omcommerce").service("currency").find({});
 
   const payload = {
     intent: 'CAPTURE',
@@ -171,7 +131,7 @@ export const createOrder = async (data,strapi) => {
             }
           }
         },
-        items: matchingProducts.map(product => {
+        items: matchingProducts.map((product: { title: any; description: any; SKU: any; amount_value: { toString: () => any; }; id: { toString: () => any; }; }) => {
           return {
             name: product.title,
             description: product.description,
@@ -180,7 +140,7 @@ export const createOrder = async (data,strapi) => {
               currency_code: currency.currency,
               value: product.amount_value.toString()
             },
-            quantity: data.cart.find(cartItem => cartItem.id === product.id.toString()).quantity,
+            quantity: data.cart.find((cartItem: { id: any; }) => cartItem.id === product.id.toString()).quantity,
           };
         }),
       },
@@ -206,9 +166,7 @@ export const createOrder = async (data,strapi) => {
       status: response.data.status
     }
 
-    // await orderRequests.addOrder(postData);
-
-    await createOrderInDB(postData,strapi);
+    await strapi.plugin("omcommerce").service("order").create(postData);
 
     return handleResponse(response);
   } catch (error) {
