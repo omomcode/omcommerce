@@ -11,13 +11,10 @@ exports.default = ({ strapi }) => ({
     },
     async create(data) {
         if (strapi.entityService) {
-            if (data &&
-                data.name &&
-                data.country &&
-                data.address &&
+            if (data && data.name
+                && data.country && data.address &&
                 data.apartment &&
-                data.postal &&
-                data.city) {
+                data.postal && data.city) {
                 const billing = await strapi.entityService.create("plugin::omcommerce.billing", data);
                 if (billing) {
                     return billing;
@@ -31,16 +28,19 @@ exports.default = ({ strapi }) => ({
             }
         }
         else {
-            throw new Error("strapi.entityService is not defined");
+            throw new Error('strapi.entityService is not defined');
         }
     },
     async update(id, data) {
         if (strapi.entityService) {
+            console.log("jebeni dejta", data);
+            console.log("jebeni dejta ajdi", id);
             if (id && data && data.name
                 && data.country && data.address &&
                 data.apartment &&
                 data.postal && data.city) {
                 const billing = await strapi.entityService.update("plugin::omcommerce.billing", id, { data });
+                console.log("jebeni billing", billing);
                 if (billing) {
                     return billing;
                 }

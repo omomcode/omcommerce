@@ -25,5 +25,6 @@ export interface IPackageModalProps {
   addPackage: (packageD: IPackage) => void;
   packageId: number | undefined;
   packageData: Object;
-  mode: string
+  mode: string;
+  errors: Record<string, string>;
 }

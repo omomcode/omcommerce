@@ -37,7 +37,7 @@
     "returnRules": {
       "type": "string"
     },
-    "returnShipping": {
+    "onlineShopping": {
       "type": "string"
     },
     "restockingFee": {

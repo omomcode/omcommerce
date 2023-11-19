@@ -12,7 +12,7 @@ exports.default = ({ strapi }) => ({
     },
     async create(data) {
         if (strapi.entityService) {
-            return await strapi.entityService.create("plugin::omcommerce.shippingpackage", data);
+            return await strapi.entityService.create("plugin::omcommerce.shippingpackage", { data });
         }
         else {
             throw new Error('strapi.entityService is not defined');
@@ -20,7 +20,7 @@ exports.default = ({ strapi }) => ({
     },
     async update(id, data) {
         if (strapi.entityService) {
-            return await strapi.entityService.update("plugin::omcommerce.shippingpackage", id, data);
+            return await strapi.entityService.update("plugin::omcommerce.shippingpackage", id, { data });
         }
         else {
             throw new Error('strapi.entityService is not defined');

@@ -17,7 +17,7 @@ import {
 import {Plus,Pencil,Trash} from "@strapi/icons";
 import {IPackage, IPackageTableProps} from "../../../../../types/package";
 
-export default function ShippingZoneTable({
+export default function PackageTable({
                                             packageData,
                                             deletePackage,
                                             editPackage,

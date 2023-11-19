@@ -58,7 +58,7 @@ const Legal = () => {
       console.log("lr", lr);
       setId(lr.id);
       setChecked(() => lr.enabled);
-      setOnline(lr.online);
+      setOnline(lr.onlineShopping);
       setRadioOne((prevState) => lr.returnWindow)
       setRadioTwo((prevState) => lr.returnShippingCost)
       setRestockingFee((prevState) => lr.restockingFee)
@@ -66,8 +66,7 @@ const Legal = () => {
       setPrivacyPolicy((prevState) => lr.privacyPolicy)
       setTermsOfService((prevState) => lr.termsOfService)
       setShippingPolicy((prevState) => lr.shippingPolicy)
-
-
+      setModalShow(lr.returnChecked)
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -93,7 +92,7 @@ const Legal = () => {
         restockingFee: restockingFee,
         returnWindow: radioOne,
         returnShippingCost: radioTwo,
-        online: online
+        onlineShopping: online,
       });
       console.log(lr);
 

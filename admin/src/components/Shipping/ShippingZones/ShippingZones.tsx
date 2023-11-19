@@ -45,6 +45,7 @@ const ShippingZones = () => {
   const [assignedZone, setAssignedZone] = useState<IShippingZone>();
   const [packages, setPackages] = useState<IPackage[]>([]);
   const [selectedPackage, setSelectedPackage] = useState<number>(0);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   // @ts-ignore
   useEffect( () => {
@@ -58,7 +59,7 @@ const ShippingZones = () => {
       const profile: any = await profileRequests.getAllProfiles();
       const sz : any = await shippingZoneRequests.getAllShippingZones();
       const pkg : any = await packagesRequests.getAllPackages();
-      console.dir(pkg);
+      console.log("pkg", pkg);
       setPackages(pkg);
 
       const notInZone = countriesNotInShippingZones(sz);
@@ -85,8 +86,16 @@ const ShippingZones = () => {
   };
 
   async function addShippingZone(data: any) {
-
-    await shippingZoneRequests.addShippingZone(data);
+    const zones = await shippingZoneRequests.getAllShippingZones();
+    const tempRes = zones.filter((zone: any) => zone.name === data.name)
+    if(tempRes || !data.name) {
+      const newErrors: Record<string, string> = {};
+      newErrors.name = "Shipping zone name is required and has to be different from existing names";
+      setErrors(newErrors);
+    }
+    else {
+      await shippingZoneRequests.addShippingZone(data);
+    }
     await fetchData();
   }
 
@@ -102,7 +111,8 @@ const ShippingZones = () => {
   }
 
   async function addShippingRate(zoneId: number, data: IShippingRate) {
-
+    console.log("addShippingRateZoneId", zoneId)
+    console.log("addShippingRateData", data)
     if (selectedRateMode === 'Add') {
 
       const d = {
@@ -112,14 +122,67 @@ const ShippingZones = () => {
         shippingzone: [zoneId],
       };
 
-      await shippingRateRequests.addShippingRate(d);
+      const rates = await shippingRateRequests.getAllShippingRates()
+      const tempRates = rates.filter((rate:any) => rate.name === data.name)
+      console.log("tempRates", tempRates)
+      const zones = await shippingZoneRequests.getAllShippingZones()
+      const tempRes = zones.filter((zone: any) => zone.id === zoneId)
+      console.log("tempRes", tempRes)
+      if(!data.name || tempRates.length > 0) {
+        console.log("prvo")
+        const newErrors: Record<string, string> = {};
+        newErrors.rate = "Name missing or not unique";
+        setErrors(newErrors);
+      }
+      else
+      if(!tempRes){
+        console.log("drugo")
+        const newErrors: Record<string, string> = {};
+        newErrors.rate = "Trying to create a shipping rate for a non existing shipping zone";
+        setErrors(newErrors);
+      }
+      else {
+        console.log("proso")
+        const newErrors: Record<string, string> = {};
+        newErrors.rate = "";
+        setErrors(newErrors);
+        setShowRateModal(false)
+        await shippingRateRequests.addShippingRate(d);
+      }
     } else if (selectedRateMode === 'Edit') {
       const d = {
         name: data.name,
         condition: data.condition,
         price: data.price,
       };
-      await shippingRateRequests.editShippingRate(data.id, d);
+
+      const rates = await shippingRateRequests.getAllShippingRates()
+      const tempRates = rates.filter((rate:any) => rate.name === data.name)
+      console.log("tempRatesEdit", tempRates)
+      const zones = await shippingZoneRequests.getAllShippingZones()
+      const tempRes = zones.filter((zone: any) => zone.id === zoneId)
+      console.log("tempResEdit", tempRes)
+      if(!data.name || tempRates.length > 0) {
+        console.log("prvoEdit")
+        const newErrors: Record<string, string> = {};
+        newErrors.rate = "Name missing or not unique";
+        setErrors(newErrors);
+      }
+      else
+      if(!tempRes){
+        console.log("drugoEdit")
+        const newErrors: Record<string, string> = {};
+        newErrors.rate = "Trying to create a shipping rate for a non existing shipping zone";
+        setErrors(newErrors);
+      }
+      else {
+        console.log("proso")
+        const newErrors: Record<string, string> = {};
+        newErrors.rate = "";
+        setErrors(newErrors);
+        setShowRateModal(false)
+        await shippingRateRequests.editShippingRate(data.id, d);
+      }
     }
     await fetchData();
 
@@ -136,6 +199,7 @@ const ShippingZones = () => {
   }
 
   async function editShippingRate(id: any, data: any) {
+    setSelectedZone(id);
     setEditRate(data);
     setSelectedRateMode('Edit');
     setShowRateModal(true);
@@ -155,7 +219,7 @@ const ShippingZones = () => {
   if (isLoading) return <LoadingIndicatorPage/>;
 
   async function addPackage(data: IPackage) {
-
+    console.log("addPackage", data)
     const defaultPackage = packages.find(p => p.default);
 
     if (defaultPackage && data.default && data.id !== defaultPackage.id) {
@@ -176,7 +240,24 @@ const ShippingZones = () => {
         weight: data.weight ?? "1",
         default: data.default ?? "false"
       };
-      await packagesRequests.addPackages(d);
+
+      const packages = await packagesRequests.getAllPackages()
+      const tempPackages = packages.filter((pack: any) => (pack.name === data.name && pack.type === data.type))
+      console.log("tempPackages", tempPackages)
+      if (tempPackages.length > 0 || !data.name) {
+        console.log("prvocreatepackage")
+        const newErrors: Record<string, string> = {};
+        newErrors.packages = "Name cannot be empty or the same as another package's name with the same package type";
+        setErrors(newErrors);
+      } else {
+        console.log("drugocreatepackage")
+        const newErrors: Record<string, string> = {};
+        newErrors.packages = "";
+        setErrors(newErrors);
+        setShowPackageModal(false)
+        await packagesRequests.addPackages(d);
+      }
+      await fetchData();
 
     } else if (selectedPackageMode === 'Edit') {
 
@@ -190,12 +271,24 @@ const ShippingZones = () => {
         weight: data.weight,
         default: data.default
       };
-      await packagesRequests.editPackages(data.id, d);
+      const packages = await packagesRequests.getAllPackages()
+      const tempPackages = packages.filter((pack: any) => (pack.name === data.name && pack.type === data.type))
+      if (tempPackages.length > 0 || !data.name) {
+        console.log("prvoeditpackage")
+        const newErrors: Record<string, string> = {};
+        newErrors.packages = "Name cannot be empty or the same as another package's name with the same package type";
+        setErrors(newErrors);
+      } else {
+        console.log("drugoeditpackage")
+        const newErrors: Record<string, string> = {};
+        newErrors.packages = "";
+        setErrors(newErrors);
+        setShowPackageModal(false)
+        await packagesRequests.editPackages(data.id, d);
+      }
+      await fetchData();
     }
-    setShowPackageModal(false);
-    await fetchData();
   }
-
   async function editPackage(id: number, data: any) {
     setSelectedPackage(data);
     setSelectedPackageMode("Edit");
@@ -296,7 +389,7 @@ const ShippingZones = () => {
       </Layout>
       {showModal && <ShippingZoneModal setShowModal={setShowModal} addShippingZone={addShippingZone}
                                        editShippingZone={editShippingZone} nonAssignedCountries={nonAssignedCountries}
-                                       assignedZone={assignedZone}/>}
+                                       assignedZone={assignedZone} errors={errors}/>}
       {showRateModal && (
         <ShippingRateModal
           setShowRateModal={setShowRateModal}
@@ -304,6 +397,7 @@ const ShippingZones = () => {
           zoneId={selectedZone}
           rateData={editRate}
           mode={selectedRateMode}
+          errors={errors}
         />
       )}
 
@@ -314,10 +408,12 @@ const ShippingZones = () => {
           packageId={selectedPackage}
           packageData={selectedPackage}
           mode={selectedPackageMode}
+          errors={errors}
         />
       )}
     </>
   );
 };
+
 
 export default ShippingZones;

@@ -1,72 +1,131 @@
 import {Strapi} from '@strapi/strapi';
-import {findShippingZoneBasedOnCountry} from "../utils/country-helper/country-helper";
+import {parsePriceCondition, parseWeightCondition} from "../utils/shipping-calculator/shipping-calc";
+import {findShippingZoneBasedOnCountry} from "../../admin/src/utils/country-helper/country-helper";
 import {IShippingZone} from "../../types/zonetable";
-import calculateMaxRate from "../utils/shipping-calculator/shipping-rate-calc";
-
-
-const calculateTotalValues = (products: any) => {
-  let totalAmountValue = 0;
-  let totalWeight = 0;
-  for (const productArray of products) {
-    for (const product of productArray) {
-      if (product.amount_value) {
-        totalAmountValue += product.amount_value;
-      }
-      if (product.weight) {
-        totalWeight += product.weight;
-      }
-    }
-  }
-  return {
-    totalAmountValue,
-    totalWeight
-  };
-};
 
 
 export default ({ strapi }: { strapi: Strapi }) => ({
 
-  async calculate(data: any) {
-    const products: any = [];
+  async calculate(data) {
+
+    const products = [];
     const country_code = data.data.country_code;
+    const findProduct = async (query) => {
+        return await strapi.entityService.findMany("plugin::omcommerce.product", query);
+    }
+
+    const findShippingZone = async (query) => {
+      return await strapi.entityService.findMany("plugin::omcommerce.shippingzone", query);
+    }
+
+    const calculateTotalValues = (products : any) => {
+      let totalAmountValue = 0;
+      let totalWeight = 0;
+      for (const productArray of products) {
+        for (const product of productArray) {
+          if (product.amount_value) {
+            totalAmountValue += product.amount_value;
+          }
+          if (product.weight) {
+            totalWeight += product.weight;
+          }
+        }
+      }
+      return {
+        totalAmountValue,
+        totalWeight
+      };
+    };
 
     const findProductsForCart = async () => {
 
       for (const item of data.data.cart) {
-        const query = {populate: '*', filters: {id: {'$eq': item.id.toString()}}}
-        const product = await strapi.plugin("omcommerce").service("product").find(query);
-        // const product = await strapi.services.omcommerce.product.find(query);
+        // const product = await getProduct(item.id);
+        // const query = `populate=*&[filters][id][$eq]=${item.id}`
+        const query = { populate: '*', filters: { id: { '$eq': item.id.toString() } } }
+
+        const product = await findProduct(query);
         if (product) {
           products.push(product);
         }
       }
     };
 
+    const findTimezone = async (query) => {
+      return await strapi.entityService.findOne("plugin::omcommerce.zone", query);
+    }
+
+    const findCurrency = async (query) => {
+      return await strapi.entityService.findOne("plugin::omcommerce.currency", query);
+    }
+
     const handleResult = async () => {
 
       const szQuery = {populate: '*'}
-
-      // const sz = await findShippingZone(strapi,szQuery);
-      const sz =await strapi.plugin("omcommerce").service("shippingzone").find(szQuery);
+      const sz = await findShippingZone(szQuery);
 
       const {totalAmountValue, totalWeight} = calculateTotalValues(products);
 
-      const currency = await strapi.plugin("omcommerce").service("currency").find({});
+      const currency = await findCurrency({});
+      const timezone = await findTimezone({});
 
-      const timezone =await strapi.plugin("omcommerce").service("timezone").find({});
+      const resolvedZone = findShippingZoneBasedOnCountry(country_code, sz as unknown as IShippingZone[]);
 
-      const resolvedZone: any = findShippingZoneBasedOnCountry(country_code, sz as unknown as IShippingZone[]);
       // @ts-ignore
-      return calculateMaxRate(resolvedZone.shippingrate, totalAmountValue, totalWeight, currency, timezone);
+      // const rate = resolvedZone.shippingrate[0];
+
+      // @ts-ignore
+      const shippingRates = resolvedZone?.shippingrate as IShippingRate[];
+
+      let maxRate: number | undefined = undefined;
+
+
+      for(const rate of shippingRates) {
+
+        const { condition, price } = rate;
+
+        // @ts-ignore
+        if (condition.includes(currency.currency)) {
+          // @ts-ignore
+          const {minPrice, maxPrice} = parsePriceCondition(rate.condition, currency.currency);
+          const isWithinRange = totalAmountValue >= parseFloat(minPrice) && totalAmountValue <= parseFloat(maxPrice);
+
+          if (maxRate === undefined || price > maxRate) {
+            maxRate =  isWithinRange ? rate.price : 0;
+          }
+
+        } else { // @ts-ignore
+          if (condition.includes(timezone.unit)) {
+            // @ts-ignore
+            const {minWeight, maxWeight} = parseWeightCondition(rate.condition, timezone.unit);
+            const isWithinRange = totalWeight >= parseFloat(minWeight) && totalWeight <= parseFloat(maxWeight);
+
+            if (maxRate === undefined || price > maxRate) {
+              maxRate =  isWithinRange ? rate.price : 0;
+            }
+          } else {
+            // console.log(rate.price);
+            if (maxRate === undefined || price > maxRate) {
+              maxRate =  price;
+            }
+          }
+        }
+      }
+
+      return maxRate;
+
+
 
     };
 
-    // const handleError = (error: any) => {
-    //   console.error("Error while finding products for the cart:", error);
-    //   return Promise.reject(error);
-    // };
+    const handleError = (error) => {
+      console.error("Error while finding products for the cart:", error);
+    };
 
     return await findProductsForCart()
-      .then(handleResult)
+                  .then(handleResult)
+                  .catch(handleError);
   }
+
+
 });

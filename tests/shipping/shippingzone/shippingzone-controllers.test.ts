@@ -11,6 +11,8 @@ describe('Shipping Zone Controller', () => {
       name: 'Domestic Zone',
       countries: [{ code: 'US', name: 'United States' }],
       shippingRatesData: []
+
+      // Add other properties as needed
     };
 
     strapi = {

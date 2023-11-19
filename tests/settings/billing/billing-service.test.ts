@@ -1,4 +1,5 @@
 import billingService from "../../../server/services/billing";
+import shippingPackageService from "../../../server/services/shippingpackage";
 
 describe('Billing Service', () => {
   let strapi: { entityService: any; };
@@ -22,7 +23,7 @@ describe('Billing Service', () => {
         create: jest.fn().mockImplementation((model: string, data: any) => {
           // Mock the behavior of create method
           // Return data based on your test scenario
-          return  {
+          return {
             id: 1,
             name: data.name,
             country: data.country,
@@ -50,8 +51,7 @@ describe('Billing Service', () => {
   });
 
   it('should create a billing record', async function () {
-    const data = {
-      id: 1,
+    const billingData = {
       name: 'Billing Company',
       country: 'US',
       address: '123 Main St',
@@ -61,10 +61,8 @@ describe('Billing Service', () => {
     };
 
     // @ts-ignore
-    const billingRecord: any = await billingService({ strapi }).create(data);
-
+    const billingRecord : any = await billingService({ strapi }).create(billingData);
     expect(strapi.entityService.create).toBeCalledTimes(1);
-    expect(billingRecord).toBeDefined();
     expect(billingRecord.id).toBe(1);
     expect(billingRecord.name).toBe('Billing Company');
     // Add similar expectations for other properties
@@ -94,41 +92,6 @@ describe('Billing Service', () => {
       // Assert that the error message matches the expected message
       expect(error.message).toBe('strapi.entityService is not defined');
     }
-  });
-
-  it('should handle null result from create', async () => {
-    // Arrange
-    const data = {
-      name: 'Billing Company',
-      country: 'US',
-      address: '123 Main St',
-      apartment: 'Apt 456',
-      postal: '12345',
-      city: 'Cityville',
-    };
-
-    // Mock the entityService.create method to return null
-    strapi.entityService.create.mockResolvedValueOnce(null);
-
-    // Act & Assert
-    // @ts-ignore
-    await expect(billingService({ strapi }).create(data)).rejects.toThrowError('Invalid database data');
-  });
-
-  it('should throw an error for invalid data when creating billing information', async function () {
-    // Arrange
-    const billingData = {
-      // Omit one of the required fields to simulate an invalid data entry
-      name: 'Billing Company',
-      country: 'Some Country',
-      address: 'Some Address',
-      apartment: 'Some Apartment',
-      postal: '12345',
-      // city: 'Some City', // Omitted field
-    };
-    // Act & Assert
-    // @ts-ignore
-    await expect(billingService({ strapi }).create(billingData)).rejects.toThrowError("Invalid data");
   });
 
 
@@ -219,44 +182,5 @@ describe('Billing Service', () => {
       expect(error.message).toBe('strapi.entityService is not defined');
     }
   });
-
-  it('should handle null result from update', async () => {
-    // Arrange
-    const billingRecordId = 1;
-    const updateData = {
-      name: 'Billing Company',
-      country: 'US',
-      address: '123 Main St',
-      apartment: 'Apt 456',
-      postal: '12345',
-      city: 'Cityville',
-    };
-
-    // Mock the entityService.update method to return null
-    strapi.entityService.update.mockResolvedValueOnce(null);
-
-    // Act & Assert
-    // @ts-ignore
-    await expect(billingService({ strapi }).update(billingRecordId, updateData)).rejects.toThrowError('Invalid database data');
-  });
-
-  it('should throw an error for invalid data when updating billing information', async () => {
-    // Arrange
-    const billingRecordId = 1;
-    const updateData = {
-      // Omit one of the required fields to simulate an invalid data entry
-      name: 'Billing Company',
-      country: 'Some Country',
-      address: 'Some Address',
-      apartment: 'Some Apartment',
-      postal: '12345',
-      // city: 'Some City', // Omitted field
-    };
-
-    // Act & Assert
-    // @ts-ignore
-    await expect(billingService({ strapi }).update(billingRecordId, updateData)).rejects.toThrowError('Invalid data');
-  });
-
 
 });

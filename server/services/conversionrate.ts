@@ -35,7 +35,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       if(id && data && data.rate
         && data.spread && data.conversion_currency
       ) {
-        const conversion = await strapi.entityService.update("plugin::omcommerce.conversionrate", id, {data});
+        const conversion = await strapi.entityService.update("plugin::omcommerce.conversionrate", id, data);
         if(conversion){
           return conversion;
         }

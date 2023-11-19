@@ -2,7 +2,7 @@ import {Strapi} from "@strapi/strapi";
 
 export default ({ strapi }: { strapi: Strapi }) => ({
 
-  async find(ctx : any) {
+  async find(ctx) {
     try {
       return await strapi.plugin("omcommerce").service("order").find(ctx.query);
     } catch (err) {
@@ -10,7 +10,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     }
   },
 
-  async findOne(ctx : any) {
+  async findOne(ctx) {
     try {
       ctx.body = await strapi
         .plugin("omcommerce")
@@ -22,7 +22,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   },
 
 
-  async create(ctx : any) {
+  async create(ctx) {
     try {
       ctx.body = await strapi
         .plugin("omcommerce")
@@ -33,7 +33,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     }
   },
 
-  async update(ctx : any) {
+  async update(ctx) {
     try {
       ctx.body = await strapi
         .plugin("omcommerce")
@@ -43,7 +43,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.throw(500, err);
     }
   },
-  async delete(ctx : any) {
+  async delete(ctx) {
     try {
       ctx.body = await strapi
         .plugin("omcommerce")

@@ -22,6 +22,7 @@ export default function ShippingRateModal({
                                             zoneId,
                                             rateData,
                                             mode,
+                                            errors
                                           } : IShippingRateModalProps)  {
   const initialData: IShippingRate = {
     id: 1,
@@ -111,7 +112,8 @@ export default function ShippingRateModal({
     e.stopPropagation();
 
     try {
-      setShowRateModal(false);
+      if(zoneId)
+      addShippingRate(zoneId, rate)
     } catch (e) {
       console.log("error", e);
     }
@@ -137,6 +139,7 @@ export default function ShippingRateModal({
           onChange={handleInputChange}
           value={rate.name}
         />
+        {errors.rate && <Typography textColor="danger600">{errors.rate}</Typography>}
         <br />
 
         <TextInput
@@ -230,7 +233,7 @@ export default function ShippingRateModal({
             Cancel
           </Button>
         }
-        endActions={<Button type="submit" onClick={() => addShippingRate(zoneId?parseInt(zoneId as string): 0,rate)}>{mode} rate</Button>}
+        endActions={<Button type="submit">{mode} rate</Button>}
       />
     </ModalLayout>
   );

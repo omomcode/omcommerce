@@ -23,4 +23,5 @@ export interface IShippingZoneModalProps {
   editShippingZone: (arg: YourTypeHere, selectedZone: { name: string; countries: any[] }) => void; // Replace YourTypeHere with the actual type
   assignedZone: YourAssignedZoneType;
   nonAssignedCountries: YourNonAssignedCountriesType;
+  errors: Record<string, string>;
 }

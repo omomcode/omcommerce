@@ -33,6 +33,9 @@ exports.default = ({ strapi }) => ({
         }
     },
     async update(ctx) {
+        console.log("billing controller data");
+        console.log(ctx.params.id);
+        console.dir(ctx.request.body);
         try {
             if (!ctx.params.id ||
                 !ctx.request.body ||

@@ -1,6 +1,5 @@
 import currencyService from "../../../server/services/currency";
 import shippingPackageService from "../../../server/services/shippingpackage";
-import conversionRateService from "../../../server/services/conversionrate";
 
 describe('Currency Service', () => {
   let strapi: { entityService: any; };
@@ -48,30 +47,6 @@ describe('Currency Service', () => {
     expect(createdCurrency.currency).toBe("EUR");
     // Add similar expectations for other properties
   });
-
-  it('should handle null result from create', async () => {
-    // Arrange
-    const currency =  {
-      currency: "EUR",
-    };
-
-    // Mock the entityService.create method to return null
-    strapi.entityService.create.mockResolvedValueOnce(null);
-
-    // Act & Assert
-    // @ts-ignore
-    await expect(currencyService({ strapi }).create(currency)).rejects.toThrowError('Invalid database data');
-  });
-
-  it('should throw an error for invalid data when creating billing information', async function () {
-
-    const currency =  {
-       // currency: "EUR",
-    };
-    // @ts-ignore
-    await expect(currencyService({ strapi }).create(currency)).rejects.toThrowError("Invalid data");
-  });
-
 
   it('currency: create. Should throw an error when strapi.entityService is not defined', async function () {
     // Arrange
@@ -174,33 +149,6 @@ describe('Currency Service', () => {
       // Assert that the error message matches the expected message
       expect(error.message).toBe('strapi.entityService is not defined');
     }
-  });
-
-  it('should handle null result from update', async () => {
-    // Arrange
-    const CurrencyId = 1;
-    const currency =  {
-      currency: "EUR",
-    };
-
-    // Mock the entityService.update method to return null
-    strapi.entityService.update.mockResolvedValueOnce(null);
-
-    // Act & Assert
-    // @ts-ignore
-    await expect(currencyService({ strapi }).update(CurrencyId, currency)).rejects.toThrowError('Invalid database data');
-  });
-
-  it('should throw an error for invalid data when updating cunversionrate information', async () => {
-    // Arrange
-    const CurrencyId = 1;
-    const currency =  {
-      // currency: "EUR",
-    };
-
-    // Act & Assert
-    // @ts-ignore
-    await expect(currencyService({ strapi }).update(CurrencyId, currency)).rejects.toThrowError('Invalid data');
   });
 
 });

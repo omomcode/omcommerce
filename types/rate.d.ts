@@ -8,7 +8,8 @@ export interface IShippingRate {
 interface IShippingRateModalProps {
   setShowRateModal:  Dispatch<SetStateAction<boolean>>;
   addShippingRate: (zoneId: number, data: IShippingRate) => Promise<void>;
-  zoneId: string | number | undefined;
-  rateData: Object | null
-  mode: string
+  zoneId: number | undefined;
+  rateData: Object | null;
+  mode: string;
+  errors: Record<string, string>
 }

@@ -1,7 +1,6 @@
+import {IShippingZone} from "../../../types/zonetable";
 // @ts-ignore
 import countriesData from "../../data/countries.json";
-import {IShippingZone} from "../../../types/zonetable";
-
 export const findCountryFromCode = (code: string) => {
   return  countriesData.find((country) => country.code === code);
 }
@@ -18,15 +17,11 @@ export const countriesNotInShippingZones = (shippingZones: IShippingZone[]) => {
   return countriesData.filter((country) => !countryCodesInShippingZones.includes(country.code));
 };
 
-export const findShippingZoneBasedOnCountry = (countryCode: string, shippingZones: IShippingZone[]): IShippingZone | null  => {
-
+export const  findShippingZoneBasedOnCountry = (countryCode: string, shippingZones: IShippingZone[]): IShippingZone  => {
   for (const zone of shippingZones) {
-    // Check if zone.countries is defined before calling find
-    if (zone.countries && Array.isArray(zone.countries)) {
-      const foundCountry = zone.countries.find((country: any) => country.code === countryCode);
-      if (foundCountry) {
-        return zone;
-      }
+    const foundCountry = zone.countries.find((country) => country.code === countryCode);
+    if (foundCountry) {
+      return zone;
     }
   }
   return null;

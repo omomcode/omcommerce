@@ -39,7 +39,7 @@ exports.default = ({ strapi }) => ({
                 && data.client_secret &&
                 data.refresh_token &&
                 data.from && emailRegex.test(data.from)) {
-                const gmail = await strapi.entityService.update("plugin::omcommerce.gmail", id, { data });
+                const gmail = await strapi.entityService.update("plugin::omcommerce.gmail", id, data);
                 if (gmail) {
                     return gmail;
                 }

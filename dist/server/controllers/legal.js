@@ -11,6 +11,16 @@ exports.default = ({ strapi }) => ({
     },
     async create(ctx) {
         try {
+            if (!ctx.params.id ||
+                !ctx.request.body ||
+                !ctx.request.body.name ||
+                !ctx.request.body.country ||
+                !ctx.request.body.address ||
+                !ctx.request.body.apartment ||
+                !ctx.request.body.postal ||
+                !ctx.request.body.city) {
+                ctx.throw(400, "Invalid data");
+            }
             ctx.body = await strapi
                 .plugin("omcommerce")
                 .service("legal")

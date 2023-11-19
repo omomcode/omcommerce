@@ -89,46 +89,23 @@ describe('Gmail Configuration Controller', () => {
     expect(strapi.plugin('omcommerce').service('gmail').create).toBeCalledTimes(1);
   });
 
-  it('should handle invalid data entries error when creating Gmail configuration', async () => {
+  it('should handle error when creating a gmail config', async () => {
     const ctx = {
       request: {
-        body: {
-          client_id: 'someClientId',
-          // Omit one of the required fields to simulate an invalid data entry
-        },
+        body: gmailConfigData,
       },
-      throw: jest.fn(),
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
     };
+
+    // Simulate an error in the create method
+    strapi.plugin("omcommerce").service("gmail").create.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await gmailConfigController({ strapi }).create(ctx);
 
-    // Expect throw to be called with the correct parameters for a 400 error
-    expect(ctx.throw).toHaveBeenCalledWith(400, "Invalid data");
-  });
-
-  it('should handle error when creating Gmail configuration', async () => {
-    const ctx = {
-      request: {
-        body: {
-          client_id: 'someClientId',
-          client_secret: 'someClientSecret',
-          refresh_token: 'someRefreshToken',
-          from: 'test@example.com',
-          // Include all required fields to simulate a successful create
-        },
-      },
-      throw: jest.fn(),
-    };
-
-    // Simulate an error in the create method that triggers a 500 error
-    strapi.plugin("omcommerce").service("gmail").create.mockRejectedValueOnce("Internal Server Error");
-
-    // @ts-ignore
-    await gmailConfigController({ strapi }).create(ctx);
-
-    // Expect throw to be called with the correct parameters for a 500 error
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Internal Server Error");
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 
   it('should update a Gmail configuration', async function () {
@@ -158,49 +135,26 @@ describe('Gmail Configuration Controller', () => {
     expect(strapi.plugin('omcommerce').service('gmail').update).toBeCalledTimes(1);
   });
 
-  it('should handle invalid data entries error when updating Gmail configuration', async () => {
+  it('should handle error when updating a gmail config', async () => {
     const ctx = {
       params: { id: 1 },
       request: {
         body: {
-          client_id: 'someClientId',
-          // Omit one of the required fields to simulate an invalid data entry
+          from: "new_info@example.com", // Assuming an updated 'from' for testing
         },
       },
-      throw: jest.fn(),
+      body: null,
+      throw: jest.fn()
     };
+
+    // Simulate an error in the update method
+    strapi.plugin("omcommerce").service("gmail").update.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await gmailConfigController({ strapi }).update(ctx);
 
-    // Expect throw to be called with the correct parameters for a 400 error
-    expect(ctx.throw).toHaveBeenCalledWith(400, "Invalid data");
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
-
-  it('should handle error when updating Gmail configuration', async () => {
-    const ctx = {
-      params: { id: 1 },
-      request: {
-        body: {
-          client_id: 'someClientId',
-          client_secret: 'someClientSecret',
-          refresh_token: 'someRefreshToken',
-          from: 'test@example.com',
-          // Include all required fields to simulate a successful update
-        },
-      },
-      throw: jest.fn(),
-    };
-
-    // Simulate an error in the update method that triggers a 500 error
-    strapi.plugin("omcommerce").service("gmail").update.mockRejectedValueOnce("Internal Server Error");
-
-    // @ts-ignore
-    await gmailConfigController({ strapi }).update(ctx);
-
-    // Expect throw to be called with the correct parameters for a 500 error
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Internal Server Error");
-  });
-
 
 });

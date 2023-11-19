@@ -16,12 +16,12 @@ import currencyRequests from "../../../api/currency";
 import timezoneRequests from "../../../api/timezone";
 import {IPackage, IPackageModalProps} from "../../../../../types/package";
 
-export default function PackageModal({setShowPackageModal, addPackage, packageId, packageData, mode} : IPackageModalProps) {
+export default function PackageModal({setShowPackageModal, addPackage, packageId, packageData, mode, errors} : IPackageModalProps) {
 
 
   const initialData: IPackage = {
     id: 1,
-    name: "standard",
+    name: "",
     height: 0,
     length: 0,
     type: "Box",
@@ -49,8 +49,8 @@ export default function PackageModal({setShowPackageModal, addPackage, packageId
 
   const fetchData = async () => {
     if (!isLoading) setIsLoading(true);
-
-    if (packageData !== null) {
+    console.log("packageDatafromshippingzone", packageData)
+    if (packageData !== null && packageData !== 0) {
       // @ts-ignore
       setPackageD(packageData);
     }
@@ -75,7 +75,8 @@ export default function PackageModal({setShowPackageModal, addPackage, packageId
     e.stopPropagation();
 
     try {
-      setShowPackageModal(false);
+      console.log("packageDDDDD", packageD)
+      addPackage(packageD)
     } catch (e) {
       console.log("error", e);
     }
@@ -130,6 +131,7 @@ export default function PackageModal({setShowPackageModal, addPackage, packageId
             label="Name"
 
           />
+          {errors.packages && <Typography textColor="danger600">{errors.packages}</Typography>}
         </Box>
         <br/>
 
@@ -138,7 +140,7 @@ export default function PackageModal({setShowPackageModal, addPackage, packageId
             label="Type"
             placeholder="Select a package type"
             onClear={() => {
-              handleSingleSelectChange(undefined);
+              handleSingleSelectChange("");
             }}
             value={value}
             onChange={handleSingleSelectChange}
@@ -246,7 +248,7 @@ export default function PackageModal({setShowPackageModal, addPackage, packageId
             Cancel
           </Button>
         }
-        endActions={<Button type="submit" onClick={() => addPackage(packageD)}> {mode} package </Button>}
+        endActions={<Button type="submit"> {mode} package </Button>}
       />
     </ModalLayout>
   );

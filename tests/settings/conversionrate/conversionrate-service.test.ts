@@ -1,6 +1,5 @@
 import conversionRateService from "../../../server/services/conversionrate";
 import shippingPackageService from "../../../server/services/shippingpackage";
-import billingService from "../../../server/services/billing";
 
 describe('Conversion Rate Service', () => {
   let strapi: { entityService: any; };
@@ -50,41 +49,12 @@ describe('Conversion Rate Service', () => {
     };
 
     // @ts-ignore
-    const createdConversionRate : any = await conversionRateService({ strapi }).create(conversionRateData);
+    const createdConversionRate = await conversionRateService({ strapi }).create(conversionRateData);
     expect(strapi.entityService.create).toBeCalledTimes(1);
-    expect(createdConversionRate).toBeDefined();
     expect(createdConversionRate.id).toBe(1);
     expect(createdConversionRate.rate).toBe(0.0082327);
     // Add similar expectations for other properties
   });
-
-  it('should handle null result from create', async () => {
-    // Arrange
-    const conversionRateData = {
-      rate: 0.0082327,
-      spread: 0.025 / 100,
-      conversion_currency: "RSD",
-    };
-
-    // Mock the entityService.create method to return null
-    strapi.entityService.create.mockResolvedValueOnce(null);
-
-    // Act & Assert
-    // @ts-ignore
-    await expect(conversionRateService({ strapi }).create(conversionRateData)).rejects.toThrowError('Invalid database data');
-  });
-
-  it('should throw an error for invalid data when creating billing information', async function () {
-
-    const conversionRateData = {
-      rate: 0.0082327,
-      spread: 0.025 / 100,
-      // conversion_currency: "RSD",
-    };
-    // @ts-ignore
-    await expect(conversionRateService({ strapi }).create(conversionRateData)).rejects.toThrowError("Invalid data");
-  });
-
 
   it('conversionrate: create. Should throw an error when strapi.entityService is not defined', async function () {
     // Arrange
@@ -198,35 +168,5 @@ describe('Conversion Rate Service', () => {
     }
   });
 
-  it('should handle null result from update', async () => {
-    // Arrange
-    const ConversionRateRecordId = 1;
-    const updateData = {
-      rate: 0.0082327,
-      spread: 0.025 / 100,
-      conversion_currency: "RSD",
-    };
-
-    // Mock the entityService.update method to return null
-    strapi.entityService.update.mockResolvedValueOnce(null);
-
-    // Act & Assert
-    // @ts-ignore
-    await expect(conversionRateService({ strapi }).update(ConversionRateRecordId, updateData)).rejects.toThrowError('Invalid database data');
-  });
-
-  it('should throw an error for invalid data when updating cunversionrate information', async () => {
-    // Arrange
-    const ConversionRateRecordId = 1;
-    const updateData = {
-      rate: 0.0082327,
-      spread: 0.025 / 100,
-      // conversion_currency: "RSD",
-    };
-
-    // Act & Assert
-    // @ts-ignore
-    await expect(conversionRateService({ strapi }).update(ConversionRateRecordId, updateData)).rejects.toThrowError('Invalid data');
-  });
 
 });

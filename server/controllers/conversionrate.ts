@@ -10,52 +10,37 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     }
   },
 
-  async create(ctx: any) {
+  async create(ctx : any) {
     try {
-      if (
-        !ctx.request.body ||
-        !ctx.request.body.rate ||
-        !ctx.request.body.spread ||
-        !ctx.request.body.conversion_currency
+      if(ctx.request.body && ctx.request.body.rate
+        && ctx.request.body.spread && ctx.request.body.conversion_currency
       ) {
-        // If any of the required fields is missing, throw a 500 error
-        ctx.throw(400, "Invalid data");
-      }
-
-      // If none of the required fields is missing, proceed with the create
       ctx.body = await strapi
         .plugin("omcommerce")
         .service("conversionrate")
         .create(ctx.request.body);
+      }
+      else ctx.throw(500, "Invalid data");
     } catch (err) {
-      // Catch any other errors and throw a 500 error
       ctx.throw(500, err);
     }
   },
 
-  async update(ctx: any) {
+  async update(ctx : any) {
     try {
-      if (
-        !ctx.params.id ||
-        !ctx.request.body ||
-        !ctx.request.body.rate ||
-        !ctx.request.body.spread ||
-        !ctx.request.body.conversion_currency
+      if(ctx.params.id && ctx.request.body && ctx.request.body.rate
+        && ctx.request.body.spread && ctx.request.body.conversion_currency
       ) {
-        // If any of the required fields is missing, throw a 400 error
-        ctx.throw(400, "Invalid data");
+        ctx.body = await strapi
+          .plugin("omcommerce")
+          .service("conversionrate")
+          .update(ctx.params.id, ctx.request.body);
       }
-
-      // If none of the required fields is missing, proceed with the update
-      ctx.body = await strapi
-        .plugin("omcommerce")
-        .service("conversionrate")
-        .update(ctx.params.id, ctx.request.body);
+      else ctx.throw(500, "Invalid data");
     } catch (err) {
-      // Catch any other errors and throw a 500 error
       ctx.throw(500, err);
     }
-  }
+  },
 
 
 });

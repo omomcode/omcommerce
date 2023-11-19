@@ -18,7 +18,7 @@ export default function ShippingZoneModal({
                                             editShippingZone,
                                             assignedZone,
                                             nonAssignedCountries,
-
+                                            errors
                                           } : IShippingZoneModalProps) {
   const [selectedZone, setSelectedZone] = useState({
     name: "",
@@ -39,6 +39,7 @@ export default function ShippingZoneModal({
     e.stopPropagation();
     try {
       handleSave();
+      if(!errors.name)
       setShowModal(false);
     } catch (error) {
       console.error("Error:", error);
@@ -90,6 +91,7 @@ export default function ShippingZoneModal({
               value={selectedZone.name}
               onChange={handleInputChange}
           />
+          {errors.name && <Typography textColor="danger600">{errors.name}</Typography>}
             <Countries
               assignedCountries={assignedZone?.countries}
               nonAssignedCountries={nonAssignedCountries}

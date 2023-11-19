@@ -20,12 +20,9 @@ const countriesNotInShippingZones = (shippingZones) => {
 exports.countriesNotInShippingZones = countriesNotInShippingZones;
 const findShippingZoneBasedOnCountry = (countryCode, shippingZones) => {
     for (const zone of shippingZones) {
-        // Check if zone.countries is defined before calling find
-        if (zone.countries && Array.isArray(zone.countries)) {
-            const foundCountry = zone.countries.find((country) => country.code === countryCode);
-            if (foundCountry) {
-                return zone;
-            }
+        const foundCountry = zone.countries.find((country) => country.code === countryCode);
+        if (foundCountry) {
+            return zone;
         }
     }
     return null;

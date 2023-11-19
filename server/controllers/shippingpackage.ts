@@ -12,6 +12,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async create(ctx : any) {
     try {
+      console.log("ctxeditpackage", ctx.request.body)
       ctx.body = await strapi
         .plugin("omcommerce")
         .service("shippingpackage")
@@ -23,6 +24,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async update(ctx : any) {
     try {
+      console.log("ctxupdatepackage", ctx.request.body)
       ctx.body = await strapi
         .plugin("omcommerce")
         .service("shippingpackage")

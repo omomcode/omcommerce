@@ -39,7 +39,7 @@ exports.default = ({ strapi }) => ({
                 && data.phone && data.email &&
                 data.region &&
                 emailRegex.test(data.email)) {
-                const profile = await strapi.entityService.update("plugin::omcommerce.profile", id, { data });
+                const profile = await strapi.entityService.update("plugin::omcommerce.profile", id, data);
                 if (profile) {
                     return profile;
                 }

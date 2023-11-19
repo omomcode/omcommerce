@@ -38,6 +38,10 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async update(ctx: any) {
 
+    console.log("billing controller data");
+    console.log(ctx.params.id);
+    console.dir(ctx.request.body);
+
     try {
       if (
         !ctx.params.id ||

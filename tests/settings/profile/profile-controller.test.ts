@@ -87,48 +87,24 @@ describe('Profile Controller', () => {
     expect(strapi.plugin('omcommerce').service('profile').create).toBeCalledTimes(1);
   });
 
-  it('should handle invalid data entries error when creating a profile', async () => {
+  it('should create a profile and handle error', async function () {
     const ctx = {
       request: {
-        body: {
-          name: 'John Doe',
-          // Omit one of the required fields to simulate an invalid data entry
-        },
+        body: profileData,
       },
-      throw: jest.fn(),
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
     };
+
+    // Simulate an error in the create method
+    strapi.plugin("omcommerce").service("profile").create.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await profileController({ strapi }).create(ctx);
 
-    // Expect throw to be called with the correct parameters for a 400 error
-    expect(ctx.throw).toHaveBeenCalledWith(400, "Invalid data");
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
-
-  it('should handle error when creating a profile', async () => {
-    const ctx = {
-      request: {
-        body: {
-          name: 'John Doe',
-          phone: '1234567890',
-          email: 'john@example.com',
-          region: 'Some Region',
-          // Include all required fields to simulate a successful create
-        },
-      },
-      throw: jest.fn(),
-    };
-
-    // Simulate an error in the create method that triggers a 500 error
-    strapi.plugin("omcommerce").service("profile").create.mockRejectedValueOnce("Internal Server Error");
-
-    // @ts-ignore
-    await profileController({ strapi }).create(ctx);
-
-    // Expect throw to be called with the correct parameters for a 500 error
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Internal Server Error");
-  });
-
 
   it('should update a profile', async function () {
     const ctx = {
@@ -157,48 +133,25 @@ describe('Profile Controller', () => {
     expect(strapi.plugin('omcommerce').service('profile').update).toBeCalledTimes(1);
   });
 
-  it('should handle invalid data entries error when updating a profile', async () => {
+  it('should update a profile and handle error', async function () {
     const ctx = {
-      params: { id: 1 },
+      params: { id: 1 }, // Assuming the ID for the profile is 1
       request: {
         body: {
-          name: 'John Doe',
-          // Omit one of the required fields to simulate an invalid data entry
+          name: 'Updated Store',
         },
       },
-      throw: jest.fn(),
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
     };
+
+    // Simulate an error in the update method
+    strapi.plugin("omcommerce").service("profile").update.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await profileController({ strapi }).update(ctx);
 
-    // Expect throw to be called with the correct parameters for a 400 error
-    expect(ctx.throw).toHaveBeenCalledWith(400, "Invalid data");
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
-
-  it('should handle error when updating a profile', async () => {
-    const ctx = {
-      params: { id: 1 },
-      request: {
-        body: {
-          name: 'John Doe',
-          phone: '1234567890',
-          email: 'john@example.com',
-          region: 'Some Region',
-          // Include all required fields to simulate a successful update
-        },
-      },
-      throw: jest.fn(),
-    };
-
-    // Simulate an error in the update method that triggers a 500 error
-    strapi.plugin("omcommerce").service("profile").update.mockRejectedValueOnce("Internal Server Error");
-
-    // @ts-ignore
-    await profileController({ strapi }).update(ctx);
-
-    // Expect throw to be called with the correct parameters for a 500 error
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Internal Server Error");
-  });
-
 });

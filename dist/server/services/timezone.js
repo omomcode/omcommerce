@@ -14,16 +14,13 @@ exports.default = ({ strapi }) => ({
             if (data && data.timezone
                 && data.measurement && data.unit &&
                 data.length_unit) {
-                const timezone = await strapi.entityService.create("plugin::omcommerce.zone", data);
+                const timezone = await strapi.entityService.create("plugin::omcommerce.zone", { data });
                 if (timezone) {
                     return timezone;
                 }
                 else {
                     throw new Error("Invalid database data");
                 }
-            }
-            else {
-                throw new Error("Invalid data");
             }
         }
         else {
@@ -42,9 +39,6 @@ exports.default = ({ strapi }) => ({
                 else {
                     throw new Error("Invalid database data");
                 }
-            }
-            else {
-                throw new Error("Invalid data");
             }
         }
         else {

@@ -2,7 +2,7 @@ import {Strapi} from "@strapi/strapi";
 
 export default ({ strapi }: { strapi: Strapi }) => ({
 
-  async calculate(ctx : any) {
+  async calculate(ctx) {
     try {
       ctx.body = await strapi
         .plugin("omcommerce")
@@ -10,7 +10,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         .calculate(ctx.request.body);
     } catch (err) {
       ctx.throw(500, err);
-      ctx.body = {};
     }
   },
 
