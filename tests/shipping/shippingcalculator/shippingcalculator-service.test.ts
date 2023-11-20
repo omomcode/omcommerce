@@ -9,7 +9,7 @@ describe('Shipping Calculator Service', () => {
   let strapi: { entityService: any, plugin: any };
 
   beforeEach(() => {
-    strapi = strapi = {
+    strapi = {
       entityService: {
         findMany: jest.fn(),
         findOne: jest.fn(),

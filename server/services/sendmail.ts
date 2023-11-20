@@ -1,20 +1,11 @@
 const nodemailer = require('nodemailer');
 import {google} from 'googleapis';
 
-
-
-
-
-
-export const sendMail = async (order, message, strapi, gmail) => {
+export const sendMail = async (order : any, message : any, strapi : any, gmail : any) => {
 
   const oAuth2Client = new google.auth.OAuth2(gmail.client_id, gmail.client_secret, process.env.STRAPI_ADMIN_EMAIL_REDIRECT_URI);
   oAuth2Client.setCredentials({refresh_token: gmail.refresh_token})
 
-
-  const findConversionRate = async (query,strapi) => {
-    return await strapi.entityService.findOne("plugin::omcommerce.conversionrate", query);
-  }
   const convertFromEURtoRSD = (rate: any, spreadPercentage: any,amount: any) => {
     // const spreadPercentage = 0.025 / 100;
     // const rate = 0.0082327;
@@ -37,7 +28,7 @@ export const sendMail = async (order, message, strapi, gmail) => {
       }
     })
 
-    const cr = await findConversionRate({},strapi);
+    const cr =await strapi.plugin("omcommerce").service("conversionrate").find({});
     const rsd_value =  convertFromEURtoRSD(cr.rate,cr.spread,order.amount)
     const messageText = `Dear ${order.customer_name},\n\n`;
     const drzava = "Srbija";
@@ -47,7 +38,7 @@ export const sendMail = async (order, message, strapi, gmail) => {
 
     const ukupno = rsd_value - parseInt(order.discount);
     const totalPrice = ukupno.toFixed(2);
-    const ordert = order.items.map((entry) =>
+    const ordert = order.items.map((entry: { unit_amount: { value: string; currency_code: any; }; }) =>
     {
       return {
         ...entry,
@@ -58,7 +49,7 @@ export const sendMail = async (order, message, strapi, gmail) => {
     // const signature = '<tbody><tr style="height:90.75pt"><td style="border-right:1.5pt solid rgb(153,153,153);vertical-align:top;padding:5pt;overflow:hidden"><p dir="ltr" style="line-height:1.44;margin-top:0pt;margin-bottom:0pt"><img data-aii="CiExM2xkZGFFOWlkSVdNVkFNcllXRzZBcDhVZm9PVDR3X1o" width="96" height="96" src="https://ci3.googleusercontent.com/mail-sig/AIorK4ywSOT7D0PhyQgNPwCLI2RzzWkqPLSG6pOh7bHJDzdaF6qRUGQz8Ggi7Y510FhgYRbVt4mmg9c" data-os="https://lh3.googleusercontent.com/d/13lddaE9idIWMVAMrYWG6Ap8UfoOT4w_Z"><br></p></td><td style="border-left:1.5pt solid rgb(153,153,153);vertical-align:top;padding:5pt;overflow:hidden"><br></td><td style="vertical-align:top;padding:5pt;overflow:hidden"><p dir="ltr" style="line-height:1.656;margin-top:0pt;margin-bottom:0pt"><span style="font-size:11pt;font-family:Arial;color:rgb(34,34,34);font-weight:700;vertical-align:baseline;white-space:pre-wrap">Support team</span></p><p dir="ltr" style="line-height:1.656;margin-top:0pt;margin-bottom:0pt"><span style="font-size:11pt;font-family:Arial;color:rgb(34,34,34);font-weight:700;vertical-align:baseline;white-space:pre-wrap">Support</span></p><p dir="ltr" style="line-height:1.656;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 5pt"><a href="http://www.omomcode.com/" target="_blank"><span style="font-size:11pt;font-family:Arial;color:rgb(17,85,204);font-weight:700;vertical-align:baseline;white-space:pre-wrap">www.omomcode.com</span></a></p><p dir="ltr" style="line-height:1.656;margin-top:0pt;margin-bottom:0pt;padding:0pt 0pt 5pt"><span style="color:rgb(34,34,34)">&nbsp;</span><img data-aii="CiExMExHaG01M2IyLVJtdmw5TDZDTFJEcmViUDktMjlLdks" width="19" height="19" src="https://ci3.googleusercontent.com/mail-sig/AIorK4zx02rit2_4ZPj5O4td0jB_fjXGOuQZJP8F5Bwrl173Cwaut71joLcP2coX9HsBDQdVXpnXPgg" data-os="https://lh3.googleusercontent.com/d/10LGhm53b2-Rmvl9L6CLRDrebP9-29KvK" style="color:rgb(34,34,34);margin-right:0px"><span style="color:rgb(34,34,34)">&nbsp;</span><img data-aii="CiExcW9NancyYjBBZTVEelF0ek4tZFBVVTdERGNLYUJrWmo" src="https://ci3.googleusercontent.com/mail-sig/AIorK4xwRHIQk2QJyxrSAEqnuzDSDR674yeBRllJTIjLYNuVJ234dTJg00pxeFO6csk58zBNpc9h1jE" data-os="https://lh3.googleusercontent.com/d/1qoMjw2b0Ae5DzQtzN-dPUU7DDcKaBkZj" width="19" height="19" style="color:rgb(34,34,34);margin-right:0px"><span style="color:rgb(34,34,34)">&nbsp;</span><img data-aii="CiExNUlVSWkzd3VDYVdpLUlOd2xraldZc25PMG1GdUUxdWs" src="https://ci3.googleusercontent.com/mail-sig/AIorK4xv5q9N6UUJlGlyP6IuxrJefGRE4I_JVeJzqB2fxvN33IbpsRNpjgX_bIhSi6_5q7og3HbZNH8" data-os="https://lh3.googleusercontent.com/d/15IUIi3wuCaWi-INwlkjWYsnO0mFuE1uk" width="19" height="19" style="color:rgb(34,34,34);margin-right:0px"><span style="color:rgb(34,34,34)">&nbsp;</span><img data-aii="CiExcy1FdHVRNUM4S2dHdjB4U2hTUm1zaVhha2pVT1Y0eEQ" src="https://ci3.googleusercontent.com/mail-sig/AIorK4ygD5-SiP6ZI2kc5hSla9tPtIMla6DGnFxMQ7rFu_nPAIX771sUE_idCFwpgJePq0CyqgkwZh0" data-os="https://lh3.googleusercontent.com/d/1s-EtuQ5C8KgGv0xShSRmsiXakjUOV4xD" width="19" height="19" style="color:rgb(34,34,34);margin-right:0px"><span style="color:rgb(34,34,34)">&nbsp;</span><img data-aii="CiExT08xUWM1amhuT2FUbWQ5cWl5cWtpdGdPdEZWZTZQSFM" src="https://ci3.googleusercontent.com/mail-sig/AIorK4ydRVybWEbcEs_fdHb8ukBqunUhs69e6hFY1VAq7iq8jsZ8mBCKx-CzIVUG3NgkRvWvRYcNHOs" data-os="https://lh3.googleusercontent.com/d/1OO1Qc5jhnOaTmd9qiyqkitgOtFVe6PHS" width="19" height="19" style="color:rgb(34,34,34);margin-right:0px"></p></td></tr></tbody>'
 
 
-    const orderTemp = order.items.map((entry) =>
+    const orderTemp = order.items.map((entry: { name: any; quantity: any; unit_amount: { value: any; }; }) =>
 
         `<div style="background-color: #fff;display: flex;
     border-bottom: 2px solid #000;
