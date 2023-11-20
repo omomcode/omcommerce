@@ -10,8 +10,18 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     }
   },
 
-  async create(ctx : any) {
+  async create(ctx: any) {
     try {
+      if (
+        !ctx.request.body ||
+        !ctx.request.body.timezone ||
+        !ctx.request.body.measurement ||
+        !ctx.request.body.unit ||
+        !ctx.request.body.lengthUnit
+      ) {
+        ctx.throw(400, "Invalid data");
+      }
+
       ctx.body = await strapi
         .plugin("omcommerce")
         .service("timezone")
@@ -21,8 +31,19 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     }
   },
 
-  async update(ctx : any) {
+  async update(ctx: any) {
     try {
+      if (
+        !ctx.params.id ||
+        !ctx.request.body ||
+        !ctx.request.body.timezone ||
+        !ctx.request.body.measurement ||
+        !ctx.request.body.unit ||
+        !ctx.request.body.lengthUnit
+      ) {
+        ctx.throw(400, "Invalid data");
+      }
+
       ctx.body = await strapi
         .plugin("omcommerce")
         .service("timezone")
@@ -30,7 +51,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     } catch (err) {
       ctx.throw(500, err);
     }
-  },
+  }
+,
 
 
 });

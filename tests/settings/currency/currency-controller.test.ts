@@ -55,13 +55,13 @@ describe('Currency Controller', () => {
     };
 
     // Simulate an error in the find method
-    strapi.plugin("omcommerce").service("currency").find.mockRejectedValueOnce("Simulated error");
+    strapi.plugin("omcommerce").service("currency").find.mockRejectedValueOnce("Invalid data");
 
     // @ts-ignore
     await currencyController({ strapi }).find(ctx);
 
     // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Invalid data");
   });
 
 
@@ -85,23 +85,46 @@ describe('Currency Controller', () => {
     expect(strapi.plugin('omcommerce').service('currency').create).toBeCalledTimes(1);
   });
 
-  it('should handle error when creating a currency', async () => {
+  it('should handle error when creating currency', async () => {
+    // Arrange
     const ctx = {
       request: {
-        body: currencyData,
+        body: {
+          currency: 'USD',
+          // Include all required fields to simulate a successful create
+        },
       },
-      body: null,
-      throw: jest.fn(), // Mocking the throw function
+      throw: jest.fn(),
     };
 
-    // Simulate an error in the create method
-    strapi.plugin("omcommerce").service("currency").create.mockRejectedValueOnce("Simulated error");
+    // Simulate an error in the create method that triggers a 500 error
+    strapi.plugin("omcommerce").service("currency").create.mockRejectedValueOnce("Internal Server Error");
 
     // @ts-ignore
     await currencyController({ strapi }).create(ctx);
 
-    // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    // Assert
+    // Ensure that ctx.throw was called with the correct parameters for a 500 error
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Internal Server Error");
+  });
+
+  it('should handle invalid data entries error when creating currency', async () => {
+    // Arrange
+    const ctx = {
+      request: {
+        body: {
+          // Omit the required field to simulate an invalid data entry
+        },
+      },
+      throw: jest.fn(),
+    };
+
+    // @ts-ignore
+    await currencyController({ strapi }).create(ctx);
+
+    // Assert
+    // Ensure that ctx.throw was called with the correct parameters for a 400 error
+    expect(ctx.throw).toHaveBeenCalledWith(400, "Invalid data");
   });
 
   it('should update a currency', async function () {
@@ -130,26 +153,48 @@ describe('Currency Controller', () => {
     expect(strapi.plugin('omcommerce').service('currency').update).toBeCalledTimes(1);
   });
 
-  it('should handle error when updating a currency', async () => {
+  it('should handle error when updating currency', async () => {
+    // Arrange
     const ctx = {
       params: { id: 1 },
       request: {
         body: {
-          currency: "EUR", // Assuming an updated currency
+          currency: 'USD',
+          // Include all required fields to simulate a successful update
         },
       },
-      body: null,
-      throw: jest.fn(), // Mocking the throw function
+      throw: jest.fn(),
     };
 
-    // Simulate an error in the update method
-    strapi.plugin("omcommerce").service("currency").update.mockRejectedValueOnce("Simulated error");
+    // Simulate an error in the update method that triggers a 500 error
+    strapi.plugin("omcommerce").service("currency").update.mockRejectedValueOnce("Internal Server Error");
 
     // @ts-ignore
     await currencyController({ strapi }).update(ctx);
 
-    // Expect throw to be called with the correct parameters
-    expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
+    // Assert
+    // Ensure that ctx.throw was called with the correct parameters for a 500 error
+    expect(ctx.throw).toHaveBeenCalledWith(500, "Internal Server Error");
+  });
+
+  it('should throw a 400 error when required fields are missing during currency update', async () => {
+    // Arrange
+    const ctx = {
+      params: { id: 1 },
+      request: {
+        body: {
+          // Omit the required field to simulate an invalid data entry
+        },
+      },
+      throw: jest.fn(),
+    };
+
+    // @ts-ignore
+    await currencyController({ strapi }).update(ctx);
+
+    // Assert
+    // Ensure that ctx.throw was called with the correct parameters for a 400 error
+    expect(ctx.throw).toHaveBeenCalledWith(400, "Invalid data");
   });
 
 });

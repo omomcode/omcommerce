@@ -39,7 +39,7 @@ describe('Shipping Package Service', () => {
           // Return updated data based on your test scenario
           const updatedPackage = {
             id: id,
-            name: data.name !== undefined ? data.name : 'Updated Package',
+            name: data.name !== undefined ? data.name : 'Updated Example Package',
             type: data.type !== undefined ? data.type : 'Updated Type',
             length: data.length !== undefined ? data.length : 15.0,
             width: data.width !== undefined ? data.width : 12.5,

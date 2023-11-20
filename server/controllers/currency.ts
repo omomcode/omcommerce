@@ -10,33 +10,41 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     }
   },
 
-  async create(ctx : any) {
+  async create(ctx: any) {
     try {
-      if(ctx.request.body.data.id && ctx.request.body.data && ctx.request.body.data.currency) {
-        ctx.body = await strapi
-          .plugin("omcommerce")
-          .service("currency")
-          .create(ctx.request.body);
+      if (
+        !ctx.request.body ||
+        !ctx.request.body.currency
+      ) {
+        ctx.throw(400, "Invalid data");
       }
-      else throw new Error("Invalid data")
+
+      ctx.body = await strapi
+        .plugin("omcommerce")
+        .service("currency")
+        .create(ctx.request.body);
     } catch (err) {
       ctx.throw(500, err);
     }
   },
 
-  async update(ctx : any) {
+  async update(ctx: any) {
     try {
-      if(ctx.request.body.data.id && ctx.request.body.data && ctx.request.body.data.currency) {
+      if (
+        !ctx.params.id ||
+        !ctx.request.body ||
+        !ctx.request.body.currency
+      ) {
+        ctx.throw(400, "Invalid data");
+      }
+
       ctx.body = await strapi
         .plugin("omcommerce")
         .service("currency")
         .update(ctx.params.id, ctx.request.body);
-      }
-      else throw new Error("Invalid data")
     } catch (err) {
       ctx.throw(500, err);
     }
-  },
-
+  }
 
 });

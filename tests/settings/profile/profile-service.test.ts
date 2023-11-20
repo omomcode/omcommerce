@@ -60,6 +60,37 @@ describe('Profile Service', () => {
     expect(profile.name).toBe('Your amazing store');
   });
 
+  it('should handle null result from create', async () => {
+    // Arrange
+    const profileData = {
+      name: 'Your amazing store',
+      phone: '+11641112233',
+      email: 'office@amazingstore.com',
+      region: 'GB',
+    };
+
+    // Mock the entityService.create method to return null
+    strapi.entityService.create.mockResolvedValueOnce(null);
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(profileService({ strapi }).create(profileData)).rejects.toThrowError('Invalid database data');
+  });
+
+  it('should throw an error for invalid data when creating billing information', async function () {
+
+    const profileData = {
+      name: 'Your amazing store',
+      phone: '+11641112233',
+      email: 'office@amazingstore.com',
+      // region: 'GB',
+    };
+    // @ts-ignore
+    await expect(profileService({ strapi }).create(profileData)).rejects.toThrowError("Invalid data");
+  });
+
+
+
   it('profile: create. Should throw an error when strapi.entityService is not defined', async function () {
     // Arrange
     const profileData = {
@@ -91,8 +122,8 @@ describe('Profile Service', () => {
 
     expect(strapi.entityService.findOne).toBeCalledTimes(1);
     // Add more specific expectations based on your test scenario
-    expect(foundProfile.id).toBe(1);
-    expect(foundProfile.name).toBe('Your amazing store');
+    expect(foundProfile?.id).toBe(1);
+    expect(foundProfile?.name).toBe('Your amazing store');
     // Add similar expectations for other properties
   });
 
@@ -118,7 +149,13 @@ describe('Profile Service', () => {
 
   it('should update a profile', async function () {
     const profileId = 1;
-    const updateData = { /* your update data */ };
+    const updateData = {
+      id: 1,
+      name: 'Updated Store',
+      phone: '+11641112233',
+      email: 'updated-email@example.com',
+      region: 'US',
+    };
 
     // @ts-ignore
     const updatedProfile = await profileService({ strapi }).update(profileId, updateData);
@@ -148,6 +185,40 @@ describe('Profile Service', () => {
       // Assert that the error message matches the expected message
       expect(error.message).toBe('strapi.entityService is not defined');
     }
+  });
+
+  it('should handle null result from update', async () => {
+    // Arrange
+    const profileId = 1;
+    const updateData = {
+      id: 1,
+      name: 'Updated Store',
+      phone: '+11641112233',
+      email: 'updated-email@example.com',
+      region: 'US',
+    };
+    // Mock the entityService.update method to return null
+    strapi.entityService.update.mockResolvedValueOnce(null);
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(profileService({ strapi }).update(profileId, updateData)).rejects.toThrowError('Invalid database data');
+  });
+
+  it('should throw an error for invalid data when updating cunversionrate information', async () => {
+    // Arrange
+    const profileId = 1;
+    const updateData = {
+      id: 1,
+      name: 'Updated Store',
+      phone: '+11641112233',
+      email: 'updated-email@example.com',
+      // region: 'US',
+    };
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(profileService({ strapi }).update(profileId, updateData)).rejects.toThrowError('Invalid data');
   });
 
 });

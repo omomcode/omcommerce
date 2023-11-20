@@ -1,99 +1,58 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const shipping_calc_1 = require("../utils/shipping-calculator/shipping-calc");
-const country_helper_1 = require("../../admin/src/utils/country-helper/country-helper");
+const country_helper_1 = require("../utils/country-helper/country-helper");
+const shipping_rate_calc_1 = __importDefault(require("../utils/shipping-calculator/shipping-rate-calc"));
+const calculateTotalValues = (products) => {
+    let totalAmountValue = 0;
+    let totalWeight = 0;
+    for (const productArray of products) {
+        for (const product of productArray) {
+            if (product.amount_value) {
+                totalAmountValue += product.amount_value;
+            }
+            if (product.weight) {
+                totalWeight += product.weight;
+            }
+        }
+    }
+    return {
+        totalAmountValue,
+        totalWeight
+    };
+};
 exports.default = ({ strapi }) => ({
     async calculate(data) {
         const products = [];
         const country_code = data.data.country_code;
-        const findProduct = async (query) => {
-            return await strapi.entityService.findMany("plugin::omcommerce.product", query);
-        };
-        const findShippingZone = async (query) => {
-            return await strapi.entityService.findMany("plugin::omcommerce.shippingzone", query);
-        };
-        const calculateTotalValues = (products) => {
-            let totalAmountValue = 0;
-            let totalWeight = 0;
-            for (const productArray of products) {
-                for (const product of productArray) {
-                    if (product.amount_value) {
-                        totalAmountValue += product.amount_value;
-                    }
-                    if (product.weight) {
-                        totalWeight += product.weight;
-                    }
-                }
-            }
-            return {
-                totalAmountValue,
-                totalWeight
-            };
-        };
         const findProductsForCart = async () => {
             for (const item of data.data.cart) {
-                // const product = await getProduct(item.id);
-                // const query = `populate=*&[filters][id][$eq]=${item.id}`
                 const query = { populate: '*', filters: { id: { '$eq': item.id.toString() } } };
-                const product = await findProduct(query);
+                const product = await strapi.plugin("omcommerce").service("product").find(query);
+                // const product = await strapi.services.omcommerce.product.find(query);
                 if (product) {
                     products.push(product);
                 }
             }
         };
-        const findTimezone = async (query) => {
-            return await strapi.entityService.findOne("plugin::omcommerce.zone", query);
-        };
-        const findCurrency = async (query) => {
-            return await strapi.entityService.findOne("plugin::omcommerce.currency", query);
-        };
         const handleResult = async () => {
             const szQuery = { populate: '*' };
-            const sz = await findShippingZone(szQuery);
+            // const sz = await findShippingZone(strapi,szQuery);
+            const sz = await strapi.plugin("omcommerce").service("shippingzone").find(szQuery);
             const { totalAmountValue, totalWeight } = calculateTotalValues(products);
-            const currency = await findCurrency({});
-            const timezone = await findTimezone({});
+            const currency = await strapi.plugin("omcommerce").service("currency").find({});
+            const timezone = await strapi.plugin("omcommerce").service("timezone").find({});
             const resolvedZone = (0, country_helper_1.findShippingZoneBasedOnCountry)(country_code, sz);
             // @ts-ignore
-            // const rate = resolvedZone.shippingrate[0];
-            // @ts-ignore
-            const shippingRates = resolvedZone === null || resolvedZone === void 0 ? void 0 : resolvedZone.shippingrate;
-            let maxRate = undefined;
-            for (const rate of shippingRates) {
-                const { condition, price } = rate;
-                // @ts-ignore
-                if (condition.includes(currency.currency)) {
-                    // @ts-ignore
-                    const { minPrice, maxPrice } = (0, shipping_calc_1.parsePriceCondition)(rate.condition, currency.currency);
-                    const isWithinRange = totalAmountValue >= parseFloat(minPrice) && totalAmountValue <= parseFloat(maxPrice);
-                    if (maxRate === undefined || price > maxRate) {
-                        maxRate = isWithinRange ? rate.price : 0;
-                    }
-                }
-                else { // @ts-ignore
-                    if (condition.includes(timezone.unit)) {
-                        // @ts-ignore
-                        const { minWeight, maxWeight } = (0, shipping_calc_1.parseWeightCondition)(rate.condition, timezone.unit);
-                        const isWithinRange = totalWeight >= parseFloat(minWeight) && totalWeight <= parseFloat(maxWeight);
-                        if (maxRate === undefined || price > maxRate) {
-                            maxRate = isWithinRange ? rate.price : 0;
-                        }
-                    }
-                    else {
-                        // console.log(rate.price);
-                        if (maxRate === undefined || price > maxRate) {
-                            maxRate = price;
-                        }
-                    }
-                }
-            }
-            return maxRate;
+            return (0, shipping_rate_calc_1.default)(resolvedZone.shippingrate, totalAmountValue, totalWeight, currency, timezone);
         };
-        const handleError = (error) => {
-            console.error("Error while finding products for the cart:", error);
-        };
+        // const handleError = (error: any) => {
+        //   console.error("Error while finding products for the cart:", error);
+        //   return Promise.reject(error);
+        // };
         return await findProductsForCart()
-            .then(handleResult)
-            .catch(handleError);
+            .then(handleResult);
     }
 });

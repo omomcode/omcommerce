@@ -10,8 +10,20 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     }
   },
 
-  async create(ctx : any) {
+  async create(ctx: any) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     try {
+      if (
+        !ctx.request.body ||
+        !ctx.request.body.client_id ||
+        !ctx.request.body.client_secret ||
+        !ctx.request.body.refresh_token ||
+        !ctx.request.body.from ||
+        !emailRegex.test(ctx.request.body.from)
+      ) {
+        ctx.throw(400, "Invalid data");
+      }
+
       ctx.body = await strapi
         .plugin("omcommerce")
         .service("gmail")
@@ -21,8 +33,21 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     }
   },
 
-  async update(ctx : any) {
+  async update(ctx: any) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     try {
+      if (
+        !ctx.params.id ||
+        !ctx.request.body ||
+        !ctx.request.body.client_id ||
+        !ctx.request.body.client_secret ||
+        !ctx.request.body.refresh_token ||
+        !ctx.request.body.from ||
+        !emailRegex.test(ctx.request.body.from)
+      ) {
+        ctx.throw(400, "Invalid data");
+      }
+
       ctx.body = await strapi
         .plugin("omcommerce")
         .service("gmail")
@@ -30,5 +55,5 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     } catch (err) {
       ctx.throw(500, err);
     }
-  },
+  }
 });
