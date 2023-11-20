@@ -13,12 +13,12 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   async create(data: any) {
     if (strapi.entityService) {
       if (
-        data ||
-        data.name ||
-        data.type ||
-        data.length !== undefined ||
-        data.width !== undefined ||
-        data.weight !== undefined ||
+        data &&
+        data.name &&
+        data.type &&
+        data.length !== undefined &&
+        data.width !== undefined &&
+        data.weight !== undefined &&
         data.default !== undefined
       ) {
         const zone =  await strapi.entityService.create("plugin::omcommerce.shippingpackage", data);
@@ -38,12 +38,12 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   async update(id: any, data: any) {
     if (strapi.entityService) {
       if (
-        data ||
-        data.name ||
-        data.type ||
-        data.length !== undefined ||
-        data.width !== undefined ||
-        data.weight !== undefined ||
+        data &&
+        data.name &&
+        data.type &&
+        data.length !== undefined &&
+        data.width !== undefined &&
+        data.weight !== undefined &&
         data.default !== undefined
       ) {
         const zone =  await strapi.entityService.update("plugin::omcommerce.shippingpackage", id,{data});
@@ -53,7 +53,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
           throw new Error("Invalid database data");
         }
       } else {
-        throw new Error("Invalid data");
+         throw new Error("Invalid data");
       }
     } else {
       throw new Error('strapi.entityService is not defined');

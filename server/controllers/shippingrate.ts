@@ -12,7 +12,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async create(ctx : any) {
     try {
-      console.log("ctxratecreate", ctx.request.body)
       if (
         !ctx.request.body ||
         !ctx.request.body.name ||
@@ -33,7 +32,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async update(ctx : any) {
     try {
-      console.log("ctxrateedit", ctx.request.body)
       if (
         !ctx.params.id ||
         !ctx.request.body ||

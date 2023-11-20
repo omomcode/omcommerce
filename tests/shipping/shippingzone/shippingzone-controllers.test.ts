@@ -123,6 +123,33 @@ describe('Shipping Zone Controller', () => {
     expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
   });
 
+  it('should throw Invalid data error when creating a shipping zone', async () => {
+
+    const shippingZone = {
+      id: 1,
+      countries: [{ code: 'US', name: 'United States' }],
+      shippingRatesData: []
+    };
+
+    const ctx = {
+      request: {
+        body: shippingZone,
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the create method
+    strapi.plugin('omcommerce').service('shippingzone').create.mockRejectedValueOnce("Invalid data");
+
+    // @ts-ignore
+    await shippingZoneController({ strapi }).create(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(400, "Invalid data");
+  });
+
+
 
   it('should update a shipping zone', async function () {
     const ctx = {
@@ -171,6 +198,28 @@ describe('Shipping Zone Controller', () => {
     // Expect throw to be called with the correct parameters
     expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
   });
+
+  it('should throw Invalid data error when updating a shipping zone', async () => {
+    const ctx = {
+      params: { id: 1 },
+      request: {
+        body: {
+        },
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the update method
+    strapi.plugin('omcommerce').service('shippingzone').update.mockRejectedValueOnce("Invalid data");
+
+    // @ts-ignore
+    await shippingZoneController({ strapi }).update(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(400, "Invalid data");
+  });
+
 
 
   it('should delete a shipping zone', async function () {

@@ -1,5 +1,6 @@
 import shippingRateService from "../../../server/services/shippingrate";
 import { IShippingRate } from "../../../types/rate";
+import shippingPackageService from "../../../server/services/shippingpackage";
 
 describe('Shipping Rate Service', () => {
   let strapi: { entityService: any; };
@@ -76,6 +77,37 @@ describe('Shipping Rate Service', () => {
     expect(createdRate.name).toBe(newRateData.name);
     // Add similar expectations for other properties of the created rate
   });
+
+
+  it('should handle null result from create', async () => {
+    // Arrange
+    const data =  {
+      name: 'New Rate',
+      condition: 'New Condition',
+      price: 25.0,
+    };
+
+    // Mock the entityService.create method to return null
+    strapi.entityService.create.mockResolvedValueOnce(null);
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(shippingRateService({ strapi }).create(data)).rejects.toThrowError('Invalid database data');
+  });
+
+  it('should throw an error for invalid data when creating shipping rate', async function () {
+    // Arrange
+    const data = {
+      // name: 'New Rate',
+      condition: 'New Condition',
+      price: 25.0,
+    };
+    // Act & Assert
+    // @ts-ignore
+    await expect(shippingRateService({ strapi }).create(data)).rejects.toThrowError("Invalid data");
+  });
+
+
 
   it('shipping rates: create. Should throw an error when strapi.entityService is not defined', async function () {
     // Arrange
@@ -164,6 +196,40 @@ describe('Shipping Rate Service', () => {
       expect(error.message).toBe('strapi.entityService is not defined');
     }
   });
+
+  it('should throw Invalid database data error when input data is not supplied', async function () {
+    // Arrange
+    const id = 1; // Replace with a valid ID for your update operation
+    const data = {
+      // name: 'New Rate',
+      condition: 'New Condition',
+      price: 25.0,
+    };
+
+    // @ts-ignore
+    await expect(shippingRateService({ strapi }).update(id, data)).rejects.toThrowError("Invalid data");
+
+  });
+
+  it('should handle null result from update', async () => {
+    // Arrange
+    const id = 1;
+    const data = {
+      name: 'New Rate',
+      condition: 'New Condition',
+      price: 25.0,
+    };
+
+
+    // Mock the entityService.update method to return null
+    strapi.entityService.update.mockResolvedValueOnce(null);
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(shippingRateService({ strapi }).update(id, data)).rejects.toThrowError('Invalid database data');
+  });
+
+
 
   it('should delete a shipping rate', async function () {
     const rateIdToDelete = 3;

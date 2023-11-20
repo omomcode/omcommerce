@@ -3,6 +3,7 @@ import {IShippingZone} from "../../../types/zonetable";
 import {ICountry} from "../../../types/country";
 import {IProfile} from "../../../types/profile";
 import {string} from "prop-types";
+import shippingRateService from "../../../server/services/shippingrate";
 
 describe('Shipping Zone Service', () => {
   let strapi: { entityService: any; };
@@ -171,6 +172,37 @@ describe('Shipping Zone Service', () => {
   });
 
 
+  it('should handle null result from create', async () => {
+    // Arrange
+    const data =  {
+      id: 1,
+      name: 'Domestic Zone',
+      countries: [],
+      shippingRatesData :[]
+      // Add other properties as needed
+    };
+
+    // Mock the entityService.create method to return null
+    strapi.entityService.create.mockResolvedValueOnce(null);
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(shippingzoneService({ strapi }).create(data)).rejects.toThrowError('Invalid database data');
+  });
+
+  it('should throw an error for invalid data when creating shipping zone', async function () {
+    // Arrange
+    const data = {
+      id: 1,
+      // name: 'Domestic Zone',
+      countries: [],
+      shippingRatesData :[]
+      // Add other properties as needed
+    };
+    // Act & Assert
+    // @ts-ignore
+    await expect(shippingzoneService({ strapi }).create(data)).rejects.toThrowError("Invalid data");
+  });
 
 
 
@@ -269,6 +301,43 @@ describe('Shipping Zone Service', () => {
     }
   });
 
+  it('should throw Invalid database data error when input data is not supplied', async function () {
+    // Arrange
+    const id = 1; // Replace with a valid ID for your update operation
+    const data = {
+      id: 1,
+      // name: 'Domestic Zone',
+      countries: [],
+      shippingRatesData :[]
+      // Add other properties as needed
+    };
+
+    // @ts-ignore
+    await expect(shippingzoneService({ strapi }).update(id, data)).rejects.toThrowError("Invalid data");
+
+  });
+
+  it('should handle null result from update', async () => {
+    // Arrange
+    const id = 1;
+    const data = {
+      id: 1,
+      name: 'Domestic Zone',
+      countries: [],
+      shippingRatesData :[]
+      // Add other properties as needed
+    };
+
+
+    // Mock the entityService.update method to return null
+    strapi.entityService.update.mockResolvedValueOnce(null);
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(shippingzoneService({ strapi }).update(id, data)).rejects.toThrowError('Invalid database data');
+  });
+
+
 
   it('should handle undefined strapi.entityService and throw an error (delete)', async function () {
     // Arrange
@@ -334,5 +403,15 @@ describe('Shipping Zone Service', () => {
 
     expect(deleteResult?.success).toBe(true);
   });
+
+  it('should throw Invalid database data error when input data is not supplied (delete)', async function () {
+    // Arrange
+    const id = 1; // Replace with a valid ID for your update operation
+
+    // @ts-ignore
+    await expect(shippingzoneService({ strapi }).delete(null)).rejects.toThrowError("Invalid data");
+
+  });
+
   // Add other tests for find, update, etc.
 });
