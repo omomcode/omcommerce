@@ -48,12 +48,11 @@ exports.default = ({ strapi }) => ({
             // @ts-ignore
             return (0, shipping_rate_calc_1.default)(resolvedZone.shippingrate, totalAmountValue, totalWeight, currency, timezone);
         };
-        const handleError = (error) => {
-            console.error("Error while finding products for the cart:", error);
-            return Promise.reject(error);
-        };
+        // const handleError = (error: any) => {
+        //   console.error("Error while finding products for the cart:", error);
+        //   return Promise.reject(error);
+        // };
         return await findProductsForCart()
-            .then(handleResult)
-            .catch(handleError);
+            .then(handleResult);
     }
 });

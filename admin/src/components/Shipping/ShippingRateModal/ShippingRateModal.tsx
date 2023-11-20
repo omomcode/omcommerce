@@ -136,6 +136,7 @@ export default function ShippingRateModal({
           name="name"
           onChange={handleInputChange}
           value={rate.name}
+          required
         />
         <br />
 

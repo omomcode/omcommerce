@@ -89,6 +89,7 @@ export default function ShippingZoneModal({
               name="name"
               value={selectedZone.name}
               onChange={handleInputChange}
+              required
           />
             <Countries
               assignedCountries={assignedZone?.countries}

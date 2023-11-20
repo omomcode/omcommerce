@@ -18,7 +18,19 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async create(data: any) {
     if (strapi.entityService) {
-      return await strapi.entityService.create("plugin::omcommerce.shippingzone", data);
+      if (
+        data ||
+        data.name
+      ) {
+        const zone =  await strapi.entityService.create("plugin::omcommerce.shippingzone", {data});
+        if (zone) {
+          return zone;
+        } else {
+          throw new Error("Invalid database data");
+        }
+      } else {
+        throw new Error("Invalid data");
+      }
     } else {
       throw new Error('strapi.entityService is not defined');
     }
@@ -26,14 +38,31 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async update(id: any, data: any) {
     if (strapi.entityService) {
-      return await strapi.entityService.update("plugin::omcommerce.shippingzone", id, data);
+      if (
+        id ||
+        data ||
+        data.name
+      ) {
+        const zone =  await strapi.entityService.update("plugin::omcommerce.shippingzone",id, {data});
+        if (zone) {
+          return zone;
+        } else {
+          throw new Error("Invalid database data");
+        }
+      } else {
+        throw new Error("Invalid data");
+      }
     } else {
       throw new Error('strapi.entityService is not defined');
     }
   },
   async delete(id: any) {
     if (strapi.entityService) {
+      if(id)
       return await strapi.entityService.delete("plugin::omcommerce.shippingzone", id);
+      else {
+        throw new Error("Invalid data");
+      }
     } else {
       throw new Error('strapi.entityService is not defined');
     }

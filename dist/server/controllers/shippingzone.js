@@ -11,6 +11,12 @@ exports.default = ({ strapi }) => ({
     },
     async create(ctx) {
         try {
+            console.log("ctxzonecreate", ctx.request.body);
+            if (!ctx.request.body ||
+                !ctx.request.body.name) {
+                // If any of the required fields is missing, throw a 400 error
+                ctx.throw(400, "Invalid data");
+            }
             ctx.body = await strapi
                 .plugin("omcommerce")
                 .service("shippingzone")
@@ -22,6 +28,12 @@ exports.default = ({ strapi }) => ({
     },
     async update(ctx) {
         try {
+            if (!ctx.params.id ||
+                !ctx.request.body ||
+                !ctx.request.body.name) {
+                // If any of the required fields is missing, throw a 400 error
+                ctx.throw(400, "Invalid data");
+            }
             ctx.body = await strapi
                 .plugin("omcommerce")
                 .service("shippingzone")

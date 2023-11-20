@@ -18,6 +18,7 @@ export interface IPackageTableProps {
   setShowPackageModal: (show: boolean) => void;
   setSelectedPackage: (id: number) => void;
   selectedPackage: number
+
 }
 
 export interface IPackageModalProps {
@@ -25,5 +26,5 @@ export interface IPackageModalProps {
   addPackage: (packageD: IPackage) => void;
   packageId: number | undefined;
   packageData: Object;
-  mode: string
+  mode: string;
 }
