@@ -50,7 +50,7 @@ export default function PackageModal({setShowPackageModal, addPackage, packageId
   const fetchData = async () => {
     if (!isLoading) setIsLoading(true);
 
-    if (packageData !== null) {
+    if (packageData !== null && packageData !== 0) {
       // @ts-ignore
       setPackageD(packageData);
     }
@@ -128,7 +128,7 @@ export default function PackageModal({setShowPackageModal, addPackage, packageId
             value={packageD.name}
             onChange={handleInputChange}
             label="Name"
-
+            required
           />
         </Box>
         <br/>

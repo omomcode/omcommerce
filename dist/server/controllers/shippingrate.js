@@ -11,6 +11,14 @@ exports.default = ({ strapi }) => ({
     },
     async create(ctx) {
         try {
+            console.log("ctxratecreate", ctx.request.body);
+            if (!ctx.request.body ||
+                !ctx.request.body.name ||
+                ctx.request.body.condition == undefined ||
+                ctx.request.body.price == undefined) {
+                // If any of the required fields is missing, throw a 400 error
+                ctx.throw(400, "Invalid data");
+            }
             ctx.body = await strapi
                 .plugin("omcommerce")
                 .service("shippingrate")
@@ -22,6 +30,15 @@ exports.default = ({ strapi }) => ({
     },
     async update(ctx) {
         try {
+            console.log("ctxrateedit", ctx.request.body);
+            if (!ctx.params.id ||
+                !ctx.request.body ||
+                !ctx.request.body.name ||
+                ctx.request.body.condition == undefined ||
+                ctx.request.body.price == undefined) {
+                // If any of the required fields is missing, throw a 400 error
+                ctx.throw(400, "Invalid data");
+            }
             ctx.body = await strapi
                 .plugin("omcommerce")
                 .service("shippingrate")

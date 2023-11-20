@@ -30,6 +30,12 @@ describe('Shipping Package Controller', () => {
             data: {
               ...shippingPackageData,
               name: 'Updated Package', // Assuming an updated 'name' for testing
+              type: 'Box',
+              length: 12.0,
+              width: 9.5,
+              height: 6.0,
+              weight: 2.8,
+              default: false,
             },
           }),
           delete: jest.fn().mockReturnValue({
@@ -119,6 +125,12 @@ describe('Shipping Package Controller', () => {
       request: {
         body: {
           name: 'Updated Package', // Assuming an updated 'name' for testing
+          type: 'Box',
+          length: 12.0,
+          width: 9.5,
+          height: 6.0,
+          weight: 2.8,
+          default: false,
         },
       },
       body: null,
@@ -131,7 +143,13 @@ describe('Shipping Package Controller', () => {
     expect(ctx.body).toEqual({
       data: {
         ...shippingPackageData,
-        name: 'Updated Package',
+        name: 'Updated Package', // Assuming an updated 'name' for testing
+        type: 'Box',
+        length: 12.0,
+        width: 9.5,
+        height: 6.0,
+        weight: 2.8,
+        default: false,
       },
     });
 

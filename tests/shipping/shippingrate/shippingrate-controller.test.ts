@@ -26,6 +26,8 @@ describe('Shipping Rate Controller', () => {
             data: {
               ...shippingRateData,
               name: 'Updated Rate', // Assuming an updated 'name' for testing
+              condition:"",
+              price: 1
             },
           }),
           delete: jest.fn().mockReturnValue({
@@ -114,6 +116,8 @@ describe('Shipping Rate Controller', () => {
       request: {
         body: {
           name: 'Updated Rate', // Assuming an updated 'name' for testing
+          condition: "",
+          price: 1
         },
       },
       body: null,
@@ -126,6 +130,7 @@ describe('Shipping Rate Controller', () => {
     expect(ctx.body).toEqual({
       data: {
         ...shippingRateData,
+        condition: "", price: 1,
         name: 'Updated Rate',
       },
     });

@@ -46,7 +46,7 @@ describe('Shipping Zone Service', () => {
           if (id === 1) {
             return {
               id: 1,
-              name: data.name || 'Domestic Zone',
+              name: data.name || 'Updated Domestic Zone',
               countries: data.countries || [{ code: 'GB', name: 'United Kingdom' }],
               // Add other properties as needed
             };
