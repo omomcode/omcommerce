@@ -110,6 +110,31 @@ describe('Shipping Rate Controller', () => {
     expect(ctx.throw).toHaveBeenCalledWith(500, "Simulated error");
   });
 
+  it('should throw Invalid data error when creating a shipping rate', async () => {
+
+    const shippingRate = {
+      id: 1,
+      name: "standard",
+      condition: ""
+    };
+    const ctx = {
+      request: {
+        body: shippingRate,
+      },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // Simulate an error in the create method
+    strapi.plugin('omcommerce').service('shippingrate').create.mockRejectedValueOnce("Invalid data");
+
+    // @ts-ignore
+    await shippingRateController({ strapi }).create(ctx);
+
+    // Expect throw to be called with the correct parameters
+    expect(ctx.throw).toHaveBeenCalledWith(400, "Invalid data");
+  });
+
   it('should update a shipping rate', async function () {
     const ctx = {
       params: { id: 1 },

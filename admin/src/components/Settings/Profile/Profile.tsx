@@ -48,16 +48,6 @@ const Profile = () => {
     try {
       const profile: any = await profileRequests.getAllProfiles();
 
-      const shippingcalc :any = await shippingcalclulatorRequests.calculate({
-        cart: [
-          { id: "1", quantity: "2" },
-        ],
-        country_code: 'GB',
-      })
-      console.log("SHIPPING CACL");
-      console.log(shippingcalc);
-
-
       if(profile !== undefined) {
         setIsNew(false);
         setData(profile);

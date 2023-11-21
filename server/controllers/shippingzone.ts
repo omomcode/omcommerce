@@ -12,7 +12,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async create(ctx : any) {
     try {
-      console.log("ctxzonecreate", ctx.request.body)
       if (
         !ctx.request.body ||
         !ctx.request.body.name

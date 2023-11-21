@@ -13,9 +13,9 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   async create(data: any) {
     if (strapi.entityService) {
       if (
-        data ||
-        data.name ||
-        data.condition !== undefined ||
+        data &&
+        data.name &&
+        data.condition !== undefined &&
         data.price !== undefined
       ) {
         const rate =  await strapi.entityService.create("plugin::omcommerce.shippingrate", data);
@@ -35,10 +35,10 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   async update(id: any, data: any) {
     if (strapi.entityService) {
       if (
-        id ||
-        data ||
-        data.name ||
-        data.condition !== undefined ||
+        id &&
+        data &&
+        data.name &&
+        data.condition !== undefined &&
         data.price !== undefined
       ) {
         const rate =  await strapi.entityService.update("plugin::omcommerce.shippingrate",id, {data});

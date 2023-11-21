@@ -1,5 +1,6 @@
 import shippingPackageService from "../../../server/services/shippingpackage";
 import {IPackage} from "../../../types/package";
+import billingService from "../../../server/services/billing";
 
 describe('Shipping Package Service', () => {
   let strapi: { entityService: any; };
@@ -124,6 +125,44 @@ describe('Shipping Package Service', () => {
     }
   });
 
+  it('should handle null result from create', async () => {
+    // Arrange
+    const data =  {
+      name: 'New Package',
+      type: 'Box',
+      length: 12.0,
+      width: 9.5,
+      height: 6.0,
+      weight: 2.8,
+      default: false,
+    };
+
+    // Mock the entityService.create method to return null
+    strapi.entityService.create.mockResolvedValueOnce(null);
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(shippingPackageService({ strapi }).create(data)).rejects.toThrowError('Invalid database data');
+  });
+
+  it('should throw an error for invalid data when creating shipping package', async function () {
+    // Arrange
+    const data = {
+      name: 'New Package',
+      type: 'Box',
+      length: 12.0,
+      width: 9.5,
+      height: 6.0,
+      // weight: 2.8,
+      default: false,
+    };
+    // Act & Assert
+    // @ts-ignore
+    await expect(shippingPackageService({ strapi }).create(data)).rejects.toThrowError("Invalid data");
+  });
+
+
+
 
   it('should find all shipping packages', async function () {
 
@@ -198,6 +237,43 @@ describe('Shipping Package Service', () => {
     }
   });
 
+  it('should throw Invalid database data error when input data is not supplied', async function () {
+    // Arrange
+    const id = 1; // Replace with a valid ID for your update operation
+    const data = {
+      id: id,
+      name: 'Updated Example Package',
+      type: 'Updated Type',
+      length: 15.0,
+      height: 8.0,
+      default: false,
+    }
+
+    // @ts-ignore
+    await expect(shippingPackageService({ strapi }).update(id, data)).rejects.toThrowError("Invalid data");
+
+  });
+
+  it('should handle null result from update', async () => {
+    // Arrange
+    const id = 1;
+    const data = {
+      name: 'Updated Example Package',
+      type: 'Updated Box',
+      length: 12.0,
+      width: 10.0,
+      height: 6.5,
+      weight: 4.0,
+      default: false,
+    };
+
+    // Mock the entityService.update method to return null
+    strapi.entityService.update.mockResolvedValueOnce(null);
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(shippingPackageService({ strapi }).update(id, data)).rejects.toThrowError('Invalid database data');
+  });
 
 
   it('should delete a shipping package', async function () {
