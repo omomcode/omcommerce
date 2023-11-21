@@ -22,7 +22,7 @@ const gmailRequests = {
     try {
       return await request('/omcommerce/gmail/create', {
         method: 'POST',
-        body: JSON.parse(JSON.stringify({data})),
+        body: JSON.parse(JSON.stringify(data)),
       });
     }
     catch (error) {
@@ -34,7 +34,7 @@ const gmailRequests = {
     try {
        return await request(`/omcommerce/gmail/update/${id}`, {
          method: 'PUT',
-         body: JSON.parse(JSON.stringify({data})),
+         body: JSON.parse(JSON.stringify(data)),
        });
     }
     catch (error) {

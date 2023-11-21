@@ -6,9 +6,6 @@ const googleapis_1 = require("googleapis");
 const sendMail = async (order, message, strapi, gmail) => {
     const oAuth2Client = new googleapis_1.google.auth.OAuth2(gmail.client_id, gmail.client_secret, process.env.STRAPI_ADMIN_EMAIL_REDIRECT_URI);
     oAuth2Client.setCredentials({ refresh_token: gmail.refresh_token });
-    const findConversionRate = async (query, strapi) => {
-        return await strapi.entityService.findOne("plugin::omcommerce.conversionrate", query);
-    };
     const convertFromEURtoRSD = (rate, spreadPercentage, amount) => {
         // const spreadPercentage = 0.025 / 100;
         // const rate = 0.0082327;
@@ -30,7 +27,7 @@ const sendMail = async (order, message, strapi, gmail) => {
                 accessToken: accessToken
             }
         });
-        const cr = await findConversionRate({}, strapi);
+        const cr = await strapi.plugin("omcommerce").service("conversionrate").find({});
         const rsd_value = convertFromEURtoRSD(cr.rate, cr.spread, order.amount);
         const messageText = `Dear ${order.customer_name},\n\n`;
         const drzava = "Srbija";

@@ -20,23 +20,80 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async create(data: any) {
     if (strapi.entityService) {
-      return await strapi.entityService.create("plugin::omcommerce.order", data);
+      if (
+          data &&
+          data.order_id &&
+          data.amount &&
+          data.currency &&
+          data.items &&
+          data.shipping_fee !== undefined &&
+          data.status
+      ) {
+        const billing = await strapi.entityService.create(
+            "plugin::omcommerce.order",
+            data
+        );
+
+        if (billing) {
+          return billing;
+        } else {
+          throw new Error("Invalid database data");
+        }
+      } else {
+        throw new Error("Invalid data");
+      }
     } else {
-      throw new Error('strapi.entityService is not defined');
+      throw new Error("strapi.entityService is not defined");
     }
   },
   async update(id: any, data: any) {
     if (strapi.entityService) {
-      return await strapi.entityService.update("plugin::omcommerce.order", id, data);
+      if (
+          id &&
+          data &&
+          data.order_id &&
+          data.amount &&
+          data.currency &&
+          data.items &&
+          data.shipping_fee !== undefined &&
+          data.status
+      ) {
+        const billing = await strapi.entityService.update(
+            "plugin::omcommerce.order", id,
+            {data}
+        );
+
+        if (billing) {
+          return billing;
+        } else {
+          throw new Error("Invalid database data");
+        }
+      } else {
+        throw new Error("Invalid data");
+      }
     } else {
-      throw new Error('strapi.entityService is not defined');
+      throw new Error("strapi.entityService is not defined");
     }
   },
   async delete(id: any) {
     if (strapi.entityService) {
-      return await strapi.entityService.delete("plugin::omcommerce.order", id);
+      if (
+          id
+      ) {
+        const billing = await strapi.entityService.update(
+            "plugin::omcommerce.order", id
+        );
+
+        if (billing) {
+          return billing;
+        } else {
+          throw new Error("Invalid database data");
+        }
+      } else {
+        throw new Error("Invalid data");
+      }
     } else {
-      throw new Error('strapi.entityService is not defined');
+      throw new Error("strapi.entityService is not defined");
     }
   },
 });

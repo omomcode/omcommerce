@@ -11,11 +11,11 @@ describe('Product Service', () => {
       slug: 'test-product',
       description: 'This is a test product',
       amount_currency_code: 'USD',
-      amount_value: 19.99,
+      amount_value: 29.99,
       tax_currency_code: 'USD',
       tax_value: 2.0,
       chargeTax: true,
-      Quantity: 100,
+      Quantity: 50,
       showQuantity: true,
       weight: 1.5,
       omcommerce_tax: 1, // Replace with the actual tax ID

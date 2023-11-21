@@ -18,7 +18,7 @@ exports.default = ({ strapi }) => ({
     },
     async create(data) {
         if (strapi.entityService) {
-            if (data ||
+            if (data &&
                 data.name) {
                 const zone = await strapi.entityService.create("plugin::omcommerce.shippingzone", data);
                 if (zone) {
@@ -38,8 +38,8 @@ exports.default = ({ strapi }) => ({
     },
     async update(id, data) {
         if (strapi.entityService) {
-            if (id ||
-                data ||
+            if (id &&
+                data &&
                 data.name) {
                 const zone = await strapi.entityService.update("plugin::omcommerce.shippingzone", id, { data });
                 if (zone) {

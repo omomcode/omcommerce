@@ -1,18 +1,41 @@
 import axios from 'axios';
 import { capturePayment, createOrder, generateAccessToken, handleResponse} from '../../../server/utils/payment/paypalPaymentHelper'
 import {sendMail} from "../../../server/services/sendmail";
+import {IProduct} from "../../../types/product";
+import productService from "../../../server/services/product";
 // Import other dependencies or mocks as needed
 
 jest.mock('axios');
 
 describe('Payment Service', () => {
   let strapi: { entityService: any, plugin: any };
-
+  let productData: IProduct;
   beforeEach(() => {
+      productData = {
+          title: 'Test Product',
+          slug: 'test-product',
+          description: 'This is a test product',
+          amount_currency_code: 'USD',
+          amount_value: 29.99,
+          tax_currency_code: 'USD',
+          tax_value: 2.0,
+          chargeTax: true,
+          Quantity: 50,
+          showQuantity: true,
+          weight: 1.5,
+          omcommerce_tax: 1, // Replace with the actual tax ID
+          omcommerce_shippingzones: [1, 2], // Replace with the actual shipping zone IDs
+          categories: [1, 2], // Replace with the actual category IDs
+          subcategory: 1, // Replace with the actual subcategory ID
+      };
+
     strapi = {
       entityService: {
         findMany: jest.fn(),
         findOne: jest.fn(),
+          update: jest.fn().mockImplementation((model: string, id: any, data: any) => {
+              return { data: { ...productData, ...data } };
+          }),
       },
       plugin: jest.fn().mockReturnValue({
         service: jest.fn().mockImplementation((serviceName: string) => {
@@ -20,7 +43,32 @@ describe('Payment Service', () => {
             return {
               find: jest.fn().mockImplementation((data: any) => {
                 // Mock implementation for the 'product' service
-                return [{id: 1, amount_value: 5, name: "some product", weight : 5},{id: 0, amount_value: 5, name: "some other product", weight : 5}];
+                return [{id: 1, title: 'Product 1',
+                  slug: 'test-product',
+                  description: 'This is a test product',
+                  SKU: 'ABC123',
+                  amount_currency_code: 'USD',
+                  amount_value: 19.99,
+                  tax_currency_code: 'USD',
+                  tax_value: 2.0,
+                  media: ['image1.jpg', 'image2.jpg'],
+                  compare_at_price: '29.99',
+                  cost_per_item: '15.00',
+                  chargeTax: true,
+                  Quantity: 100,
+                  Barcode: '123456789',
+                  showQuantity: true,
+                  weight: 1.5,
+                  measurement_unit: 'kg',
+                  omcommerce_tax: 1, // Assuming the ID of the associated tax record
+                  omcommerce_shippingzones: [1, 2], // Assuming the IDs of the associated shipping zones
+                  categories: [3, 4], // Assuming the IDs of the associated categories
+                  subcategory: 5, // Assuming the ID of the associated subcategory
+                  amount_value_converted: 25.0,
+                  amount_value_converted_currency_code: 'EUR',},
+                  {id: 2, amount_value: 5,
+                  title: "some other product", weight : 5, Quantity: 5, slug: "prod2",
+                    chargeTax: false, showQuantity: false}];
               }),
             };
           } else if (serviceName === 'shippingcalculator') {
@@ -45,7 +93,42 @@ describe('Payment Service', () => {
             return {
               find: jest.fn().mockImplementation((query: any) => {
                 // Mock implementation for the 'order' service
-                return [{ /* mock order data here based on query */ }];
+
+                return [{
+                  "id": "test_order_id",
+                  "status": "CREATED",
+                  "purchase_units": [
+                    {
+                      "amount": {
+                        "currency_code": "USD",
+                        "value": "100.00",
+                        "breakdown": {
+                          "item_total": {
+                            "currency_code": "USD",
+                            "value": "80.00"
+                          },
+                          "shipping": {
+                            "currency_code": "USD",
+                            "value": "20.00"
+                          }
+                        }
+                      },
+                      "items": [
+                        {
+                          "name": "Product 1",
+                          "description": "Description for Product 1",
+                          "SKU": "SKU_001",
+                          "unit_amount": {
+                            "currency_code": "USD",
+                            "value": "40.00"
+                          },
+                          "quantity": 2
+                        }
+                      ]
+                    }
+                  ]
+                }
+                ];
               }),
               update: jest.fn().mockImplementation((orderId: string, updatedData: any) => {
                 // Mock implementation for updating an order
@@ -125,7 +208,6 @@ describe('Payment Service', () => {
           status: 'COMPLETED',
         },
       });
-
       // Call the capturePayment function with the mocked strapi object
       const result = await capturePayment(orderID, strapi);
 
@@ -327,7 +409,7 @@ describe('Payment Service', () => {
                     currency_code: 'USD',
                     value: '40.00',
                   },
-                  quantity: 2,
+                  Quantity: 2,
                 },
               ],
             },

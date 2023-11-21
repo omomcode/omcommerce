@@ -16,7 +16,7 @@ const conversionRequests = {
     try {
       return await request('/omcommerce/conversionrate/create', {
         method: "POST",
-        body: JSON.parse(JSON.stringify({data})),
+        body: JSON.parse(JSON.stringify(data)),
       });
     }
     catch (error) {
@@ -33,7 +33,7 @@ const conversionRequests = {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.parse(JSON.stringify({data})),
+        body: JSON.parse(JSON.stringify(data)),
       });
     }
     catch (error) {

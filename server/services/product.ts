@@ -36,15 +36,18 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async create(data: any) {
     if (strapi.entityService) {
-      return await strapi.entityService.create("plugin::omcommerce.product", data);
+      const prod =  await strapi.entityService.create("plugin::omcommerce.product", data);
+      console.log("prod",prod)
+      return prod;
     } else {
       throw new Error('strapi.entityService is not defined');
     }
   },
 
   async update(id: any, data: any) {
+    console.log("dataeditproduct", data)
     if (strapi.entityService) {
-      return await strapi.entityService.update("plugin::omcommerce.product", id, data);
+      return await strapi.entityService.update("plugin::omcommerce.product", id, {data});
     } else {
       throw new Error('strapi.entityService is not defined');
     }

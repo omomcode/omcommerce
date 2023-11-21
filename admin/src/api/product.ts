@@ -16,7 +16,7 @@ const productRequests = {
     try {
       return await request('/omcommerce/product/create', {
         method: "POST",
-        body: JSON.parse(JSON.stringify({data})),
+        body: JSON.parse(JSON.stringify(data)),
       });
     }
     catch (error) {
@@ -31,7 +31,7 @@ const productRequests = {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.parse(JSON.stringify({data})),
+        body: JSON.parse(JSON.stringify(data)),
       });
     }
     catch (error) {

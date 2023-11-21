@@ -87,7 +87,7 @@ const ShippingZones = () => {
   };
 
   async function addShippingZone(data: any) {
-    const zones = await shippingZoneRequests.getAllShippingZones();
+    const zones: any = await shippingZoneRequests.getAllShippingZones();
     const tempRes = zones.filter((zone: any) => zone.name === data.name)
     if(tempRes.length>0 || !data.name) {
       const newErrors: Record<string, string> = {};
@@ -102,7 +102,7 @@ const ShippingZones = () => {
 
   async function editShippingZone(id: number, data: any) {
 
-    const zones = await shippingZoneRequests.getAllShippingZones();
+    const zones: any = await shippingZoneRequests.getAllShippingZones();
     const tempRes = zones.filter((zone: any) => (zone.name === data.name && id !== zone.id))
     console.log("tempResZoneEdit", tempRes)
     if(tempRes.length>0 || !data.name) {
@@ -132,10 +132,10 @@ const ShippingZones = () => {
         price: data.price,
         shippingzone: [zoneId],
       };
-      const rates = await shippingRateRequests.getAllShippingRates()
+      const rates: any = await shippingRateRequests.getAllShippingRates()
       const tempRates = rates.filter((rate:any) => rate.name === d.name)
       console.log("tempRates", tempRates)
-      const zones = await shippingZoneRequests.getAllShippingZones()
+      const zones: any = await shippingZoneRequests.getAllShippingZones()
       const tempRes = zones.filter((zone: any) => zone.id === zoneId)
       console.log("tempRes", tempRes)
       if(!d.name || tempRates.length > 0) {
@@ -166,10 +166,10 @@ const ShippingZones = () => {
         condition: data.condition,
         price: data.price,
       };
-      const rates = await shippingRateRequests.getAllShippingRates()
+      const rates: any = await shippingRateRequests.getAllShippingRates()
       const tempRates = rates.filter((rate:any) => (rate.name === d.name && rate.id !== data.id))
       console.log("tempRatesEdit", tempRates)
-      const zones = await shippingZoneRequests.getAllShippingZones()
+      const zones: any = await shippingZoneRequests.getAllShippingZones()
       const tempRes = zones.filter((zone: any) => zone.id === zoneId)
       console.log("tempResEdit", tempRes)
       if(!d.name || tempRates.length > 0) {
@@ -251,7 +251,7 @@ const ShippingZones = () => {
         default: data.default ?? "false"
       };
 
-      const packages = await packagesRequests.getAllPackages()
+      const packages: any = await packagesRequests.getAllPackages()
       const tempPackages = packages.filter((pack: any) => (pack.name === d.name && pack.type === d.type))
       console.log("tempPackages", tempPackages)
       console.log("dejta", data)
@@ -285,7 +285,7 @@ const ShippingZones = () => {
         default: data.default
       };
 
-      const packages = await packagesRequests.getAllPackages()
+      const packages: any = await packagesRequests.getAllPackages()
       const tempPackages = packages.filter((pack: any) => (pack.name === data.name && pack.type === data.type))
       if (tempPackages.length > 0 || !data.name) {
         console.log("prvoeditpackage")

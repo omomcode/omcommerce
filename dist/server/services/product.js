@@ -26,34 +26,85 @@ exports.default = ({ strapi }) => ({
     },
     async findOne(id) {
         if (strapi.entityService) {
-            return await strapi.entityService.findOne("plugin::omcommerce.product", id);
+            if (id) {
+                const product = await strapi.entityService.findOne("plugin::omcommerce.product", id);
+                if (product) {
+                    return product;
+                }
+                else {
+                    throw new Error("Invalid database data");
+                }
+            }
+            else {
+                throw new Error("Invalid data");
+            }
         }
         else {
-            throw new Error('strapi.entityService is not defined');
+            throw new Error("strapi.entityService is not defined");
         }
     },
     async create(data) {
         if (strapi.entityService) {
-            return await strapi.entityService.create("plugin::omcommerce.product", data);
+            if (data &&
+                data.title &&
+                data.slug &&
+                data.showQuantity) {
+                const product = await strapi.entityService.create("plugin::omcommerce.product", data);
+                if (product) {
+                    return product;
+                }
+                else {
+                    throw new Error("Invalid database data");
+                }
+            }
+            else {
+                throw new Error("Invalid data");
+            }
         }
         else {
-            throw new Error('strapi.entityService is not defined');
+            throw new Error("strapi.entityService is not defined");
         }
     },
     async update(id, data) {
         if (strapi.entityService) {
-            return await strapi.entityService.update("plugin::omcommerce.product", id, data);
+            if (id &&
+                data &&
+                data.title &&
+                data.slug &&
+                data.showQuantity) {
+                const product = await strapi.entityService.update("plugin::omcommerce.product", id, { data });
+                if (product) {
+                    return product;
+                }
+                else {
+                    throw new Error("Invalid database data");
+                }
+            }
+            else {
+                throw new Error("Invalid data");
+            }
         }
         else {
-            throw new Error('strapi.entityService is not defined');
+            throw new Error("strapi.entityService is not defined");
         }
     },
     async delete(id) {
         if (strapi.entityService) {
-            return await strapi.entityService.delete("plugin::omcommerce.product", id);
+            if (id) {
+                const product = await strapi.entityService.delete("plugin::omcommerce.product", id);
+                if (product) {
+                    return product;
+                }
+                else {
+                    throw new Error("Invalid database data");
+                }
+            }
+            else {
+                throw new Error("Invalid data");
+            }
         }
         else {
-            throw new Error('strapi.entityService is not defined');
+            throw new Error("strapi.entityService is not defined");
         }
     },
 });

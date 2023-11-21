@@ -1,9 +1,9 @@
 export interface IProduct {
   title: string;
   slug: string;
-  description: string;
+  description?: string;
   SKU?: string;
-  amount_currency_code: string;
+  amount_currency_code?: string;
   amount_value: number;
   tax_currency_code: string;
   tax_value: number;

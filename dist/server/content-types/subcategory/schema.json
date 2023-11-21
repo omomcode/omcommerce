@@ -13,7 +13,8 @@
     "pluginOptions": {},
     "attributes": {
         "title": {
-            "type": "string"
+            "type": "string",
+            "required": true
         },
         "category": {
             "type": "relation",

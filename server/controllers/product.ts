@@ -33,6 +33,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   },
 
   async update(ctx : any) {
+    console.log("prodedit", ctx.request.body)
     try {
       ctx.body = await strapi
         .plugin("omcommerce")

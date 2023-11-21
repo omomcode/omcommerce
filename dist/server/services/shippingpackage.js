@@ -12,12 +12,12 @@ exports.default = ({ strapi }) => ({
     },
     async create(data) {
         if (strapi.entityService) {
-            if (data ||
-                data.name ||
-                data.type ||
-                data.length !== undefined ||
-                data.width !== undefined ||
-                data.weight !== undefined ||
+            if (data &&
+                data.name &&
+                data.type &&
+                data.length !== undefined &&
+                data.width !== undefined &&
+                data.weight !== undefined &&
                 data.default !== undefined) {
                 const zone = await strapi.entityService.create("plugin::omcommerce.shippingpackage", data);
                 if (zone) {
@@ -37,12 +37,12 @@ exports.default = ({ strapi }) => ({
     },
     async update(id, data) {
         if (strapi.entityService) {
-            if (data ||
-                data.name ||
-                data.type ||
-                data.length !== undefined ||
-                data.width !== undefined ||
-                data.weight !== undefined ||
+            if (data &&
+                data.name &&
+                data.type &&
+                data.length !== undefined &&
+                data.width !== undefined &&
+                data.weight !== undefined &&
                 data.default !== undefined) {
                 const zone = await strapi.entityService.update("plugin::omcommerce.shippingpackage", id, { data });
                 if (zone) {
