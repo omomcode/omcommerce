@@ -40,7 +40,6 @@ exports.default = ({ strapi }) => ({
                 data.price !== undefined) {
                 const rate = await strapi.entityService.update("plugin::omcommerce.shippingrate", id, { data });
                 if (rate) {
-                    console.log("rate", rate);
                     return rate;
                 }
                 else {

@@ -11,9 +11,6 @@ exports.default = ({ strapi }) => ({
     },
     async findOne(ctx) {
         try {
-            if (!ctx.params.id) { // If any of the required fields is missing, throw a 400 error
-                ctx.throw(400, "Invalid data");
-            }
             ctx.body = await strapi
                 .plugin("omcommerce")
                 .service("product")
@@ -25,12 +22,6 @@ exports.default = ({ strapi }) => ({
     },
     async create(ctx) {
         try {
-            if (!ctx.request.body ||
-                !ctx.request.body.title ||
-                !ctx.request.body.slug ||
-                !ctx.request.body.showQuantity) { // If any of the required fields is missing, throw a 400 error
-                ctx.throw(400, "Invalid data");
-            }
             ctx.body = await strapi
                 .plugin("omcommerce")
                 .service("product")
@@ -41,14 +32,8 @@ exports.default = ({ strapi }) => ({
         }
     },
     async update(ctx) {
+        console.log("prodedit", ctx.request.body);
         try {
-            if (!ctx.params.id ||
-                !ctx.request.body ||
-                !ctx.request.body.title ||
-                !ctx.request.body.slug ||
-                !ctx.request.body.showQuantity) { // If any of the required fields is missing, throw a 400 error
-                ctx.throw(400, "Invalid data");
-            }
             ctx.body = await strapi
                 .plugin("omcommerce")
                 .service("product")
@@ -60,9 +45,6 @@ exports.default = ({ strapi }) => ({
     },
     async delete(ctx) {
         try {
-            if (!ctx.params.id) { // If any of the required fields is missing, throw a 400 error
-                ctx.throw(400, "Invalid data");
-            }
             ctx.body = await strapi
                 .plugin("omcommerce")
                 .service("product")

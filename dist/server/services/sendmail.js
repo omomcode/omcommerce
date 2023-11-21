@@ -4,7 +4,10 @@ exports.sendMail = void 0;
 const nodemailer = require('nodemailer');
 const googleapis_1 = require("googleapis");
 const sendMail = async (order, message, strapi, gmail) => {
-    const oAuth2Client = new googleapis_1.google.auth.OAuth2(gmail.client_id, gmail.client_secret, process.env.STRAPI_ADMIN_EMAIL_REDIRECT_URI);
+    if (!gmail || !gmail.client_id || !gmail.client_secret || !gmail.from || !gmail.refresh_token) {
+        throw new Error("Invalid gmail data");
+    }
+    const oAuth2Client = new googleapis_1.google.auth.OAuth2(gmail.client_id, gmail.client_secret, "https://developers/google.com/oauthplayground");
     oAuth2Client.setCredentials({ refresh_token: gmail.refresh_token });
     const convertFromEURtoRSD = (rate, spreadPercentage, amount) => {
         // const spreadPercentage = 0.025 / 100;
@@ -30,7 +33,7 @@ const sendMail = async (order, message, strapi, gmail) => {
         const cr = await strapi.plugin("omcommerce").service("conversionrate").find({});
         const rsd_value = convertFromEURtoRSD(cr.rate, cr.spread, order.amount);
         const messageText = `Dear ${order.customer_name},\n\n`;
-        const drzava = "Srbija";
+        const country = "USA";
         if (order.discount === null) {
             order.discount = 0;
         }
@@ -39,7 +42,7 @@ const sendMail = async (order, message, strapi, gmail) => {
         const ordert = order.items.map((entry) => {
             return {
                 ...entry,
-                unit_amount: { value: convertFromEURtoRSD(cr.rate, cr.spread, parseFloat(entry.unit_amount.value)).toFixed(2), currency_code: entry.unit_amount.currency_code }
+                unit_amount: { value: parseFloat(entry.unit_amount.value).toFixed(2), currency_code: entry.unit_amount.currency_code }
             };
         });
         order.items = ordert;
@@ -71,7 +74,7 @@ const sendMail = async (order, message, strapi, gmail) => {
     justify-content:space-between;
     ">
                 <span>
-                    PRIMALAC RAČUNA
+                    RECIPIENT
                 </span>
             </div>
             <div style="background-color: #fff;display: flex;
@@ -81,7 +84,7 @@ const sendMail = async (order, message, strapi, gmail) => {
         justify-content:space-between;
         ">
                 <span>
-                    Ime i prezime:
+                    First and last name:
                 </span>
                 <span style="text-align: right;">
                     ${" " + order.customer_name + " " + order.customer_surname}
@@ -94,7 +97,7 @@ const sendMail = async (order, message, strapi, gmail) => {
         justify-content:space-between;
         ">
                 <span>
-                    Ulica i broj:
+                    Address:
                 </span>
                 <span style="text-align: right;">
                     ${" " + order.address_line_1}
@@ -107,7 +110,7 @@ const sendMail = async (order, message, strapi, gmail) => {
         justify-content:space-between;
         ">
                 <span>
-                    Poštanski broj i grad:
+                    Postal code and city name:
                 </span>
                 <span style="text-align: right;">
                     ${" " + order.postal_code + " " + order.admin_area_2}
@@ -123,7 +126,7 @@ const sendMail = async (order, message, strapi, gmail) => {
                     Država:
                 </span>
                 <span style="text-align: right;">
-                    ${" " + drzava}
+                    ${" " + country}
                 </span>
             </div>
         </div>
@@ -136,7 +139,7 @@ const sendMail = async (order, message, strapi, gmail) => {
         justify-content:space-between;
         ">
                     <span>
-                        ADRESA ZA ISPORUKU
+                        SHIPPING ADDRESS
                     </span>
                 </div>
                 <div style="background-color: #fff;display: flex;
@@ -146,7 +149,7 @@ const sendMail = async (order, message, strapi, gmail) => {
         justify-content:space-between;
         ">
                 <span>
-                    Ime i prezime:
+                    First and last name:
                 </span>
                 <span style="text-align: right;">
                     ${" " + order.customer_name + " " + order.customer_surname}
@@ -159,7 +162,7 @@ const sendMail = async (order, message, strapi, gmail) => {
         justify-content:space-between;
         ">
                 <span>
-                    Ulica i broj:
+                    Address:
                 </span>
                 <span style="text-align: right;">
                     ${" " + order.address_line_1}
@@ -172,7 +175,7 @@ const sendMail = async (order, message, strapi, gmail) => {
         justify-content:space-between;
         ">
                 <span>
-                    Poštanski broj i grad:
+                    Postal code and city name:
                 </span>
                 <span style="text-align: right;">
                     ${" " + order.postal_code + " " + order.admin_area_2}
@@ -188,7 +191,7 @@ const sendMail = async (order, message, strapi, gmail) => {
                     Država:
                 </span>
                 <span style="text-align: right;">
-                    ${" " + drzava}
+                    ${" " + country}
                 </span>
             </div>
 
@@ -202,7 +205,7 @@ const sendMail = async (order, message, strapi, gmail) => {
             justify-content:space-between;
             ">
                     <span>
-                        PORUČENI PROIZVODI
+                        ORDERED PRODUCTS
                     </span>
                 </div>
                 ${orderTemp}
@@ -216,7 +219,7 @@ const sendMail = async (order, message, strapi, gmail) => {
                 justify-content:space-between;
                 ">
                     <span>
-                        VREDNOST PORUDŽBINE
+                        ORDER VALUE
                     </span>
                 </div>
                 <div style="background-color: #fff;display: flex;
@@ -226,10 +229,10 @@ const sendMail = async (order, message, strapi, gmail) => {
                     justify-content:space-between;
                     ">
                     <span>
-                        Popust:
+                        Discount:
                     </span>
                     <span style="text-align: right;">
-                        ${order.discount} RSD
+                        ${order.discount} USD
                     </span>
                 </div>
                 <div style="background-color: #fff;display: flex;
@@ -239,10 +242,10 @@ const sendMail = async (order, message, strapi, gmail) => {
                     justify-content:space-between;
                     ">
                     <span>
-                        Poštarina:
+                        Shipping fee:
                     </span>
                     <span style="text-align: right;">
-                        ${order.shipping_fee} RSD
+                        ${order.shipping_fee} USD
                     </span>
                 </div>
                 <div style="background-color: #fff;display: flex;
@@ -252,7 +255,7 @@ const sendMail = async (order, message, strapi, gmail) => {
                     justify-content:space-between;
                     ">
                     <span>
-                        Iznos porudžbine:
+                        Price:
                     </span>
                     <span style="text-align: right;">
                         ${ukupno.toFixed(2)}
@@ -266,7 +269,7 @@ const sendMail = async (order, message, strapi, gmail) => {
                     justify-content:space-between;
                     ">
                     <div>
-                        UKUPNO ZA PLAĆANJE:
+                        TOTAL:
                     </div>
                     <div style="text-align: right;">
                         ${" " + totalPrice} RSD
@@ -280,7 +283,7 @@ const sendMail = async (order, message, strapi, gmail) => {
             from: gmail.from,
             to: order.email,
             // to: "alexmitrovic993@gmail.com",
-            subject: 'Hvala Vam na kupovini!',
+            subject: 'Thank you for your purchase!',
             text: messageText + signature,
             html: messageText.replace(/\n/g, '<br>') + signature
         };

@@ -144,7 +144,12 @@ describe('Payment Service', () => {
             return {
               find: jest.fn().mockImplementation((data: any) => {
                 // Mock implementation for the 'gmail' service
-                return [{ /* mock gmail data here */ }];
+                return {
+                  client_id: 'mockClientId',
+                  client_secret: 'mockClientSecret',
+                  refresh_token: 'mockRefreshToken',
+                  from: 'mock@gmail.com',
+                };
               }),
             };
           }
@@ -226,6 +231,9 @@ describe('Payment Service', () => {
         entityService: {
           findMany: jest.fn(),
           findOne: jest.fn(),
+          update: jest.fn().mockImplementation((model: string, id: any, data: any) => {
+            return { data: { ...productData, ...data } };
+          }),
         },
         plugin: jest.fn().mockReturnValue({
           service: jest.fn().mockImplementation((serviceName: string) => {
@@ -233,7 +241,32 @@ describe('Payment Service', () => {
               return {
                 find: jest.fn().mockImplementation((data: any) => {
                   // Mock implementation for the 'product' service
-                  return [{id: 1, amount_value: 5, name: "some product", weight : 5},{id: 0, amount_value: 5, name: "some other product", weight : 5}];
+                  return [{id: 1, title: 'Product 1',
+                    slug: 'test-product',
+                    description: 'This is a test product',
+                    SKU: 'ABC123',
+                    amount_currency_code: 'USD',
+                    amount_value: 19.99,
+                    tax_currency_code: 'USD',
+                    tax_value: 2.0,
+                    media: ['image1.jpg', 'image2.jpg'],
+                    compare_at_price: '29.99',
+                    cost_per_item: '15.00',
+                    chargeTax: true,
+                    Quantity: 100,
+                    Barcode: '123456789',
+                    showQuantity: true,
+                    weight: 1.5,
+                    measurement_unit: 'kg',
+                    omcommerce_tax: 1, // Assuming the ID of the associated tax record
+                    omcommerce_shippingzones: [1, 2], // Assuming the IDs of the associated shipping zones
+                    categories: [3, 4], // Assuming the IDs of the associated categories
+                    subcategory: 5, // Assuming the ID of the associated subcategory
+                    amount_value_converted: 25.0,
+                    amount_value_converted_currency_code: 'EUR',},
+                    {id: 2, amount_value: 5,
+                      title: "some other product", weight : 5, Quantity: 5, slug: "prod2",
+                      chargeTax: false, showQuantity: false}];
                 }),
               };
             } else if (serviceName === 'shippingcalculator') {
@@ -258,7 +291,42 @@ describe('Payment Service', () => {
               return {
                 find: jest.fn().mockImplementation((query: any) => {
                   // Mock implementation for the 'order' service
-                  return [{ /* mock order data here based on query */ }];
+
+                  return [{
+                    "id": "test_order_id",
+                    "status": "CREATED",
+                    "purchase_units": [
+                      {
+                        "amount": {
+                          "currency_code": "USD",
+                          "value": "100.00",
+                          "breakdown": {
+                            "item_total": {
+                              "currency_code": "USD",
+                              "value": "80.00"
+                            },
+                            "shipping": {
+                              "currency_code": "USD",
+                              "value": "20.00"
+                            }
+                          }
+                        },
+                        "items": [
+                          {
+                            "name": "Product 1",
+                            "description": "Description for Product 1",
+                            "SKU": "SKU_001",
+                            "unit_amount": {
+                              "currency_code": "USD",
+                              "value": "40.00"
+                            },
+                            "quantity": 2
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                  ];
                 }),
                 update: jest.fn().mockImplementation((orderId: string, updatedData: any) => {
                   // Mock implementation for updating an order
@@ -274,7 +342,12 @@ describe('Payment Service', () => {
               return {
                 find: jest.fn().mockImplementation((data: any) => {
                   // Mock implementation for the 'gmail' service
-                  return [{ /* mock gmail data here */ }];
+                  return {
+                    client_id: 'mockClientId',
+                    client_secret: 'mockClientSecret',
+                    refresh_token: 'mockRefreshToken',
+                    from: 'mock@gmail.com',
+                  };
                 }),
               };
             }
@@ -292,6 +365,9 @@ describe('Payment Service', () => {
                 }),
               };
             }
+            // Add more conditions for other services as needed
+
+            // Default case, return an empty object if the service is not recognized
             return {};
           }),
         }),

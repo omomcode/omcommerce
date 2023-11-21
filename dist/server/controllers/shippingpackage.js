@@ -11,7 +11,6 @@ exports.default = ({ strapi }) => ({
     },
     async create(ctx) {
         try {
-            console.log(ctx.request.body);
             if (!ctx.request.body ||
                 !ctx.request.body.name ||
                 !ctx.request.body.type ||
@@ -33,8 +32,6 @@ exports.default = ({ strapi }) => ({
     },
     async update(ctx) {
         try {
-            console.log(ctx.request.body);
-            console.log(ctx.params.id);
             if (!ctx.params.id ||
                 !ctx.request.body ||
                 !ctx.request.body.name ||

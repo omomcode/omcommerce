@@ -1,5 +1,6 @@
 import paypalSetupController from '../../../server/controllers/paypalsetup';
 import { IPaypalSetup } from '../../../types/paypalsetup';
+import billingController from "../../../server/controllers/billing";
 
 describe('PayPal Setup Controller', () => {
   let strapi: { plugin: any };
@@ -115,6 +116,29 @@ describe('PayPal Setup Controller', () => {
     // Expect create to be called once
     expect(strapi.plugin('omcommerce').service('paypalSetup').create).toBeCalledTimes(1);
   });
+
+  it('should handle invalid data entries error when creating paypalsetup information', async () => {
+    const updateData = {
+      id: 1,
+      live_paypal_client_id: 'UPDATED_CLIENT_ID',
+      sandbox_paypal_client_id: 'UPDATED_SANDBOX_CLIENT_ID',
+      live: false,
+    };
+
+    const ctx: any = {
+      params: { id: 1 },
+      request: { body: updateData },
+      body: null,
+      throw: jest.fn(), // Mocking the throw function
+    };
+
+    // @ts-ignore
+    await paypalSetupController({ strapi }).create(ctx);
+
+    // Expect throw to be called with the correct parameters for a 400 error
+    expect(ctx.throw).toHaveBeenCalledWith(400, "Invalid data");
+  });
+
 
   it('should update PayPal setup information', async () => {
     const updateData = {

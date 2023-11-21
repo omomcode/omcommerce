@@ -29,13 +29,13 @@ export default ({ strapi }: { strapi: Strapi }) => ({
           data.shipping_fee !== undefined &&
           data.status
       ) {
-        const billing = await strapi.entityService.create(
+        const order = await strapi.entityService.create(
             "plugin::omcommerce.order",
             data
         );
 
-        if (billing) {
-          return billing;
+        if (order) {
+          return order;
         } else {
           throw new Error("Invalid database data");
         }
@@ -80,12 +80,12 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       if (
           id
       ) {
-        const billing = await strapi.entityService.update(
+        const order = await strapi.entityService.delete(
             "plugin::omcommerce.order", id
         );
 
-        if (billing) {
-          return billing;
+        if (order) {
+          return order;
         } else {
           throw new Error("Invalid database data");
         }

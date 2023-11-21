@@ -13,9 +13,15 @@ export const capturePayment = async (orderID: string, strapi : any) => {
   const base = credentials.live === false ? "https://api-m.sandbox.paypal.com" : "https://api-m.paypal.com";
   const url = `${base}/v2/checkout/orders/${orderID}/capture`;
   async function iterateAsync(combinedObject: any) {
-    for (const obj of combinedObject) {
-      const { id, ...updatedObject } = obj;
-      const pro: any = await strapi.entityService.update("plugin::omcommerce.product", id, updatedObject)
+    try {
+      for (const obj of combinedObject) {
+        const { id, ...updatedObject } = obj;
+        const pro: any = await strapi.entityService.update("plugin::omcommerce.product", id, updatedObject)
+      }
+      return true;
+    }
+    catch (e) {
+      return false;
     }
   }
   try {
@@ -25,7 +31,6 @@ export const capturePayment = async (orderID: string, strapi : any) => {
         'Authorization': `Bearer ${accessToken}`,
       },
     });
-    console. log("responseanddata", response)
     if (response && response.data && response.data.payer && response.data.purchase_units &&
       response.data.purchase_units[0] && response.data.payer.email_address && response.data.payer.name &&
       response.data.payer.name.given_name &&
@@ -67,8 +72,6 @@ export const capturePayment = async (orderID: string, strapi : any) => {
           throw new Error("Could not update product quantity")
         }
 
-
-      console.log("orderresponse", orderResponse)
       const order = orderResponse[0];
       order.email = response.data?.payer?.email_address;
       order.customer_name = response.data?.payer?.name?.given_name;
@@ -90,7 +93,7 @@ export const capturePayment = async (orderID: string, strapi : any) => {
         throw new Error("Sender email data invalid")
       }
 
-      if (order.status === "COMPLETED" && gmail !== undefined) await sendMail(orderResponse[0], "this is a message", strapi, gmail)
+      if (order.status === "COMPLETED") await sendMail(orderResponse[0], "this is a message", strapi, gmail)
       else throw new Error("Order could not be completed")
 
       await strapi.plugin("omcommerce").service("order").update(order.id,order);
