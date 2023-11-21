@@ -11,7 +11,6 @@ exports.default = ({ strapi }) => ({
     },
     async create(ctx) {
         try {
-            console.log("ctxzonecreate", ctx.request.body);
             if (!ctx.request.body ||
                 !ctx.request.body.name) {
                 // If any of the required fields is missing, throw a 400 error

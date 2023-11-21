@@ -47,7 +47,6 @@ exports.default = ({ strapi }) => ({
             const resolvedZone = (0, country_helper_1.findShippingZoneBasedOnCountry)(country_code, sz);
             // @ts-ignore
             return (0, shipping_rate_calc_1.default)(resolvedZone.shippingrate, totalAmountValue, totalWeight, currency, timezone);
-
         };
         // const handleError = (error: any) => {
         //   console.error("Error while finding products for the cart:", error);

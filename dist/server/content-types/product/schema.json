@@ -70,11 +70,11 @@
         "chargeTax": {
             "type": "boolean",
             "default": false,
-            "required": false
+            "required": true
         },
         "Quantity": {
             "type": "integer",
-            "required": false,
+            "required": true,
             "default": 0,
             "min": 0
         },
@@ -89,7 +89,7 @@
         "weight": {
             "type": "decimal",
             "default": 0,
-            "required": false,
+            "required": true,
             "min": 0
         },
         "measurement_unit": {

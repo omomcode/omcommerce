@@ -20,8 +20,7 @@
     },
     "attributes": {
         "enabled": {
-            "type": "boolean",
-            "require": true
+            "type": "boolean"
         },
         "returnPolicy": {
             "type": "text"
@@ -35,7 +34,10 @@
         "shippingPolicy": {
             "type": "text"
         },
-        "online": {
+        "returnRules": {
+            "type": "string"
+        },
+        "returnShipping": {
             "type": "string"
         },
         "restockingFee": {
@@ -45,9 +47,6 @@
             "type": "string"
         },
         "returnShippingCost": {
-            "type": "string"
-        },
-        "returnRules": {
             "type": "string"
         }
     }

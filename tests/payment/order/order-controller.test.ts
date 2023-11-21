@@ -1,4 +1,5 @@
 import orderController from '../../../server/controllers/order';
+import billingController from "../../../server/controllers/billing";
 
 describe('Order Controller', () => {
   let strapi: { plugin: any };
@@ -75,6 +76,40 @@ describe('Order Controller', () => {
     expect(ctx.throw).toHaveBeenCalledWith(500, 'Simulated error');
   });
 
+  it('should handle invalid data entries error when creating order', async () => {
+    const ctx = {
+      request: {
+        body: {
+          order_id: '123456',
+          // amount: 100.0,
+          currency: 'USD',
+          items: [{ /* item data */}],
+          shipping_fee: 10.0,
+          tax_total: 5.0,
+          discount: 'DISCOUNT_CODE',
+          email: 'customer@example.com',
+          customer_name: 'John',
+          customer_surname: 'Doe',
+          address_line_1: '123 Main St',
+          address_line_2: 'Apt 4',
+          admin_area_1: 'CA',
+          admin_area_2: 'San Francisco',
+          postal_code: '12345',
+          country_code: 'US',
+          status: 'pending',
+        }
+      },
+      throw: jest.fn(),
+    };
+
+    // @ts-ignore
+    await orderController({ strapi }).create(ctx);
+
+    // Expect throw to be called with the correct parameters for a 400 error
+    expect(ctx.throw).toHaveBeenCalledWith(400, "Invalid data");
+  });
+
+
   it('should find orders', async () => {
     const ctx: any = {
       query: {},
@@ -138,7 +173,23 @@ describe('Order Controller', () => {
   it('should update an order', async () => {
     const orderId = 1; // Replace with the actual order ID
     const updateData = {
-      status: 'shipped',
+      order_id: '123456',
+      amount: 100.0,
+      currency: 'USD',
+      items: [{ /* item data */ }],
+      shipping_fee: 10.0,
+      tax_total: 5.0,
+      discount: 'DISCOUNT_CODE',
+      email: 'new_customer@example.com',
+      customer_name: 'John',
+      customer_surname: 'Doe',
+      address_line_1: '123 Main St',
+      address_line_2: 'Apt 4',
+      admin_area_1: 'CA',
+      admin_area_2: 'San Francisco',
+      postal_code: '12345',
+      country_code: 'US',
+      status: 'pending',
     };
 
     const ctx: any = {
@@ -200,4 +251,18 @@ describe('Order Controller', () => {
     // Expect throw to be called with the correct parameters
     expect(ctx.throw).toHaveBeenCalledWith(500, 'Simulated error');
   });
+
+  it('should handle invalid data entries error when deleting order', async () => {
+    const ctx: any = {
+      params: { id: null },
+      throw: jest.fn(),
+    };
+
+    // @ts-ignore
+    await orderController({ strapi }).delete(ctx);
+
+    // Expect throw to be called with the correct parameters for a 400 error
+    expect(ctx.throw).toHaveBeenCalledWith(400, "Invalid data");
+  });
+
 });

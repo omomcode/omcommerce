@@ -30,7 +30,21 @@ describe('Orders Service', () => {
           return { data: { ...orderData, ...data } };
         }),
         update: jest.fn().mockImplementation((model: string, id: any, data: any) => {
-          return { data: { ...orderData, ...data } };
+          return {
+            order_id: data.order_id || 'test_order_id',
+            amount: data.amount ||"100.0",
+            currency: data.currency ||'USD',
+            items: data.items ||"[{ id: 1, quantity: 2 }]",
+            shipping_fee:data.shipping_fee || "10.0",
+            tax_total:data.tax_total || "5.0",
+            email:data.email || 'new_test@example.com',
+            customer_name: data.customer_name || 'John',
+            customer_surname:data.customer_surname ||  'Doe',
+            address_line_1: data.address_line_1 ||'123 Main St',
+            postal_code: data.postal_code || '12345',
+            country_code: data.country_code || 'US',
+            status: data.status || 'CREATED',
+          };
         }),
         delete: jest.fn().mockResolvedValue(true),
       },
@@ -87,7 +101,19 @@ describe('Orders Service', () => {
 
   it('should create an order', async () => {
     const createData = {
-      // Replace with the actual data you use for creating an order
+      order_id: 'test_order_id',
+      amount: "100.0",
+      currency: 'USD',
+      items: "[{ id: 1, quantity: 2 }]",
+      shipping_fee: "10.0",
+      tax_total: "5.0",
+      email: 'test@example.com',
+      customer_name: 'John',
+      customer_surname: 'Doe',
+      address_line_1: '123 Main St',
+      postal_code: '12345',
+      country_code: 'US',
+      status: 'PROCESSING',
     };
 
     // @ts-ignore
@@ -121,13 +147,27 @@ describe('Orders Service', () => {
   it('should update an order', async () => {
     const orderId = 'test_order_id'; // Replace with the actual order ID
     const updateData = {
-      // Replace with the actual data you use for updating an order
+      order_id: 'test_order_id',
+      amount: "100.0",
+      currency: 'USD',
+      items: "[{ id: 1, quantity: 2 }]",
+      shipping_fee: "10.0",
+      tax_total: "5.0",
+      email: 'new_test@example.com',
+      customer_name: 'John',
+      customer_surname: 'Doe',
+      address_line_1: '123 Main St',
+      postal_code: '12345',
+      country_code: 'US',
+      status: 'CREATED',
     };
 
     // @ts-ignore
     const updatedOrder: any = await ordersService({ strapi }).update(orderId, updateData);
 
     expect(strapi.entityService.update).toBeCalledTimes(1);
+    expect(updatedOrder).not.toBeNull();
+    expect(updatedOrder.email).toBe(updateData.email);
     // Add expectations for the updated order data
   });
 
@@ -154,10 +194,10 @@ describe('Orders Service', () => {
   });
 
   it('should delete an order', async () => {
-    const orderIdToDelete = 'test_order_id'; // Replace with the actual order ID
+    const orderIdToDelete = 1; // Replace with the actual order ID
 
     // @ts-ignore
-    const isDeleted: boolean = await ordersService({ strapi }).delete(orderIdToDelete);
+    const isDeleted: boolean = await ordersService({ strapi }).delete(1);
 
     expect(strapi.entityService.delete).toBeCalledTimes(1);
     expect(isDeleted).toBe(true);

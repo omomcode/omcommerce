@@ -23,6 +23,7 @@ describe('PayPal Setup Service', () => {
           // Mock the behavior of create method
           // Return data based on your test scenario
           return {
+            id: 1,
             live_paypal_client_id: data.live_paypal_client_id,
             live_paypal_client_secret: data.live_paypal_client_secret,
             sandbox_paypal_client_id: data.sandbox_paypal_client_id,

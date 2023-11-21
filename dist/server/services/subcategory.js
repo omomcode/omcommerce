@@ -17,81 +17,34 @@ exports.default = ({ strapi }) => ({
     },
     async findOne(id) {
         if (strapi.entityService) {
-            if (id) {
-                const subcategory = await strapi.entityService.findOne("plugin::omcommerce.subcategory", id);
-                if (subcategory) {
-                    return subcategory;
-                }
-                else {
-                    throw new Error("Invalid database data");
-                }
-            }
-            else {
-                throw new Error("Invalid data");
-            }
+            return await strapi.entityService.findOne("plugin::omcommerce.subcategory", id);
         }
         else {
-            throw new Error("strapi.entityService is not defined");
+            throw new Error('strapi.entityService is not defined');
         }
     },
     async create(data) {
         if (strapi.entityService) {
-            if (data &&
-                data.title) {
-                const subcategory = await strapi.entityService.create("plugin::omcommerce.subcategory", data);
-                if (subcategory) {
-                    return subcategory;
-                }
-                else {
-                    throw new Error("Invalid database data");
-                }
-            }
-            else {
-                throw new Error("Invalid data");
-            }
+            return await strapi.entityService.create("plugin::omcommerce.subcategory", data);
         }
         else {
-            throw new Error("strapi.entityService is not defined");
+            throw new Error('strapi.entityService is not defined');
         }
     },
     async update(id, data) {
         if (strapi.entityService) {
-            if (id &&
-                data &&
-                data.title) {
-                const subcategory = await strapi.entityService.update("plugin::omcommerce.subcategory", id, { data });
-                if (subcategory) {
-                    return subcategory;
-                }
-                else {
-                    throw new Error("Invalid database data");
-                }
-            }
-            else {
-                throw new Error("Invalid data");
-            }
+            return await strapi.entityService.update("plugin::omcommerce.subcategory", id, data);
         }
         else {
-            throw new Error("strapi.entityService is not defined");
+            throw new Error('strapi.entityService is not defined');
         }
     },
     async delete(id) {
         if (strapi.entityService) {
-            if (id) {
-                const subcategory = await strapi.entityService.delete("plugin::omcommerce.subcategory", id);
-                if (subcategory) {
-                    return subcategory;
-                }
-                else {
-                    throw new Error("Invalid database data");
-                }
-            }
-            else {
-                throw new Error("Invalid data");
-            }
+            return await strapi.entityService.delete("plugin::omcommerce.subcategory", id);
         }
         else {
-            throw new Error("strapi.entityService is not defined");
+            throw new Error('strapi.entityService is not defined');
         }
     },
 });
