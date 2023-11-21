@@ -9,7 +9,6 @@ exports.default = ({ strapi }) => ({
             return JSON.stringify(response);
         }
         catch (error) {
-            console.error('Failed to create order:', error);
             return JSON.stringify({ error: 'Failed to capture order.' });
         }
     },
@@ -19,8 +18,6 @@ exports.default = ({ strapi }) => ({
             return JSON.stringify(response);
         }
         catch (error) {
-            console.error('Failed to create order:', error);
-            // res.status(500).json({ error: 'Failed to create order.' });
             return JSON.stringify({ error: 'Failed to create order.' });
         }
     },

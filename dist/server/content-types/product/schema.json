@@ -20,7 +20,8 @@
     },
     "attributes": {
         "title": {
-            "type": "string"
+            "type": "string",
+            "required": true
         },
         "slug": {
             "type": "uid",
@@ -69,11 +70,11 @@
         "chargeTax": {
             "type": "boolean",
             "default": false,
-            "required": true
+            "required": false
         },
         "Quantity": {
             "type": "integer",
-            "required": true,
+            "required": false,
             "default": 0,
             "min": 0
         },
@@ -88,7 +89,7 @@
         "weight": {
             "type": "decimal",
             "default": 0,
-            "required": true,
+            "required": false,
             "min": 0
         },
         "measurement_unit": {

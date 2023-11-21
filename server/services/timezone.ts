@@ -17,6 +17,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         && data.measurement && data.unit &&
         data.length_unit
       ) {
+        console.log("timezone")
         const timezone = await strapi.entityService.create("plugin::omcommerce.zone", data);
         if (timezone) {
           return timezone;
@@ -37,6 +38,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         && data.measurement && data.unit &&
         data.length_unit
       ) {
+        console.log("timezoneedit")
         const timezone = await strapi.entityService.update("plugin::omcommerce.zone", id, {data});
         if (timezone) {
           return timezone;

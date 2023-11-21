@@ -17,7 +17,7 @@ const timezoneRequests = {
     try {
       return await request('/omcommerce/timezone/create', {
         method: "POST",
-        body: JSON.parse(JSON.stringify({data})),
+        body: JSON.parse(JSON.stringify(data)),
       });
     }
     catch (error) {
@@ -33,7 +33,7 @@ const timezoneRequests = {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.parse(JSON.stringify({data})),
+        body: JSON.parse(JSON.stringify(data)),
       });
     }
     catch (error) {

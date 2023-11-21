@@ -23,7 +23,6 @@ describe('PayPal Setup Service', () => {
           // Mock the behavior of create method
           // Return data based on your test scenario
           return {
-            id: 1,
             live_paypal_client_id: data.live_paypal_client_id,
             live_paypal_client_secret: data.live_paypal_client_secret,
             sandbox_paypal_client_id: data.sandbox_paypal_client_id,
@@ -35,12 +34,12 @@ describe('PayPal Setup Service', () => {
           // Mock the behavior of update method
           // Return data based on your test scenario
           return {
-            id: 1,
-            live_paypal_client_id: 'UPDATED_CLIENT_ID', // Updated live_paypal_client_id for testing
-            live_paypal_client_secret: 'UPDATED_CLIENT_SECRET', // Updated live_paypal_client_secret for testing
-            sandbox_paypal_client_id: 'UPDATED_SANDBOX_CLIENT_ID', // Updated sandbox_paypal_client_id for testing
-            sandbox_paypal_client_secret: 'UPDATED_SANDBOX_CLIENT_SECRET', // Updated sandbox_paypal_client_secret for testing
-            live: true, // Updated live for testing
+            id: id,
+            live_paypal_client_id: data.live_paypal_client_id,
+            live_paypal_client_secret: data.live_paypal_client_secret,
+            sandbox_paypal_client_id: data.sandbox_paypal_client_id,
+            sandbox_paypal_client_secret: data.sandbox_paypal_client_secret,
+            live: data.live,
           };
         }),
       },
@@ -49,18 +48,22 @@ describe('PayPal Setup Service', () => {
 
   it('should create a PayPal Setup record', async function () {
     const initialData = {
-      live_paypal_client_id: '',
-      live_paypal_client_secret: '',
+      live_paypal_client_id: '532fd',
+      live_paypal_client_secret: '325dsf',
       sandbox_paypal_client_id: '',
       sandbox_paypal_client_secret: '',
-      live: false,
+      live: true,
     };
 
     // @ts-ignore
     const createdPayPalSetup = await paypalSetupService({ strapi }).create(initialData);
     expect(strapi.entityService.create).toBeCalledTimes(1);
     expect(createdPayPalSetup.id).toBe(1);
-    expect(createdPayPalSetup.live_paypal_client_id).toBe('');
+    expect(createdPayPalSetup.live_paypal_client_id).toBe(initialData.live_paypal_client_id);
+    expect(createdPayPalSetup.live_paypal_client_secret).toBe(initialData.live_paypal_client_secret);
+    expect(createdPayPalSetup.sandbox_paypal_client_id).toBe(initialData.sandbox_paypal_client_id);
+    expect(createdPayPalSetup.sandbox_paypal_client_secret).toBe(initialData.sandbox_paypal_client_secret);
+
     // Add similar expectations for other properties
   });
 
@@ -125,7 +128,12 @@ describe('PayPal Setup Service', () => {
 
   it('should update a PayPal Setup record', async function () {
     const payPalSetupId = 1;
-    const updateData = { /* your update data */ };
+    const updateData = {
+      live_paypal_client_id: '',
+      live_paypal_client_secret: '',
+      sandbox_paypal_client_id: '412fqas',
+      sandbox_paypal_client_secret: 'rwq42',
+      live: false, };
 
     // @ts-ignore
     const updatedPayPalSetup = await paypalSetupService({ strapi }).update(payPalSetupId, updateData);
@@ -133,7 +141,10 @@ describe('PayPal Setup Service', () => {
     expect(strapi.entityService.update).toBeCalledTimes(1);
     // Add more specific expectations based on your test scenario
     expect(updatedPayPalSetup!.id).toBe(1);
-    expect(updatedPayPalSetup!.live_paypal_client_id).toBe('UPDATED_CLIENT_ID');
+    expect(updatedPayPalSetup.live_paypal_client_id).toBe(updateData.live_paypal_client_id);
+    expect(updatedPayPalSetup.live_paypal_client_secret).toBe(updateData.live_paypal_client_secret);
+    expect(updatedPayPalSetup.sandbox_paypal_client_id).toBe(updateData.sandbox_paypal_client_id);
+    expect(updatedPayPalSetup.sandbox_paypal_client_secret).toBe(updateData.sandbox_paypal_client_secret);
     // Add similar expectations for other properties
   });
 
