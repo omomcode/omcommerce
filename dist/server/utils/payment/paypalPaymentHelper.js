@@ -26,7 +26,9 @@ const capturePayment = async (orderID, strapi) => {
             return true;
         }
         catch (e) {
-            return false;
+            // throw new Error(e);
+            // return false;
+            // console.error(e);
         }
     }
     try {
