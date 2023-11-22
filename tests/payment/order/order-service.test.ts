@@ -1,5 +1,6 @@
 import ordersService from '../../../server/services/order';
 import { IOrder } from '../../../types/order';
+import billingService from "../../../server/services/billing";
 
 describe('Orders Service', () => {
   let strapi: { entityService: any };
@@ -144,6 +145,55 @@ describe('Orders Service', () => {
     }
   });
 
+  it('should handle null result from create', async () => {
+    // Arrange
+    const data = {
+      order_id: 'test_order_id',
+      amount: "100.0",
+      currency: 'USD',
+      items: "[{ id: 1, quantity: 2 }]",
+      shipping_fee: "10.0",
+      tax_total: "5.0",
+      email: 'test@example.com',
+      customer_name: 'John',
+      customer_surname: 'Doe',
+      address_line_1: '123 Main St',
+      postal_code: '12345',
+      country_code: 'US',
+      status: 'PROCESSING',
+    };
+
+    // Mock the entityService.create method to return null
+    strapi.entityService.create.mockResolvedValueOnce(null);
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(ordersService({ strapi }).create(data)).rejects.toThrowError('Invalid database data');
+  });
+
+  it('should throw an error for invalid data when creating orders', async function () {
+    // Arrange
+    const ordersData = {
+      order_id: 'test_order_id',
+      currency: 'USD',
+      items: "[{ id: 1, quantity: 2 }]",
+      shipping_fee: "10.0",
+      tax_total: "5.0",
+      email: 'test@example.com',
+      customer_name: 'John',
+      customer_surname: 'Doe',
+      address_line_1: '123 Main St',
+      postal_code: '12345',
+      country_code: 'US',
+      status: 'PROCESSING',
+    };
+    // Act & Assert
+    // @ts-ignore
+    await expect(ordersService({ strapi }).create(ordersData)).rejects.toThrowError("Invalid data");
+  });
+
+
+
   it('should update an order', async () => {
     const orderId = 'test_order_id'; // Replace with the actual order ID
     const updateData = {
@@ -193,6 +243,57 @@ describe('Orders Service', () => {
     }
   });
 
+  it('should handle null result from update', async () => {
+    // Arrange
+    const orderId = 'test_order_id'; // Replace with the actual order ID
+    const updateData = {
+      order_id: 'test_order_id',
+      amount: "100.0",
+      currency: 'USD',
+      items: "[{ id: 1, quantity: 2 }]",
+      shipping_fee: "10.0",
+      tax_total: "5.0",
+      email: 'new_test@example.com',
+      customer_name: 'John',
+      customer_surname: 'Doe',
+      address_line_1: '123 Main St',
+      postal_code: '12345',
+      country_code: 'US',
+      status: 'CREATED',
+    };
+
+    // Mock the entityService.update method to return null
+    strapi.entityService.update.mockResolvedValueOnce(null);
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(ordersService({ strapi }).update(orderId, updateData)).rejects.toThrowError('Invalid database data');
+  });
+
+  it('should throw an error for invalid data when updating order information', async () => {
+    // Arrange
+    const orderId = 'test_order_id'; // Replace with the actual order ID
+    const updateData = {
+      order_id: 'test_order_id',
+      currency: 'USD',
+      items: "[{ id: 1, quantity: 2 }]",
+      shipping_fee: "10.0",
+      tax_total: "5.0",
+      email: 'new_test@example.com',
+      customer_name: 'John',
+      customer_surname: 'Doe',
+      address_line_1: '123 Main St',
+      postal_code: '12345',
+      country_code: 'US',
+      status: 'CREATED',
+    };
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(ordersService({ strapi }).update(orderId, updateData)).rejects.toThrowError('Invalid data');
+  });
+
+
   it('should delete an order', async () => {
     const orderIdToDelete = 1; // Replace with the actual order ID
 
@@ -217,4 +318,27 @@ describe('Orders Service', () => {
       expect(error.message).toBe('strapi.entityService is not defined');
     }
   });
+
+  it('should handle null result from delete', async () => {
+    // Arrange
+    const orderId = 'test_order_id'; // Replace with the actual order ID
+
+    // Mock the entityService.update method to return null
+    strapi.entityService.delete.mockResolvedValueOnce(null);
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(ordersService({ strapi }).delete(orderId)).rejects.toThrowError('Invalid database data');
+  });
+
+  it('should throw an error for invalid data when deleting order', async () => {
+    // Arrange
+    const orderId = undefined; // Replace with the actual order ID
+
+
+    // Act & Assert
+    // @ts-ignore
+    await expect(ordersService({ strapi }).delete(orderId)).rejects.toThrowError('Invalid data');
+  });
+
 });

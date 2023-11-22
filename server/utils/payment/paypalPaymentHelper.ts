@@ -5,11 +5,12 @@ import productService from "../../services/product";
 // const { STRAPI_ADMIN_SANDBOX_PAYPAL_CLIENT_ID, STRAPI_ADMIN_SANDBOX_PAYPAL_CLIENT_SECRET,STRAPI_ADMIN_PAYPAL_ENVIRONMENT } = process.env;
 // const base = STRAPI_ADMIN_PAYPAL_ENVIRONMENT==='sandbox' ? "https://api-m.sandbox.paypal.com" : "https://api-m.paypal.com";
 export const capturePayment = async (orderID: string, strapi : any) => {
-  const accessToken = await generateAccessToken(strapi);
+
   const credentials = await strapi.plugin("omcommerce").service("paypalsetup").find({});
   if(!credentials){
     throw new Error("No valid paypal credentials")
   }
+  const accessToken = await generateAccessToken(strapi);
   const base = credentials.live === false ? "https://api-m.sandbox.paypal.com" : "https://api-m.paypal.com";
   const url = `${base}/v2/checkout/orders/${orderID}/capture`;
   async function iterateAsync(combinedObject: any) {
@@ -46,12 +47,12 @@ export const capturePayment = async (orderID: string, strapi : any) => {
       const query = { populate: '*', filters: { order_id: { '$eq': orderID.toString() } } }
       const orderResponse =await strapi.plugin("omcommerce").service("order").find(query);
       if(!orderResponse) {
-        throw new Error("Order data could not be fetched")
+        return Promise.reject(new Error("Order data could not be fetched"));
       }
 
       const products =await strapi.plugin("omcommerce").service("product").find({});
       if(!products) {
-        throw new Error("Invalid products data")
+        return Promise.reject(new Error("Invalid products data"));
       }
 
       const combinedObject = products
@@ -69,7 +70,7 @@ export const capturePayment = async (orderID: string, strapi : any) => {
         const iterate: any = await iterateAsync(combinedObject);
 
         if(!iterate) {
-          throw new Error("Could not update product quantity")
+          return Promise.reject(new Error("Could not update product quantity"));
         }
 
       const order = orderResponse[0];
@@ -90,11 +91,11 @@ export const capturePayment = async (orderID: string, strapi : any) => {
 
       const gmail =await strapi.plugin("omcommerce").service("gmail").find({});
       if(!gmail){
-        throw new Error("Sender email data invalid")
+        return Promise.reject(new Error("Sender email data invalid"));
       }
 
       if (order.status === "COMPLETED") await sendMail(orderResponse[0], "this is a message", strapi, gmail)
-      else throw new Error("Order could not be completed")
+      else return Promise.reject(new Error("Order could not be completed"));
 
       await strapi.plugin("omcommerce").service("order").update(order.id,order);
 
@@ -102,9 +103,10 @@ export const capturePayment = async (orderID: string, strapi : any) => {
 
     }
     else{
-      throw new Error("Order could not be captured")
+      return Promise.reject(new Error("Order could not be captured"));
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error:', error);
   }
 };
@@ -143,13 +145,15 @@ export async function handleResponse(response : any) {
 export const createOrder = async (data : any,strapi : any) => {
 
 
-  const accessToken = await generateAccessToken(strapi);
   const credentials =await strapi.plugin("omcommerce").service("paypalsetup").find({});
-  const base = credentials.live === false ? "https://api-m.sandbox.paypal.com" : "https://api-m.paypal.com";
-  const url = `${base}/v2/checkout/orders`;
   if(!credentials){
     throw new Error("No valid paypal credentials")
   }
+
+  const accessToken = await generateAccessToken(strapi);
+  const base = credentials.live === false ? "https://api-m.sandbox.paypal.com" : "https://api-m.paypal.com";
+  const url = `${base}/v2/checkout/orders`;
+
   // const products = res.data;
   // const products = await findProduct({},strapi);
   if(!data.cart){
@@ -164,7 +168,7 @@ export const createOrder = async (data : any,strapi : any) => {
   const matchingProducts = products.filter((product: { id: { toString: () => any; }; }) => {
     return cartItemIds.includes(product.id.toString());
   });
-  if(!matchingProducts){
+  if(matchingProducts.length === 0){
     throw new Error("No matching products found")
   }
   const totalAmount = matchingProducts.reduce((total: number, product: { id: { toString: () => any; }; amount_value: number; Quantity: number; title: string}) => {
@@ -183,7 +187,7 @@ export const createOrder = async (data : any,strapi : any) => {
   }
   // const currency = await findCurrency({},strapi);
   const currency =await strapi.plugin("omcommerce").service("currency").find({});
-  if(!currency){
+  if(!currency || !currency.currency){
     throw new Error("No valid currency data")
   }
 
