@@ -26,9 +26,9 @@ exports.default = ({ strapi }) => ({
                 data.items &&
                 data.shipping_fee !== undefined &&
                 data.status) {
-                const billing = await strapi.entityService.create("plugin::omcommerce.order", data);
-                if (billing) {
-                    return billing;
+                const order = await strapi.entityService.create("plugin::omcommerce.order", { data });
+                if (order) {
+                    return order;
                 }
                 else {
                     throw new Error("Invalid database data");
@@ -71,9 +71,9 @@ exports.default = ({ strapi }) => ({
     async delete(id) {
         if (strapi.entityService) {
             if (id) {
-                const billing = await strapi.entityService.update("plugin::omcommerce.order", id);
-                if (billing) {
-                    return billing;
+                const order = await strapi.entityService.delete("plugin::omcommerce.order", id);
+                if (order) {
+                    return order;
                 }
                 else {
                     throw new Error("Invalid database data");

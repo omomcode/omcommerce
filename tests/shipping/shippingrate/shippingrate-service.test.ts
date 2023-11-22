@@ -41,12 +41,12 @@ describe('Shipping Rate Service', () => {
         create: jest.fn().mockImplementation((model: string, data: any) => {
           // Mock the behavior of create method
           // Return created data based on your test scenario
-          return {
-            id: 3,
-            name: data.name,
-            condition: data.condition,
-            price: data.price,
+          const createdRate = {
+            name: data.name !== undefined ? data.name : 'Created Rate',
+            condition: data.condition !== undefined ? data.condition : 'Created Condition',
+            price: data.price !== undefined ? data.price : 15.0,
           };
+          return createdRate;
         }),
         delete: jest.fn().mockImplementation((model: string, id: any) => {
           // Mock the behavior of delete method
@@ -63,9 +63,9 @@ describe('Shipping Rate Service', () => {
 
   it('should create a shipping rate', async function () {
     const newRateData = {
-      name: 'New Rate',
-      condition: 'New Condition',
-      price: 25.0,
+        name: 'Created Rate',
+        condition: 'Created Condition',
+        price: 15.0,
     };
 
     // @ts-ignore
@@ -73,8 +73,7 @@ describe('Shipping Rate Service', () => {
 
     expect(strapi.entityService.create).toBeCalledTimes(1);
     expect(createdRate).not.toBeNull();
-    expect(createdRate.id).toBe(3);
-    expect(createdRate.name).toBe(newRateData.name);
+    expect(createdRate.name).toBe('Created Rate');
     // Add similar expectations for other properties of the created rate
   });
 

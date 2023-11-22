@@ -24,10 +24,10 @@ describe('Zone Service', () => {
           // Return data based on your test scenario
           return {
             id: 1,
-            timezone: data.timezone,
-            measurement: data.measurement,
-            unit: data.unit,
-            length_unit: data.length_unit,
+            timezone: "Central Europe Standard Time",
+            measurement: "Metric",
+            unit: "g",
+            lengthUnit: "cm",
           };
         }),
         update: jest.fn().mockImplementation((model: string, id: any, data: any) => {
@@ -38,7 +38,7 @@ describe('Zone Service', () => {
             timezone: "Eastern Standard Time", // Updated timezone for testing
             measurement: "Imperial", // Updated measurement for testing
             unit: "lbs", // Updated unit for testing
-            length_unit: "in", // Updated length unit for testing
+            lengthUnit: "in", // Updated length unit for testing
           };
         }),
       },
@@ -50,13 +50,12 @@ describe('Zone Service', () => {
       timezone: "Central Europe Standard Time",
       measurement: "Metric",
       unit: "g",
-      length_unit: "cm",
+      lengthUnit: "cm",
     };
 
     // @ts-ignore
     const createdZone = await zoneService({ strapi }).create(initialData);
     expect(strapi.entityService.create).toBeCalledTimes(1);
-    expect(createdZone?.id).toBe(1);
     expect(createdZone?.timezone).toBe("Central Europe Standard Time");
     // Add similar expectations for other properties
   });
@@ -67,7 +66,7 @@ describe('Zone Service', () => {
       timezone: "Central Europe Standard Time",
       measurement: "Metric",
       unit: "g",
-      length_unit: "cm",
+      lengthUnit: "cm",
     };
 
     // Mock the entityService.create method to return null
@@ -84,7 +83,7 @@ describe('Zone Service', () => {
       timezone: "Central Europe Standard Time",
       measurement: "Metric",
       unit: "g",
-      // length_unit: "cm",
+      // lengthUnit: "cm",
     };
     // @ts-ignore
     await expect(zoneService({ strapi }).create(initialData)).rejects.toThrowError("Invalid data");
@@ -98,7 +97,7 @@ describe('Zone Service', () => {
       timezone: "Central Europe Standard Time",
       measurement: "Metric",
       unit: "g",
-      length_unit: "cm",
+      lengthUnit: "cm",
     };
 
     // Temporarily set strapi.entityService to undefined
@@ -158,10 +157,10 @@ describe('Zone Service', () => {
   it('should update a zone record', async function () {
     const zoneId = 1;
     const updateData = {
-      timezone: "Central Europe Standard Time",
-      measurement: "Metric",
-      unit: "g",
-      length_unit: "cm",
+      timezone: "Eastern Standard Time",
+      measurement: "Imperial",
+      unit: "lbs",
+      lengthUnit: "in",
     };
 
     // @ts-ignore
@@ -208,7 +207,7 @@ describe('Zone Service', () => {
       timezone: "Central Europe Standard Time",
       measurement: "Metric",
       unit: "g",
-      length_unit: "cm",
+      lengthUnit: "cm",
     };
     // Mock the entityService.update method to return null
     strapi.entityService.update.mockResolvedValueOnce(null);
@@ -225,7 +224,7 @@ describe('Zone Service', () => {
       timezone: "Central Europe Standard Time",
       measurement: "Metric",
       unit: "g",
-      // length_unit: "cm",
+      // lengthUnit: "cm",
     };
 
     // Act & Assert

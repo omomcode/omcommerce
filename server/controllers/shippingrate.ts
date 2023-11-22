@@ -11,6 +11,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   },
 
   async create(ctx : any) {
+
     try {
       if (
         !ctx.request.body ||

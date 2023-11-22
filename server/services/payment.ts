@@ -16,7 +16,9 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async orders(data : any) {
     try {
+
       const response = await createOrder(data,strapi);
+
       return JSON.stringify(response);
     } catch (error) {
       return JSON.stringify({ error: 'Failed to create order.' })

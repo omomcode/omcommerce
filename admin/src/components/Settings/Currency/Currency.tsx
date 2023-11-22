@@ -92,7 +92,7 @@ const Currency = () => {
     if (!isNew) await currencyRequests.editCurrency(data.id, data);
     else {
       const curr = await currencyRequests.addCurrency(data);
-      console.log("curr", curr)
+
       setIsNew(false)
     }
     await fetchData();

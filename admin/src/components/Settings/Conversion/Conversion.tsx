@@ -101,7 +101,7 @@ const Conversion = () => {
     if (!isNew) await conversionRequests.editConversion(data.id, data);
     else {
       const conv = await conversionRequests.addConversion(data);
-      console.log("conv", conv)
+
       setIsNew(false)
     }
 

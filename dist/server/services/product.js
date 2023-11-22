@@ -35,7 +35,6 @@ exports.default = ({ strapi }) => ({
     async create(data) {
         if (strapi.entityService) {
             const prod = await strapi.entityService.create("plugin::omcommerce.product", data);
-            console.log("prod", prod);
             return prod;
         }
         else {
@@ -43,7 +42,6 @@ exports.default = ({ strapi }) => ({
         }
     },
     async update(id, data) {
-        console.log("dataeditproduct", data);
         if (strapi.entityService) {
             return await strapi.entityService.update("plugin::omcommerce.product", id, { data });
         }

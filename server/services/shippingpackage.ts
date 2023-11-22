@@ -12,6 +12,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   },
   async create(data: any) {
     if (strapi.entityService) {
+
       if (
         data &&
         data.name &&
@@ -21,7 +22,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         data.weight !== undefined &&
         data.default !== undefined
       ) {
-        const zone =  await strapi.entityService.create("plugin::omcommerce.shippingpackage", data);
+        const zone =  await strapi.entityService.create("plugin::omcommerce.shippingpackage", {data});
         if (zone) {
           return zone;
         } else {
