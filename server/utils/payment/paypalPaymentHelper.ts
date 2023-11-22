@@ -22,7 +22,9 @@ export const capturePayment = async (orderID: string, strapi : any) => {
       return true;
     }
     catch (e) {
-      return false;
+      // throw new Error(e);
+      // return false;
+      // console.error(e);
     }
   }
   try {
