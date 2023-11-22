@@ -19,7 +19,7 @@ exports.default = ({ strapi }) => ({
                 data.width !== undefined &&
                 data.weight !== undefined &&
                 data.default !== undefined) {
-                const zone = await strapi.entityService.create("plugin::omcommerce.shippingpackage", data);
+                const zone = await strapi.entityService.create("plugin::omcommerce.shippingpackage", { data });
                 if (zone) {
                     return zone;
                 }

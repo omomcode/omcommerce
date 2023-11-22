@@ -15,7 +15,7 @@ exports.default = ({ strapi }) => ({
                 data.name &&
                 data.condition !== undefined &&
                 data.price !== undefined) {
-                const rate = await strapi.entityService.create("plugin::omcommerce.shippingrate", data);
+                const rate = await strapi.entityService.create("plugin::omcommerce.shippingrate", { data });
                 if (rate) {
                     return rate;
                 }

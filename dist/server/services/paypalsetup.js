@@ -21,7 +21,7 @@ exports.default = ({ strapi }) => ({
                 (data.live !== undefined && (((data.live === true) && data.live_paypal_client_id &&
                     data.live_paypal_client_secret) || ((data.live === false) &&
                     data.sandbox_paypal_client_id && data.sandbox_paypal_client_secret)))) {
-                const paypalsetup = await strapi.entityService.create("plugin::omcommerce.paypalsetup", data);
+                const paypalsetup = await strapi.entityService.create("plugin::omcommerce.paypalsetup", { data });
                 if (paypalsetup) {
                     return paypalsetup;
                 }
@@ -44,7 +44,7 @@ exports.default = ({ strapi }) => ({
                 (data.live !== undefined && (((data.live === true) && data.live_paypal_client_id &&
                     data.live_paypal_client_secret) || ((data.live === false) &&
                     data.sandbox_paypal_client_id && data.sandbox_paypal_client_secret)))) {
-                const paypalsetup = await strapi.entityService.update("plugin::omcommerce.paypalsetup", id, data);
+                const paypalsetup = await strapi.entityService.update("plugin::omcommerce.paypalsetup", id, { data });
                 if (paypalsetup) {
                     return paypalsetup;
                 }

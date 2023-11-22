@@ -103,7 +103,7 @@ const Gmail = () => {
     }
     else {
       const googlemail = await gmailRequests.addGmail(data);
-      console.log("googlemail", googlemail)
+
       setIsNew(false)
     }
     await fetchData();

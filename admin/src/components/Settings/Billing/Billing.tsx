@@ -78,7 +78,6 @@ const Billing = () => {
 
     try {
       const billing: any = await billingRequests.getAllBilling();
-      console.log("billing", billing)
       if(billing !== undefined) {
         setIsNew(false);
         setData(billing);

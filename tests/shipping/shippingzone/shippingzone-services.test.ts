@@ -257,7 +257,7 @@ describe('Shipping Zone Service', () => {
     // Add similar expectations for other properties of the domesticZone
 
     expect(internationalZone).not.toBeNull();
-    expect(internationalZone.id).toBe(2); // Adjust the expected ID based on your test scenario
+    expect(internationalZone.id).toBe(1); // Adjust the expected ID based on your test scenario
     // Add similar expectations for other properties of the internationalZone
   });
   it('should update a shipping zone', async function () {

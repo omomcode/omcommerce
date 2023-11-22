@@ -18,6 +18,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async create(data: any) {
     if (strapi.entityService) {
+
       if (
         data &&
         (data.live !== undefined && (
@@ -29,7 +30,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ) {
         const paypalsetup = await strapi.entityService.create(
           "plugin::omcommerce.paypalsetup",
-          data
+          {data}
         );
 
         if (paypalsetup) {
@@ -47,6 +48,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async update(id: any, data: any) {
     if (strapi.entityService) {
+
       if (
         id &&
         data &&
@@ -59,7 +61,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ) {
         const paypalsetup = await strapi.entityService.update(
           "plugin::omcommerce.paypalsetup", id,
-          data
+          {data}
         );
 
         if (paypalsetup) {

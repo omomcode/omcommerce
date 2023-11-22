@@ -56,7 +56,7 @@ export const capturePayment = async (orderID: string, strapi : any) => {
 
       const combinedObject = products
         .map((product: any) => {
-          const orderItem = orderResponse[0].purchase_units[0].items.find((orderItem: { name: any; }) => orderItem.name === product.title);
+          const orderItem = orderResponse[0].items.find((orderItem: { name: any; }) => orderItem.name === product.title);
 
           if (orderItem) {
             return { ...product, Quantity: product.Quantity - orderItem.quantity };
@@ -66,11 +66,7 @@ export const capturePayment = async (orderID: string, strapi : any) => {
         })
         .filter((obj: null) => obj !== null);
 
-        const iterate: any = await iterateAsync(combinedObject);
-
-        if(!iterate) {
-          throw new Error("Could not update product quantity")
-        }
+        await iterateAsync(combinedObject);
 
       const order = orderResponse[0];
       order.email = response.data?.payer?.email_address;
@@ -142,7 +138,6 @@ export async function handleResponse(response : any) {
 
 export const createOrder = async (data : any,strapi : any) => {
 
-
   const accessToken = await generateAccessToken(strapi);
   const credentials =await strapi.plugin("omcommerce").service("paypalsetup").find({});
   const base = credentials.live === false ? "https://api-m.sandbox.paypal.com" : "https://api-m.paypal.com";
@@ -167,6 +162,7 @@ export const createOrder = async (data : any,strapi : any) => {
   if(!matchingProducts){
     throw new Error("No matching products found")
   }
+
   const totalAmount = matchingProducts.reduce((total: number, product: { id: { toString: () => any; }; amount_value: number; Quantity: number; title: string}) => {
     const cartItem = data.cart.find((item: { id: any; }) => item.id === product.id.toString());
     const quantity = cartItem ? parseInt(cartItem.quantity, 10) : 0;
@@ -178,15 +174,14 @@ export const createOrder = async (data : any,strapi : any) => {
 
   // const shippingAmount = await calculateShippingCost(strapi,{data});
   const shippingAmount =await strapi.plugin("omcommerce").service("shippingcalculator").calculate({data});
-  if(!shippingAmount){
-    throw new Error("No valid shipping amount data")
-  }
+  // if(!shippingAmount){
+  //   throw new Error("No valid shipping amount data")
+  // }
   // const currency = await findCurrency({},strapi);
   const currency =await strapi.plugin("omcommerce").service("currency").find({});
   if(!currency){
     throw new Error("No valid currency data")
   }
-
   const payload = {
     intent: 'CAPTURE',
     purchase_units: [
@@ -223,7 +218,6 @@ export const createOrder = async (data : any,strapi : any) => {
   };
 
   const payloadJSON = JSON.stringify(payload);
-
   try {
     const response = await axios.post(url, payloadJSON, {
       headers: {
@@ -240,11 +234,10 @@ export const createOrder = async (data : any,strapi : any) => {
       shipping_fee: parseFloat(payload.purchase_units[0].amount.breakdown.shipping.value),
       status: response.data.status
     }
-
     await strapi.plugin("omcommerce").service("order").create(postData);
 
     return handleResponse(response);
   } catch (error) {
-    console.error('Error:', error);
+    console.error('ErrorPayment:', error);
   }
 };

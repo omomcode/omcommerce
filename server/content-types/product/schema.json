@@ -60,12 +60,7 @@
       "type": "string"
     },
     "cost_per_item": {
-      "type": "string",
-      "pluginOptions": {
-        "omcommerce": {
-          "enabled": true
-        }
-      }
+      "type": "string"
     },
     "chargeTax": {
       "type": "boolean",

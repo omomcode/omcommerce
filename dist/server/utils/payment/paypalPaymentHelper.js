@@ -18,9 +18,15 @@ const capturePayment = async (orderID, strapi) => {
     const base = credentials.live === false ? "https://api-m.sandbox.paypal.com" : "https://api-m.paypal.com";
     const url = `${base}/v2/checkout/orders/${orderID}/capture`;
     async function iterateAsync(combinedObject) {
-        for (const obj of combinedObject) {
-            const { id, ...updatedObject } = obj;
-            const pro = await strapi.entityService.update("plugin::omcommerce.product", id, updatedObject);
+        try {
+            for (const obj of combinedObject) {
+                const { id, ...updatedObject } = obj;
+                const pro = await strapi.entityService.update("plugin::omcommerce.product", id, updatedObject);
+            }
+            return true;
+        }
+        catch (e) {
+            return false;
         }
     }
     try {
@@ -30,7 +36,6 @@ const capturePayment = async (orderID, strapi) => {
                 'Authorization': `Bearer ${accessToken}`,
             },
         });
-        console.log("responseanddata", response);
         if (response && response.data && response.data.payer && response.data.purchase_units &&
             response.data.purchase_units[0] && response.data.payer.email_address && response.data.payer.name &&
             response.data.payer.name.given_name &&
@@ -52,18 +57,14 @@ const capturePayment = async (orderID, strapi) => {
             }
             const combinedObject = products
                 .map((product) => {
-                const orderItem = orderResponse[0].purchase_units[0].items.find((orderItem) => orderItem.name === product.title);
+                const orderItem = orderResponse[0].items.find((orderItem) => orderItem.name === product.title);
                 if (orderItem) {
                     return { ...product, Quantity: product.Quantity - orderItem.quantity };
                 }
                 return null;
             })
                 .filter((obj) => obj !== null);
-            const iterate = await iterateAsync(combinedObject);
-            if (!iterate) {
-                throw new Error("Could not update product quantity");
-            }
-            console.log("orderresponse", orderResponse);
+            await iterateAsync(combinedObject);
             const order = orderResponse[0];
             order.email = (_b = (_a = response.data) === null || _a === void 0 ? void 0 : _a.payer) === null || _b === void 0 ? void 0 : _b.email_address;
             order.customer_name = (_e = (_d = (_c = response.data) === null || _c === void 0 ? void 0 : _c.payer) === null || _d === void 0 ? void 0 : _d.name) === null || _e === void 0 ? void 0 : _e.given_name;
@@ -160,9 +161,9 @@ const createOrder = async (data, strapi) => {
     }, 0);
     // const shippingAmount = await calculateShippingCost(strapi,{data});
     const shippingAmount = await strapi.plugin("omcommerce").service("shippingcalculator").calculate({ data });
-    if (!shippingAmount) {
-        throw new Error("No valid shipping amount data");
-    }
+    // if(!shippingAmount){
+    //   throw new Error("No valid shipping amount data")
+    // }
     // const currency = await findCurrency({},strapi);
     const currency = await strapi.plugin("omcommerce").service("currency").find({});
     if (!currency) {
@@ -222,7 +223,7 @@ const createOrder = async (data, strapi) => {
         return handleResponse(response);
     }
     catch (error) {
-        console.error('Error:', error);
+        console.error('ErrorPayment:', error);
     }
 };
 exports.createOrder = createOrder;

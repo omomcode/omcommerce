@@ -20,6 +20,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async create(data: any) {
     if (strapi.entityService) {
+
       if (
           data &&
           data.order_id &&
@@ -31,7 +32,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ) {
         const order = await strapi.entityService.create(
             "plugin::omcommerce.order",
-            data
+          {data}
         );
 
         if (order) {

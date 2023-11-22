@@ -114,7 +114,7 @@ const Timezone = () => {
       await timezoneRequests.editTimezone(data.id, data);
     else {
       const timezone = await timezoneRequests.addTimezone(data);
-      console.log("timezone", timezone)
+
       setIsNew(false)
     }
     await fetchData();

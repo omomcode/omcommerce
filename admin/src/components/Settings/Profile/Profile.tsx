@@ -128,7 +128,7 @@ const Profile = () => {
         await profileRequests.editProfile(data.id, data);
       } else {
         const profile = await profileRequests.addProfile(data);
-        console.log("profile", profile)
+
         setIsNew(false)
       }
 
