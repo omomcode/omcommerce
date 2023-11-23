@@ -43,11 +43,11 @@ export default function ReturnRulesModal({
   };
 
   const handleSave = () => {
-    editLegal({
-      returnWindow: radioOne,
-      returnShippingCost: radioTwo,
-      restockingFee: restockingFee,
-    });
+    // editLegal({
+    //   returnWindow: radioOne,
+    //   returnShippingCost: radioTwo,
+    //   restockingFee: restockingFee,
+    // });
   };
 
   const handleNumberInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -141,7 +141,7 @@ export default function ReturnRulesModal({
           </Button>
         }
         endActions={
-          <Button type="submit">
+          <Button onClick={handleRulesShow}>
             Save Rules
           </Button>
         }

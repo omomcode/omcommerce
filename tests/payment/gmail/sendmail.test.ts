@@ -1,3 +1,5 @@
+import paypalSetupService from "../../../server/services/paypalsetup";
+
 const nodemailer = require('nodemailer');
 import { google } from 'googleapis';
 import { sendMail } from '../../../server/services/sendmail';
@@ -82,6 +84,39 @@ describe('sendMail function', () => {
     });
     expect(mockTransportSendMail).toHaveBeenCalled();
   });
+
+
+  it('should fail when data is not correct', async () => {
+    // Arrange
+    const mockOrder = {
+      customer_name: 'John',
+      customer_surname: 'Doe',
+      address_line_1: '123 Main St',
+      postal_code: '12345',
+      admin_area_2: 'City',
+      email: 'john.doe@example.com',
+      amount: 100.00,
+      discount: 10.00,
+      shipping_fee: 5.00,
+      items: [
+        { name: 'Product 1', quantity: 2, unit_amount: { value: '20.00', currency_code: 'RSD' } },
+        { name: 'Product 2', quantity: 1, unit_amount: { value: '30.00', currency_code: 'RSD' } },
+        // Add more items as needed
+      ],
+    };
+
+    const gmailFail = {
+      client_id: 'mockClientId',
+      refresh_token: 'mockRefreshToken',
+      from: 'mock@gmail.com',
+    };
+
+    const mockMessage = 'Thank you for your purchase!';
+
+    await expect(sendMail(mockOrder, mockMessage, strapi, gmailFail)).rejects.toEqual(new Error("Invalid gmail data"));
+  });
+
+
 
   it('should send mail successfully with null as discount', async () => {
     // Arrange

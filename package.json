@@ -1,6 +1,6 @@
 {
   "name": "omcommerce",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "The most customizable and user-friendly ecommerce plugin for Strapi.",
   "strapi": {
     "name": "omcommerce",

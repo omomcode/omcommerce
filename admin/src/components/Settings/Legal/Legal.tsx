@@ -16,7 +16,7 @@ import ReturnRulesModal from "../ReturnRulesModal/ReturnRulesModal";
 import {ILegal} from "../../../../../types/legal";
 
 const initialData: ILegal = {
-  id: 1,
+  id: 0,
   checked: false,
   returnWindow: "",
   returnShippingCost: "",
@@ -30,7 +30,8 @@ const initialData: ILegal = {
 };
 
 const Legal = () => {
-  const [id, setId] = useState(1);
+  const [isNew, setIsNew] = useState(true);
+  const [id, setId] = useState(0);
   const [checked, setChecked] = useState(initialData.checked);
   const [isLoading, setIsLoading] = useState(true);
   const [legalData, setLegalData] = useState<ILegal>(initialData);
@@ -54,20 +55,20 @@ const Legal = () => {
 
     try {
       const lr : any = await legalRequests.getAllLegals();
-      setLegalData(lr);
-
-      setId(lr.id);
-      setChecked(() => lr.enabled);
-      setOnline(lr.online);
-      setRadioOne((prevState) => lr.returnWindow)
-      setRadioTwo((prevState) => lr.returnShippingCost)
-      setRestockingFee((prevState) => lr.restockingFee)
-      setReturnPolicy((prevState) => lr.returnPolicy)
-      setPrivacyPolicy((prevState) => lr.privacyPolicy)
-      setTermsOfService((prevState) => lr.termsOfService)
-      setShippingPolicy((prevState) => lr.shippingPolicy)
-
-
+      if(lr !== undefined) {
+        setIsNew(false);
+        setLegalData(lr);
+        setId(lr.id);
+        setChecked(() => lr.enabled);
+        setOnline(lr.online);
+        setRadioOne((prevState) => lr.returnWindow)
+        setRadioTwo((prevState) => lr.returnShippingCost)
+        setRestockingFee((prevState) => lr.restockingFee)
+        setReturnPolicy((prevState) => lr.returnPolicy)
+        setPrivacyPolicy((prevState) => lr.privacyPolicy)
+        setTermsOfService((prevState) => lr.termsOfService)
+        setShippingPolicy((prevState) => lr.shippingPolicy)
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -76,27 +77,46 @@ const Legal = () => {
   };
 
   const editLegal = async (data: any) => {
-    await legalRequests.editLegal(id, data);
+    if(!isNew)
+      await legalRequests.editLegal(id, data);
+    else {
+      await legalRequests.addLegal(data);
+      setIsNew(false);
+    }
     await fetchData();
-  }
+}
 
   const putData = async () => {
     if (!isLoading) setIsLoading(true);
 
     try {
-      const lr = await legalRequests.editLegal(id, {
-        enabled: checked,
-        returnPolicy: returnPolicy,
-        privacyPolicy: privacyPolicy,
-        termsOfService: termsOfService,
-        shippingPolicy: shippingPolicy,
-        restockingFee: restockingFee,
-        returnWindow: radioOne,
-        returnShippingCost: radioTwo,
-        online: online
+      if(!isNew)
+        await legalRequests.editLegal(id, {
+          enabled: checked,
+          returnPolicy: returnPolicy,
+          privacyPolicy: privacyPolicy,
+          termsOfService: termsOfService,
+          shippingPolicy: shippingPolicy,
+          restockingFee: restockingFee,
+          returnWindow: radioOne,
+          returnShippingCost: radioTwo,
+          online: online
       });
-
-
+      else {
+        await legalRequests.addLegal({
+          enabled: checked,
+          returnPolicy: returnPolicy,
+          privacyPolicy: privacyPolicy,
+          termsOfService: termsOfService,
+          shippingPolicy: shippingPolicy,
+          restockingFee: restockingFee,
+          returnWindow: radioOne,
+          returnShippingCost: radioTwo,
+          online: online
+        });
+        setIsNew(false);
+      }
+      await fetchData();
 
     } catch (error) {
       console.error("Error fetching data:", error);
