@@ -9,7 +9,6 @@ describe('Legal Service', () => {
     legalData = {
       id: 1,
       checked: true,
-      returnRules: 'Original return rules',
       returnShippingCost: 'Free',
       returnWindow: '30 days',
       restockingFee: 5,
@@ -58,7 +57,6 @@ describe('Legal Service', () => {
     expect(strapi.entityService.create).toBeCalledTimes(1);
     expect(createdLegal).not.toBeNull();
     expect(createdLegal.id).toBe(2);
-    expect(createdLegal.returnRules).toBe(newLegalData.returnRules);
     // Add similar expectations for other properties of the created legal information
   });
 
@@ -100,7 +98,6 @@ describe('Legal Service', () => {
     expect(foundLegal).not.toBeNull();
     expect(foundLegal.length).toBe(1);
     expect(foundLegal[0].id).toBe(1);
-    expect(foundLegal[0].returnRules).toBe(legalData.returnRules);
     // Add similar expectations for other properties
   });
 
@@ -143,7 +140,6 @@ describe('Legal Service', () => {
     expect(strapi.entityService.update).toBeCalledTimes(1);
     expect(updatedLegal).not.toBeNull();
     expect(updatedLegal.id).toBe(1);
-    expect(updatedLegal.returnRules).toBe(updateData.returnRules);
     // Add similar expectations for other properties of the updated legal information
   });
 

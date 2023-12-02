@@ -1,7 +1,6 @@
 export interface ILegal {
   id: number;
   checked: boolean;
-  returnRules: string;
   returnShippingCost: string;
   returnWindow: string;
   restockingFee: number;
