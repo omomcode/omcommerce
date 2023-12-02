@@ -20,6 +20,7 @@ import social from "./social";
 import subcategory from "./subcategory";
 import conversionrate from "./conversionrate";
 import gmail from "./gmail";
+import paypal from "./paypal";
 
 export default {
   myService,
@@ -38,6 +39,7 @@ export default {
   legal,
   setup,
   paypalsetup,
+  paypal,
   shippingcalculator,
   category,
   social,

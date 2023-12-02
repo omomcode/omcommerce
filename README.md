@@ -192,7 +192,7 @@ Now, let's build your online store with precision and ease!
 
 ##### 4.1.5 Social
 
-- **Endpoint:** `GET <host>/omcommerce/social/find/1`
+- **Endpoint:** `GET <host>/omcommerce/social/find`
 
 - **Example Response Body:**
     ```json
@@ -280,7 +280,7 @@ Now, let's build your online store with precision and ease!
     ]
     ```
 ##### 4.2.2 Categories
-- **Endpoint:** `GET <host>/omcommerce/categorys/find`
+- **Endpoint:** `GET <host>/omcommerce/category/find`
 - **Example Response Body:**
     ```json
     [
@@ -294,7 +294,7 @@ Now, let's build your online store with precision and ease!
     ```
 
 ##### 4.2.3 Subcategories
-- **Endpoint:** `GET <host>/omcommerce/subcategories/find`
+- **Endpoint:** `GET <host>/omcommerce/subcategory/find`
 - **Example Response Body:**
     ```json
     [
@@ -337,6 +337,7 @@ Now, let's build your online store with precision and ease!
 - **Example Response Body:**
     ```json
     {
+        "id" : 1,
         "live_paypal_client_id": "XXXXXXXXXXXXXXXXXXXXXXXXXX", // Required for setting up PayPal buttons in production. Use the provided live client ID. If 'live' is false, use the "test" client ID instead.
         "live": true  // If 'live' is true, the system is in production mode. If 'live' is false, the system is in sandbox mode for testing purposes.
     }

@@ -162,6 +162,7 @@ describe('Legal Controller', () => {
   it('should throw an error when updating legal information', async () => {
     const updateData = {
       checked: false,
+      returnRules: 'Updated return rules',
       returnShippingCost: 'Paid',
       returnWindow: '60 days',
       restockingFee: 10,

@@ -3,7 +3,7 @@ import { ID } from '@strapi/types/dist/types/core/entity';
 
 export default ({strapi}: { strapi: Strapi }) => ({
 
-  async settings(query: ID) {
+  async settings(query: any) {
     if (strapi.entityService) {
       const tempData = await strapi.entityService.findOne("plugin::omcommerce.paypalsetup", query);
       return {

@@ -408,11 +408,19 @@ export default [
   },
   {
     method: "GET",
+    path: "/paypal/settings",
+    handler: "paypal.settings",
+    config: {
+      policies: [],
+      auth: false
+    },
+  },
+  {
+    method: "GET",
     path: "/paypalsetup/find",
     handler: "paypalsetup.find",
     config: {
       policies: [],
-      auth: false
     },
   },
   {
@@ -421,7 +429,6 @@ export default [
     handler: "paypalsetup.create",
     config: {
       policies: [],
-      auth: false
     },
   },
   {
@@ -430,7 +437,6 @@ export default [
     handler: "paypalsetup.update",
     config: {
       policies: [],
-      auth: false
     },
   },
   {
@@ -573,7 +579,6 @@ export default [
     handler: "gmail.find",
     config: {
       policies: [],
-      auth: false
     },
   },
   {

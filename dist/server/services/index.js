@@ -25,6 +25,7 @@ const social_1 = __importDefault(require("./social"));
 const subcategory_1 = __importDefault(require("./subcategory"));
 const conversionrate_1 = __importDefault(require("./conversionrate"));
 const gmail_1 = __importDefault(require("./gmail"));
+const paypal_1 = __importDefault(require("./paypal"));
 exports.default = {
     myService: my_service_1.default,
     settings: settings_1.default,
@@ -42,6 +43,7 @@ exports.default = {
     legal: legal_1.default,
     setup: setup_1.default,
     paypalsetup: paypalsetup_1.default,
+    paypal: paypal_1.default,
     shippingcalculator: shippingcalculator_1.default,
     category: category_1.default,
     social: social_1.default,
