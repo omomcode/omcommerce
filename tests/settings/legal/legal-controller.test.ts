@@ -9,6 +9,7 @@ describe('Legal Controller', () => {
     legalData = {
       id: 1,
       checked: true,
+      returnRules: 'Some return rules',
       returnShippingCost: 'Free',
       returnWindow: '30 days',
       restockingFee: 5,
@@ -72,6 +73,7 @@ describe('Legal Controller', () => {
   it('should create legal information', async () => {
     const newLegalData = {
       checked: true,
+      returnRules: 'Some return rules',
       returnShippingCost: 'Free',
       returnWindow: '30 days',
       restockingFee: 5,
@@ -103,6 +105,7 @@ describe('Legal Controller', () => {
   it('should throw an error when creating legal information', async () => {
     const newLegalData = {
       checked: true,
+      returnRules: 'Some return rules',
       returnShippingCost: 'Free',
       returnWindow: '30 days',
       restockingFee: 5,
@@ -133,6 +136,7 @@ describe('Legal Controller', () => {
     const updateData = {
       id: 1,
       checked: true,
+      returnRules: 'Some return rules',
       returnShippingCost: 'Free',
       returnWindow: '30 days',
       restockingFee: 5,
@@ -162,6 +166,7 @@ describe('Legal Controller', () => {
   it('should throw an error when updating legal information', async () => {
     const updateData = {
       checked: false,
+      returnRules: 'Updated return rules',
       returnShippingCost: 'Paid',
       returnWindow: '60 days',
       restockingFee: 10,

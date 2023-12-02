@@ -1,6 +1,5 @@
 import legalService from '../../../server/services/legal';
 import { ILegal } from '../../../types/legal';
-import { ILegalReturn } from "../../../types/legal";
 
 describe('Legal Service', () => {
   let strapi: { entityService: any; };
@@ -10,6 +9,7 @@ describe('Legal Service', () => {
     legalData = {
       id: 1,
       checked: true,
+      returnRules: 'Original return rules',
       returnShippingCost: 'Free',
       returnWindow: '30 days',
       restockingFee: 5,
@@ -41,6 +41,7 @@ describe('Legal Service', () => {
   it('should create legal information', async function () {
     const newLegalData = {
       checked: true,
+      returnRules: 'New return rules',
       returnShippingCost: 'Paid',
       returnWindow: '45 days',
       restockingFee: 8,
@@ -51,14 +52,13 @@ describe('Legal Service', () => {
       online: 'New online terms',
     };
 
-    const data = {newLegalData};
     // @ts-ignore
-    const createdLegal: ILegalReturn = await legalService({ strapi }).create(newLegalData);
+    const createdLegal: ILegal = await legalService({ strapi }).create(newLegalData);
 
     expect(strapi.entityService.create).toBeCalledTimes(1);
     expect(createdLegal).not.toBeNull();
     expect(createdLegal.id).toBe(2);
-    expect(createdLegal.data.online).toBe(data.newLegalData.online);
+    expect(createdLegal.returnRules).toBe(newLegalData.returnRules);
     // Add similar expectations for other properties of the created legal information
   });
 
@@ -66,6 +66,7 @@ describe('Legal Service', () => {
     // Arrange
     const newLegalData = {
       checked: true,
+      returnRules: 'New return rules',
       returnShippingCost: 'Paid',
       returnWindow: '45 days',
       restockingFee: 8,
@@ -99,6 +100,7 @@ describe('Legal Service', () => {
     expect(foundLegal).not.toBeNull();
     expect(foundLegal.length).toBe(1);
     expect(foundLegal[0].id).toBe(1);
+    expect(foundLegal[0].returnRules).toBe(legalData.returnRules);
     // Add similar expectations for other properties
   });
 
@@ -124,6 +126,7 @@ describe('Legal Service', () => {
   it('should update legal information', async function () {
     const updateData = {
       checked: false,
+      returnRules: 'Updated return rules',
       returnShippingCost: 'Paid',
       returnWindow: '60 days',
       restockingFee: 10,
@@ -133,15 +136,14 @@ describe('Legal Service', () => {
       shippingPolicy: 'Updated shipping policy',
       online: 'Updated online terms',
     };
-    const data = {updateData};
 
     // @ts-ignore
-    const updatedLegal: ILegalReturn = await legalService({ strapi }).update(1, updateData);
+    const updatedLegal: ILegal = await legalService({ strapi }).update(1, updateData);
 
     expect(strapi.entityService.update).toBeCalledTimes(1);
     expect(updatedLegal).not.toBeNull();
     expect(updatedLegal.id).toBe(1);
-    expect(updatedLegal.data.online).toBe(data.updateData.online);
+    expect(updatedLegal.returnRules).toBe(updateData.returnRules);
     // Add similar expectations for other properties of the updated legal information
   });
 
@@ -149,6 +151,7 @@ describe('Legal Service', () => {
     // Arrange
     const updateData = {
       checked: false,
+      returnRules: 'Updated return rules',
       returnShippingCost: 'Paid',
       returnWindow: '60 days',
       restockingFee: 10,

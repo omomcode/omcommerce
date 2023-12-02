@@ -410,11 +410,19 @@ exports.default = [
     },
     {
         method: "GET",
+        path: "/paypal/settings",
+        handler: "paypal.settings",
+        config: {
+            policies: [],
+            auth: false
+        },
+    },
+    {
+        method: "GET",
         path: "/paypalsetup/find",
         handler: "paypalsetup.find",
         config: {
             policies: [],
-            auth: false
         },
     },
     {
@@ -423,7 +431,6 @@ exports.default = [
         handler: "paypalsetup.create",
         config: {
             policies: [],
-            auth: false
         },
     },
     {
@@ -432,7 +439,6 @@ exports.default = [
         handler: "paypalsetup.update",
         config: {
             policies: [],
-            auth: false
         },
     },
     {
@@ -575,7 +581,6 @@ exports.default = [
         handler: "gmail.find",
         config: {
             policies: [],
-            auth: false
         },
     },
     {

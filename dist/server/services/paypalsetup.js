@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ({ strapi }) => ({
     async find(query) {
         if (strapi.entityService) {
-            const paypalsetup = await strapi.entityService.findOne("plugin::omcommerce.paypalsetup", query);
+            const paypalsetup = await strapi.entityService.findOne("plugin::omcommerce.paypalsetup", 1);
             if (paypalsetup) {
                 return paypalsetup;
             }

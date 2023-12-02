@@ -14,6 +14,7 @@ import order from "./order";
 import legal from "./legal";
 import setup from "./setup";
 import paypalsetup from "./paypalsetup";
+import paypal from "./paypal";
 import shippingcalculator from "./shippingcalculator";
 import category from "./category";
 import social from "./social";
@@ -38,6 +39,7 @@ export default {
   legal,
   setup,
   paypalsetup,
+  paypal,
   shippingcalculator,
   category,
   social,
