@@ -17,7 +17,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         data.refresh_token &&
         data.from && emailRegex.test(data.from)
       ) {
-      const gmail =  await strapi.entityService.create("plugin::omcommerce.gmail", data);
+      const gmail =  await strapi.entityService.create("plugin::omcommerce.gmail", {data});
       if(gmail){
         return gmail;
       }
