@@ -21,7 +21,6 @@ const initialData: ILegal = {
   returnWindow: "",
   returnShippingCost: "",
   restockingFee: 0,
-  returnRules: "",
   returnPolicy: "",
   privacyPolicy: "",
   termsOfService: "",
