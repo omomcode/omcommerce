@@ -12,6 +12,7 @@ describe('Gmail Configuration Controller', () => {
       client_secret: "UPDATEDCLIENTSECRET",
       refresh_token: "UPDATEDSECRETREFRESHCODE",
       from: "updated_info@example.com",
+      languageRadio: "English"
     };
 
     strapi = {

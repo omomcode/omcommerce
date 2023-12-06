@@ -42,6 +42,8 @@ exports.default = ({ strapi }) => ({
         }
     },
     async update(id, data) {
+        console.log("id", id);
+        console.log("data", data);
         if (strapi.entityService) {
             return await strapi.entityService.update("plugin::omcommerce.product", id, { data });
         }

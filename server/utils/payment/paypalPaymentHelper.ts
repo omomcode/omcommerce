@@ -17,7 +17,9 @@ export const capturePayment = async (orderID: string, strapi : any) => {
     try {
       for (const obj of combinedObject) {
         const { id, ...updatedObject } = obj;
-        const pro: any = await strapi.entityService.update("plugin::omcommerce.product", id, updatedObject)
+        console.log("updatedObject", updatedObject)
+        //await strapi.entityService.update("plugin::omcommerce.product", id, updatedObject)
+        await strapi.plugin("omcommerce").service("product").update(id, updatedObject)
       }
       return true;
     }
@@ -68,9 +70,18 @@ export const capturePayment = async (orderID: string, strapi : any) => {
           return null;
         })
         .filter((obj: null) => obj !== null);
+      console.log("combinedObject", combinedObject)
 
+      if(combinedObject) {
+        combinedObject.map((prod: any) => {
+          if(prod.Quantity < 0){
+            const q = prod.Quantity * (-1);
+            return Promise.reject(new Error(`We are missing ${q} x ${prod.title} so we cannot go through with the order. We apologize for the inconvenience.`));
+          }
+        })
+      }
 
-        await iterateAsync(combinedObject);
+      await iterateAsync(combinedObject);
 
 
       const order = orderResponse[0];

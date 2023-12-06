@@ -4,7 +4,7 @@ import {google} from 'googleapis';
 export const sendMail = async (order : any, message : any, strapi : any, gmail : any) => {
 
 
-  if(!gmail || !gmail.client_id || !gmail.client_secret || !gmail.from || !gmail.refresh_token) {
+  if(!gmail || !gmail.client_id || !gmail.client_secret || !gmail.from || !gmail.refresh_token || !gmail.languageRadio) {
     throw new Error("Invalid gmail data")
   }
 
@@ -39,7 +39,14 @@ export const sendMail = async (order : any, message : any, strapi : any, gmail :
       }
     })
     const profile = await strapi.plugin("omcommerce").service("profile").find({});
+    if(profile === undefined){
+      throw new Error("Invalid profile data!")
+    }
     const cr = await strapi.plugin("omcommerce").service("conversionrate").find({});
+    if(cr === undefined || !cr) {
+      throw new Error("Invalid conversion rate data!");
+    }
+    console.log("conversionrate", cr)
     const rsd_value =  convertFromEURtoRSD(cr.rate,cr.spread,order.amount)
     const messageText = `Dear ${order.customer_name},\n\n`;
 
@@ -47,8 +54,8 @@ export const sendMail = async (order : any, message : any, strapi : any, gmail :
       order.discount = 0;
     }
 
-    const ukupno = rsd_value - parseInt(order.discount);
-    const totalPrice = ukupno.toFixed(2);
+    const ukupno = Math.round(rsd_value) - parseInt(order.discount);
+    const totalPrice = Math.round(ukupno);
     const ordert = order.items.map((entry: { unit_amount: { value: string; currency_code: any; }; }) =>
     {
       return {
@@ -62,31 +69,257 @@ export const sendMail = async (order : any, message : any, strapi : any, gmail :
 
     const orderTemp = order.items.map((entry: { name: any; quantity: any; unit_amount: { value: any; currency_code: any;}; }) =>
 
-        `<div style="background-color: #fff;display: flex;
-    border-bottom: 2px solid #000;
+        `<div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
     padding: 10px;
     font-size: 20px;
     justify-content:space-between;
     ">
     <span>
-    ${entry.name}
+    ${entry.name}:
       </span>
       <span style="text-align: right;">
-      ${entry.quantity}  x   ${entry.unit_amount.value} ${entry.unit_amount.currency_code}
+      ${entry.quantity}  x   ${entry.unit_amount.value} ${cr.conversion_currency}
     </span>
     </div>`
     )
 
-    const signature = `
-<div style="display: flex; justify-content: center;font-family: 'Lucida Console', 'Courier New', monospace;">
-    <div style="justify-content: center; width: 600px;max-height: 90vw;">
+    let signature = "";
+    if(gmail.languageRadio === "Serbian") {
+      signature = `
+<div style="display: flex; justify-content: center;font-family: Tahoma,sans-serif;padding:20px;">
+    <div style="border-top-left-radius: 40px;border-top-right-radius: 40px;border: 5px solid #e6cfc5;justify-content: center; width: 600px;padding:5px;">
 
-        <div style="display: grid; width:600px;background-color: #ffffff;
+        <div style="display: grid; width:600px;background-color: #fff5ee;
  gap: 10px;
 ">
-            <div style="width: 100%; height:100px; background-color: green;">
+            <div class="center" align="center" valign="center" style="border-top-left-radius: 30px;border-top-right-radius: 30px;width: 100%; height:150px; background-color: #e6cfc5;font-size: 50px;font-weight: bold;color:white;">
+				<p class="center" align="center">${profile.name}</p>
             </div>
-            <div style="background-color: rgba(124, 255, 59, 0.5);display: flex;
+            <div style="background-color: #f3e5e0;display: flex;
+padding: 10px;
+font-size: 20px;
+justify-content:space-between;
+">
+                <span>
+                    PRIMALAC
+                </span>
+            </div>
+            <div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
+    padding: 10px;
+    font-size: 20px;
+    justify-content:space-between;
+    ">
+                <span>
+                    Ime i prezime:
+                </span>
+                <span style="text-align: right;">
+                    ${" " + order.customer_name + " " + order.customer_surname}
+                </span>
+            </div>
+            <div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
+    padding: 10px;
+    font-size: 20px;
+    justify-content:space-between;
+    ">
+                <span>
+                    Adresa:
+                </span>
+                <span style="text-align: right;">
+                    ${" " + order.address_line_1}
+                </span>
+            </div>
+            <div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
+    padding: 10px;
+    font-size: 20px;
+    justify-content:space-between;
+    ">
+                <span>
+                    Grad i poštanski broj:
+                </span>
+                <span style="text-align: right;">
+                    ${" " + order.postal_code + " " + order.admin_area_2}
+                </span>
+            </div>
+            <div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
+    padding: 10px;
+    font-size: 20px;
+    justify-content:space-between;
+    ">
+                <span>
+                    Država:
+                </span>
+                <span style="text-align: right;">
+                    ${" " + order.country_code}
+                </span>
+            </div>
+        </div>
+        <div style="display: grid; width:600px;background-color: #fff5ee;
+    gap: 10px; padding-top:20px;
+">
+            <div style="background-color: #f3e5e0;display: flex;
+    padding: 10px;
+    font-size: 20px;
+    justify-content:space-between;
+    ">
+                <span>
+                    ADRESA DOSTAVE
+                </span>
+            </div>
+            <div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
+    padding: 10px;
+    font-size: 20px;
+    justify-content:space-between;
+    ">
+                <span>
+                    Ime i prezime:
+                </span>
+                <span style="text-align: right;">
+                    ${" " + order.customer_name + " " + order.customer_surname}
+                </span>
+            </div>
+            <div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
+    padding: 10px;
+    font-size: 20px;
+    justify-content:space-between;
+    ">
+                <span>
+                    Adresa:
+                </span>
+                <span style="text-align: right;">
+                    ${" " + order.address_line_1}
+                </span>
+            </div>
+            <div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
+    padding: 10px;
+    font-size: 20px;
+    justify-content:space-between;
+    ">
+                <span>
+                    Grad i poštanski broj:
+                </span>
+                <span style="text-align: right;">
+                    ${" " + order.postal_code + " " + order.admin_area_2}
+                </span>
+            </div>
+            <div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
+    padding: 10px;
+    font-size: 20px;
+    justify-content:space-between;
+    ">
+                <span>
+                    Država:
+                </span>
+                <span style="text-align: right;">
+                    ${" " + order.country_code}
+                </span>
+            </div>
+
+        </div>
+        <div style="display: grid; width:600px;background-color: #fff5ee;
+        gap: 10px; padding-top:20px;
+    ">
+            <div style="background-color: #f3e5e0;display: flex;
+        padding: 10px;
+        font-size: 20px;
+        justify-content:space-between;
+        ">
+                <span>
+                    PORUČENI PROIZVODI
+                </span>
+            </div>
+            ${orderTemp}
+        </div>
+        <div style="display: grid; width:600px;background-color: #fff5ee;
+            gap: 10px; padding-top:20px;
+        ">
+            <div style="background-color: #f3e5e0;display: flex;
+            padding: 10px;
+            font-size: 20px;
+            justify-content:space-between;
+            ">
+                <span>
+                    VREDNOST PORUDŽBINE
+                </span>
+            </div>
+            <div style="background-color: #fff5ee;display: flex;
+                border-bottom: 2px solid #e6cfc5;
+                padding: 10px;
+                font-size: 20px;
+                justify-content:space-between;
+                ">
+                <span>
+                    Popust:
+                </span>
+                <span style="text-align: right;">
+                    ${order.discount} ${cr.conversion_currency}
+                </span>
+            </div>
+            <div style="background-color: #fff5ee;display: flex;
+                border-bottom: 2px solid #e6cfc5;
+                padding: 10px;
+                font-size: 20px;
+                justify-content:space-between;
+                ">
+                <span>
+                    Poštarina:
+                </span>
+                <span style="text-align: right;">
+                    ${order.shipping_fee} ${cr.conversion_currency}
+                </span>
+            </div>
+            <div style="background-color: #fff5ee;display: flex;
+                border-bottom: 2px solid #e6cfc5;
+                padding: 10px;
+                font-size: 20px;
+                justify-content:space-between;
+                ">
+                <span>
+                    Cena:
+                </span>
+                <span style="text-align: right;">
+                    ${ukupno} ${cr.conversion_currency}
+                </span>
+            </div>
+            <div style="background-color: #fff5ee;display: flex;
+                border-bottom: 2px solid #e6cfc5;
+                padding: 10px;
+                font-size: 20px;
+                color: #ff3030;
+                justify-content:space-between;
+                ">
+                <div>
+                    UKUPNO:
+                </div>
+                <div style="text-align: right;">
+                    ${" " + totalPrice} ${cr.conversion_currency}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>`;
+    }
+    else {
+      `
+<div style="display: flex; justify-content: center;font-family: Tahoma,sans-serif;padding:20px;">
+    <div style="border-top-left-radius: 40px;border-top-right-radius: 40px;border: 5px solid #e6cfc5;justify-content: center; width: 600px;padding:5px;">
+
+        <div style="display: grid; width:600px;background-color: #fff5ee;
+ gap: 10px;
+">
+            <div class="center" align="center" valign="center" style="border-top-left-radius: 30px;border-top-right-radius: 30px;width: 100%; height:150px; background-color: #e6cfc5;font-size: 50px;font-weight: bold;color:white;">
+				<p class="center" align="center">${profile.name}</p>
+            </div>
+            <div style="background-color: #f3e5e0;display: flex;
 padding: 10px;
 font-size: 20px;
 justify-content:space-between;
@@ -95,8 +328,8 @@ justify-content:space-between;
                     RECIPIENT
                 </span>
             </div>
-            <div style="background-color: #fff;display: flex;
-    border-bottom: 2px solid #000;
+            <div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
     padding: 10px;
     font-size: 20px;
     justify-content:space-between;
@@ -108,8 +341,8 @@ justify-content:space-between;
                     ${" " + order.customer_name + " " + order.customer_surname}
                 </span>
             </div>
-            <div style="background-color: #fff;display: flex;
-    border-bottom: 2px solid #000;
+            <div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
     padding: 10px;
     font-size: 20px;
     justify-content:space-between;
@@ -121,8 +354,8 @@ justify-content:space-between;
                     ${" " + order.address_line_1}
                 </span>
             </div>
-            <div style="background-color: #fff;display: flex;
-    border-bottom: 2px solid #000;
+            <div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
     padding: 10px;
     font-size: 20px;
     justify-content:space-between;
@@ -134,8 +367,8 @@ justify-content:space-between;
                     ${" " + order.postal_code + " " + order.admin_area_2}
                 </span>
             </div>
-            <div style="background-color: #fff;display: flex;
-    border-bottom: 2px solid #000;
+            <div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
     padding: 10px;
     font-size: 20px;
     justify-content:space-between;
@@ -148,10 +381,10 @@ justify-content:space-between;
                 </span>
             </div>
         </div>
-        <div style="display: grid; width:600px;background-color: #ffffff;
+        <div style="display: grid; width:600px;background-color: #fff5ee;
     gap: 10px; padding-top:20px;
 ">
-            <div style="background-color: rgba(124, 255, 59, 0.5);display: flex;
+            <div style="background-color: #f3e5e0;display: flex;
     padding: 10px;
     font-size: 20px;
     justify-content:space-between;
@@ -160,8 +393,8 @@ justify-content:space-between;
                     SHIPPING ADDRESS
                 </span>
             </div>
-            <div style="background-color: #fff;display: flex;
-    border-bottom: 2px solid #000;
+            <div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
     padding: 10px;
     font-size: 20px;
     justify-content:space-between;
@@ -173,8 +406,8 @@ justify-content:space-between;
                     ${" " + order.customer_name + " " + order.customer_surname}
                 </span>
             </div>
-            <div style="background-color: #fff;display: flex;
-    border-bottom: 2px solid #000;
+            <div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
     padding: 10px;
     font-size: 20px;
     justify-content:space-between;
@@ -186,8 +419,8 @@ justify-content:space-between;
                     ${" " + order.address_line_1}
                 </span>
             </div>
-            <div style="background-color: #fff;display: flex;
-    border-bottom: 2px solid #000;
+            <div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
     padding: 10px;
     font-size: 20px;
     justify-content:space-between;
@@ -199,8 +432,8 @@ justify-content:space-between;
                     ${" " + order.postal_code + " " + order.admin_area_2}
                 </span>
             </div>
-            <div style="background-color: #fff;display: flex;
-    border-bottom: 2px solid #000;
+            <div style="background-color: #fff5ee;display: flex;
+    border-bottom: 2px solid #e6cfc5;
     padding: 10px;
     font-size: 20px;
     justify-content:space-between;
@@ -214,10 +447,10 @@ justify-content:space-between;
             </div>
 
         </div>
-        <div style="display: grid; width:600px;background-color: #ffffff;
+        <div style="display: grid; width:600px;background-color: #fff5ee;
         gap: 10px; padding-top:20px;
     ">
-            <div style="background-color: rgba(124, 255, 59, 0.5);display: flex;
+            <div style="background-color: #f3e5e0;display: flex;
         padding: 10px;
         font-size: 20px;
         justify-content:space-between;
@@ -226,12 +459,12 @@ justify-content:space-between;
                     ORDERED PRODUCTS
                 </span>
             </div>
-            ${orderTemp}
+            ${orderTemp} ${cr.conversion_currency}
         </div>
-        <div style="display: grid; width:600px;background-color: #ffffff;
+        <div style="display: grid; width:600px;background-color: #fff5ee;
             gap: 10px; padding-top:20px;
         ">
-            <div style="background-color: rgba(124, 255, 59, 0.5);display: flex;
+            <div style="background-color: #f3e5e0;display: flex;
             padding: 10px;
             font-size: 20px;
             justify-content:space-between;
@@ -240,8 +473,8 @@ justify-content:space-between;
                     ORDER VALUE
                 </span>
             </div>
-            <div style="background-color: #fff;display: flex;
-                border-bottom: 2px solid #000;
+            <div style="background-color: #fff5ee;display: flex;
+                border-bottom: 2px solid #e6cfc5;
                 padding: 10px;
                 font-size: 20px;
                 justify-content:space-between;
@@ -250,11 +483,11 @@ justify-content:space-between;
                     Discount:
                 </span>
                 <span style="text-align: right;">
-                    ${order.discount} ${order.currency}
+                    ${order.discount} ${cr.conversion_currency}
                 </span>
             </div>
-            <div style="background-color: #fff;display: flex;
-                border-bottom: 2px solid #000;
+            <div style="background-color: #fff5ee;display: flex;
+                border-bottom: 2px solid #e6cfc5;
                 padding: 10px;
                 font-size: 20px;
                 justify-content:space-between;
@@ -263,11 +496,11 @@ justify-content:space-between;
                     Shipping fee:
                 </span>
                 <span style="text-align: right;">
-                    ${order.shipping_fee} ${order.currency}
+                    ${order.shipping_fee} ${cr.conversion_currency}
                 </span>
             </div>
-            <div style="background-color: #fff;display: flex;
-                border-bottom: 2px solid #000;
+            <div style="background-color: #fff5ee;display: flex;
+                border-bottom: 2px solid #e6cfc5;
                 padding: 10px;
                 font-size: 20px;
                 justify-content:space-between;
@@ -276,27 +509,30 @@ justify-content:space-between;
                     Price:
                 </span>
                 <span style="text-align: right;">
-                    ${ukupno.toFixed(2)}
+                    ${ukupno}
                 </span>
             </div>
-            <div style="background-color: #fff;display: flex;
-                border-bottom: 2px solid #000;
+            <div style="background-color: #fff5ee;display: flex;
+                border-bottom: 2px solid #e6cfc5;
                 padding: 10px;
                 font-size: 20px;
-                color: #ff0000;
+                color: #ff3030;
                 justify-content:space-between;
                 ">
                 <div>
                     TOTAL:
                 </div>
                 <div style="text-align: right;">
-                    ${" " + totalPrice} ${order.currency}
+                    ${" " + totalPrice} ${cr.conversion_currency}
                 </div>
             </div>
 
         </div>
     </div>
 </div>`;
+    }
+
+    //'Lucida Console', 'Courier New', monospace
 
     console.log("order", order)
     const mailOptions = {
@@ -313,7 +549,7 @@ justify-content:space-between;
     return await transport.sendMail(mailOptions);
 
   } catch (err) {
-    console.log("eror", err)
+    console.log("error", err)
     return err;
   }
 }

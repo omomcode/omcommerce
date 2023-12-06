@@ -17,6 +17,7 @@ describe('Gmail Service', () => {
             client_secret: "CLIENTSECRET",
             refresh_token: "SECRETREFRESHCODE",
             from: "info@example.com",
+            languageRadio: "English"
           };
         }),
         create: jest.fn().mockImplementation((model: string, data: any) => {
@@ -36,6 +37,7 @@ describe('Gmail Service', () => {
             client_secret: "CLIENTSECRET",
             refresh_token: "SECRETREFRESHCODE",
             from: "info@example.com",
+            languageRadio: "English"
           };
         }),
       },
@@ -48,6 +50,7 @@ describe('Gmail Service', () => {
       client_secret: "CLIENTSECRET",
       refresh_token: "SECRETREFRESHCODE",
       from: "info@example.com",
+      languageRadio: "English"
     };
 
     // @ts-ignore
@@ -64,6 +67,7 @@ describe('Gmail Service', () => {
       client_secret: "CLIENTSECRET",
       refresh_token: "SECRETREFRESHCODE",
       from: "info@example.com",
+      languageRadio: "English"
     };
 
     // Mock the entityService.create method to return null
@@ -160,6 +164,7 @@ describe('Gmail Service', () => {
       client_secret: "UPDATEDCLIENTSECRET", // Updated client_secret for testing
       refresh_token: "UPDATEDSECRETREFRESHCODE", // Updated refresh_token for testing
       from: "updated_info@example.com", // Updated from for testing
+      languageRadio: "English"
     };
 
     // @ts-ignore
@@ -208,6 +213,7 @@ describe('Gmail Service', () => {
       client_secret: "UPDATEDCLIENTSECRET", // Updated client_secret for testing
       refresh_token: "UPDATEDSECRETREFRESHCODE", // Updated refresh_token for testing
       from: "updated_info@example.com", // Updated from for testing
+      languageRadio: "English"
     };
     // Mock the entityService.update method to return null
     strapi.entityService.update.mockResolvedValueOnce(null);

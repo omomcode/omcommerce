@@ -8,7 +8,7 @@ import {
   Grid,
   GridItem,
   Button,
-  SingleSelect, SingleSelectOption
+  SingleSelect, SingleSelectOption, RadioGroup, Radio
 } from "@strapi/design-system";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {LoadingIndicatorPage} from "@strapi/helper-plugin";
@@ -24,7 +24,8 @@ const Gmail = () => {
     client_id: "",
     client_secret: "",
     refresh_token: "",
-    from: ""
+    from: "",
+    languageRadio: "English"
   };
 
   const [isLoading, setIsLoading] = useState(true);
@@ -43,6 +44,7 @@ const Gmail = () => {
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    console.log("name and value", name + " " + value)
     setData({
       ...data,
       [name]: value,
@@ -90,6 +92,9 @@ const Gmail = () => {
     } else if (!emailRegex.test(data.from)) {
       newErrors.from = "Enter a valid email address";
     }
+    if (!data.languageRadio) {
+      newErrors.languageRadio = "Choose language first!"
+    }
 
     setErrors(newErrors);
 
@@ -99,6 +104,7 @@ const Gmail = () => {
       return;
     }
     if(!isNew) {
+      console.log("emaildata", data)
       const zez: any = await gmailRequests.editGmail(data.id, data);
     }
     else {
@@ -141,6 +147,17 @@ const Gmail = () => {
                   </Typography>
                 )}
               </Box>
+            </GridItem>
+            <GridItem padding={1} col={8}>
+              <RadioGroup
+                labelledBy="return-window"
+                onChange={handleInputChange}
+                value={data.languageRadio}
+                name="languageRadio"
+              >
+                <Radio value="English">English</Radio>
+                <Radio value="Serbian">Serbian</Radio>
+              </RadioGroup>
             </GridItem>
             <GridItem col={6} s={12}>
               <Box marginTop="1rem">

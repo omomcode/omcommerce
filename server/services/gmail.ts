@@ -15,7 +15,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       if(data && data.client_id
         && data.client_secret &&
         data.refresh_token &&
-        data.from && emailRegex.test(data.from)
+        data.from && emailRegex.test(data.from) &&
+        (data.languageRadio === "English" || data.languageRadio === "Serbian")
       ) {
       const gmail =  await strapi.entityService.create("plugin::omcommerce.gmail", {data});
       if(gmail){
@@ -39,7 +40,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       if(id && data && data.client_id
         && data.client_secret &&
         data.refresh_token &&
-        data.from && emailRegex.test(data.from)
+        data.from && emailRegex.test(data.from) &&
+        (data.languageRadio === "English" || data.languageRadio === "Serbian")
       ) {
         const gmail =  await strapi.entityService.update("plugin::omcommerce.gmail", id, {data});
         if(gmail){

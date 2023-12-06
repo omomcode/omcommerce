@@ -4,4 +4,5 @@ export interface IGmail {
   client_secret: string;
   refresh_token: string,
   from: string,
+  languageRadio: string
 }
