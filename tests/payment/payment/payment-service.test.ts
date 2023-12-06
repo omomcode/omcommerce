@@ -85,7 +85,7 @@ describe('Payment Service', () => {
     const result = await paymentService({ strapi }).orders(mockData);
 
     // Assert
-    expect(result).toEqual(JSON.stringify({ error: 'Failed to create order.' }));
+    expect(result).toEqual(JSON.stringify({ error: 'Simulated create order error' }));
     expect(createOrder).toHaveBeenCalledWith(mockData, strapi);
   });
 });
