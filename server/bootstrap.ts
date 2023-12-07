@@ -235,7 +235,7 @@ export default async ({strapi}: { strapi: Strapi }) => {
         {
           const conversionRate = {
             rate: 0.0082327,
-            spread: 0.025 / 100,
+            spread: 0,
             conversion_currency: "RSD"
           }
           await createConversionRate(conversionRate);
@@ -275,7 +275,7 @@ export default async ({strapi}: { strapi: Strapi }) => {
       data.tax_currency_code = currency.currency;
       data.amount_value_converted_currency_code = cr.conversion_currency;
 
-      data.amount_value_converted = Math.ceil(val);
+      data.amount_value_converted = parseFloat(val).toFixed(2);
 
       let tQuery;
 
@@ -302,12 +302,12 @@ export default async ({strapi}: { strapi: Strapi }) => {
       if(data.amount_value) {
         if (cr.rate !== null || cr.rate !== undefined) {
           val = await convertFromEURtoRSD(cr.rate, cr.spread, data.amount_value);
-          data.amount_value_converted = Math.ceil(val);
+          data.amount_value_converted = parseFloat(val).toFixed(2);
           data.amount_value_converted_currency_code = cr.conversion_currency;
         }
         else{
           val = await convertFromEURtoRSD( 0.0082327, cr.spread, data.amount_value)
-          data.amount_value_converted = Math.ceil(val)
+          data.amount_value_converted = parseFloat(val).toFixed(2);
           data.amount_value_converted_currency_code = cr.conversion_currency;
         }
       }

@@ -18,7 +18,8 @@ exports.default = ({ strapi }) => ({
             return JSON.stringify(response);
         }
         catch (error) {
-            return JSON.stringify({ error: 'Failed to create order.' });
+            console.log("greska", error);
+            return JSON.stringify({ error: error.message });
         }
     },
 });

@@ -182,7 +182,7 @@ exports.default = async ({ strapi }) => {
                 if (cr === null) {
                     const conversionRate = {
                         rate: 0.0082327,
-                        spread: 0.025 / 100,
+                        spread: 0,
                         conversion_currency: "RSD"
                     };
                     await createConversionRate(conversionRate);
@@ -217,7 +217,7 @@ exports.default = async ({ strapi }) => {
             data.amount_currency_code = currency.currency;
             data.tax_currency_code = currency.currency;
             data.amount_value_converted_currency_code = cr.conversion_currency;
-            data.amount_value_converted = Math.ceil(val);
+            data.amount_value_converted = parseFloat(val).toFixed(2);
             let tQuery;
             if (!data.omcommerce_tax || data.omcommerce_tax.connect === undefined) {
                 tQuery = { populate: '*' };
@@ -242,12 +242,12 @@ exports.default = async ({ strapi }) => {
             if (data.amount_value) {
                 if (cr.rate !== null || cr.rate !== undefined) {
                     val = await convertFromEURtoRSD(cr.rate, cr.spread, data.amount_value);
-                    data.amount_value_converted = Math.ceil(val);
+                    data.amount_value_converted = parseFloat(val).toFixed(2);
                     data.amount_value_converted_currency_code = cr.conversion_currency;
                 }
                 else {
                     val = await convertFromEURtoRSD(0.0082327, cr.spread, data.amount_value);
-                    data.amount_value_converted = Math.ceil(val);
+                    data.amount_value_converted = parseFloat(val).toFixed(2);
                     data.amount_value_converted_currency_code = cr.conversion_currency;
                 }
             }

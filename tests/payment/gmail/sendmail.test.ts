@@ -25,6 +25,7 @@ describe('sendMail function', () => {
       client_secret: 'mockClientSecret',
       refresh_token: 'mockRefreshToken',
       from: 'mock@gmail.com',
+      languageRadio: 'English'
     };
 
     // Mock the OAuth2 client

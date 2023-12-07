@@ -19,7 +19,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         !ctx.request.body.client_secret ||
         !ctx.request.body.refresh_token ||
         !ctx.request.body.from ||
-        !emailRegex.test(ctx.request.body.from)
+        !emailRegex.test(ctx.request.body.from) ||
+        !(ctx.request.body.languageRadio === "English" || ctx.request.body.languageRadio === "Serbian")
       ) {
         ctx.throw(400, "Invalid data");
       }
@@ -43,7 +44,8 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         !ctx.request.body.client_secret ||
         !ctx.request.body.refresh_token ||
         !ctx.request.body.from ||
-        !emailRegex.test(ctx.request.body.from)
+        !emailRegex.test(ctx.request.body.from)||
+        !(ctx.request.body.languageRadio === "English" || ctx.request.body.languageRadio === "Serbian")
       ) {
         ctx.throw(400, "Invalid data");
       }
