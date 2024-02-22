@@ -3,6 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+let slugify = require('slugify');
+let uniqueSlug = require('unique-slug');
 // @ts-ignore
 const countries_json_1 = __importDefault(require("./data/countries.json"));
 const findSetup = async (query) => {
@@ -111,10 +113,10 @@ exports.default = async ({ strapi }) => {
                 const p = await findProfile({});
                 if (p === null) {
                     const profile = {
-                        name: 'Your amazing store',
-                        phone: '+11641112233',
-                        email: 'office@amazingstore.com',
-                        region: 'GB',
+                        name: '',
+                        phone: '',
+                        email: '',
+                        region: '',
                     };
                     await createProfile(profile);
                     const country = countries_json_1.default.find((country) => country.code === profile.region);
@@ -169,12 +171,12 @@ exports.default = async ({ strapi }) => {
                 const b = await findBilling({});
                 if (b === null) {
                     const billing = {
-                        name: "Your legal name",
-                        country: "RS",
-                        address: "You amazing address",
-                        apartment: "Sky high 11",
-                        postal: "1",
-                        city: "City of dreams"
+                        name: "",
+                        country: "",
+                        address: "",
+                        apartment: "",
+                        postal: "",
+                        city: ""
                     };
                     await createBilling(billing);
                 }
@@ -197,6 +199,90 @@ exports.default = async ({ strapi }) => {
         },
         async beforeCreate(event) {
             const { data, where, select, populate } = event.params;
+            console.log("beforecreate", data);
+            const randomSlug = uniqueSlug();
+            if (data.title) {
+                data.slug = slugify(data.title + randomSlug, { lower: true });
+            }
+            if (!data.measurement_unit) {
+                data.measurement_unit = 'g';
+            }
+            let query;
+            if (!data.omcommerce_shippingzones || data.omcommerce_shippingzones.connect === undefined) {
+                query = { populate: '*' };
+            }
+            else {
+                query = { populate: '*', filters: { id: { '$eq': data.omcommerce_shippingzones.connect[0].id.toString() } } };
+            }
+            let val;
+            const cr = await findConversionRate({});
+            if (data.amount_value === null || data.amount_value === undefined) {
+                data.amount_value = 0;
+            }
+            if (cr.rate !== null || cr.rate !== undefined) {
+                val = await convertFromEURtoRSD(cr.rate, cr.spread, data.amount_value);
+            }
+            else {
+                val = await convertFromEURtoRSD(0.0082327, cr.spread, data.amount_value);
+            }
+            await findShippingZone(query);
+            const currency = await findCurrency({});
+            if (currency) {
+                data.amount_currency_code = currency.currency;
+                data.tax_currency_code = currency.currency;
+            }
+            else {
+                data.amount_currency_code = "EUR";
+                data.tax_currency_code = "EUR";
+            }
+            data.amount_value_converted_currency_code = cr.conversion_currency;
+            data.amount_value_converted = parseFloat(val).toFixed(2);
+            let tQuery;
+            if (!data.omcommerce_tax || data.omcommerce_tax.connect === undefined) {
+                tQuery = { populate: '*' };
+            }
+            else if (data.chargeTax) {
+                {
+                    const tQuery = { populate: '*', filters: { id: { '$eq': data.omcommerce_tax.connect[0].id.toString() } } };
+                    const tax = await findTax(tQuery);
+                    if (tax !== null && tax !== undefined && tax[0].rate !== null) {
+                        data.tax_value = (data.amount_value * tax[0].rate) / 100;
+                    }
+                    else {
+                        data.tax_value = (data.amount_value_converted);
+                    }
+                }
+            }
+        },
+        async beforeUpdate(event) {
+            const { data, where, select, populate } = event.params;
+            const cr = await findConversionRate({});
+            let val;
+            if (data.amount_value) {
+                if (cr.rate !== null || cr.rate !== undefined) {
+                    val = await convertFromEURtoRSD(cr.rate, cr.spread, data.amount_value);
+                    data.amount_value_converted = parseFloat(val).toFixed(2);
+                    data.amount_value_converted_currency_code = cr.conversion_currency;
+                }
+                else {
+                    val = await convertFromEURtoRSD(0.0082327, cr.spread, data.amount_value);
+                    data.amount_value_converted = parseFloat(val).toFixed(2);
+                    data.amount_value_converted_currency_code = cr.conversion_currency;
+                }
+            }
+        }
+    });
+    strapi.db.lifecycles.subscribe({
+        models: ["plugin::omcommerce.productcms"],
+        async afterFindOne(event) {
+            const { where, select, populate } = event.params;
+        },
+        async beforeCreate(event) {
+            const { data, where, select, populate } = event.params;
+            console.log("beforecreateprcms", data);
+            if (data.title) {
+                data.slug = slugify(data.title, { lower: true });
+            }
             let query;
             if (!data.omcommerce_shippingzones || data.omcommerce_shippingzones.connect === undefined) {
                 query = { populate: '*' };
@@ -236,8 +322,12 @@ exports.default = async ({ strapi }) => {
             }
         },
         async beforeUpdate(event) {
+            console.log("beforeupdateprcms");
             const { data, where, select, populate } = event.params;
             const cr = await findConversionRate({});
+            if (data.title && !data.slug) {
+                data.slug = slugify(data.title, { lower: true });
+            }
             let val;
             if (data.amount_value) {
                 if (cr.rate !== null || cr.rate !== undefined) {

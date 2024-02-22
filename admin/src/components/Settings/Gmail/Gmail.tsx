@@ -8,7 +8,7 @@ import {
   Grid,
   GridItem,
   Button,
-  SingleSelect, SingleSelectOption, RadioGroup, Radio
+  SingleSelect, SingleSelectOption, RadioGroup, Radio,
 } from "@strapi/design-system";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {LoadingIndicatorPage} from "@strapi/helper-plugin";
@@ -104,12 +104,12 @@ const Gmail = () => {
       return;
     }
     if(!isNew) {
-      console.log("emaildata", data)
-      const zez: any = await gmailRequests.editGmail(data.id, data);
+      setNoSubmit(false);
+      await gmailRequests.editGmail(data.id, data);
     }
     else {
-      const googlemail = await gmailRequests.addGmail(data);
-
+      setNoSubmit(false);
+      await gmailRequests.addGmail(data);
       setIsNew(false)
     }
     await fetchData();
@@ -125,9 +125,22 @@ const Gmail = () => {
         {nosubmit &&<Alert closeLabel="Close" onClose={() => setNoSubmit(false)} title="Error" variant="danger">
           Fill all required fields.
         </Alert>}
-        <Box padding="3rem">
-          <Typography variant="title">Gmail</Typography>
-          <Grid gap={5}>
+        <Box padding="3rem" background="neutral0" borderRadius="4px" style={{ boxShadow: "rgba(3, 3, 5, 0.35) 1px 1px 10px" }}>
+          <Typography variant="beta">Gmail</Typography>
+          <Grid gap={5} marginBottom="2rem">
+            <GridItem padding={1} col={8}>
+              <Box marginTop="1rem">
+              <RadioGroup
+                labelledBy="return-window"
+                onChange={handleInputChange}
+                value={data.languageRadio}
+                name="languageRadio"
+              >
+                <Radio value="English">English</Radio>
+                <Radio value="Serbian">Serbian</Radio>
+              </RadioGroup>
+              </Box>
+            </GridItem>
             <GridItem col={6} s={12}>
               <Box marginTop="1rem">
                 <TextInput
@@ -148,17 +161,7 @@ const Gmail = () => {
                 )}
               </Box>
             </GridItem>
-            <GridItem padding={1} col={8}>
-              <RadioGroup
-                labelledBy="return-window"
-                onChange={handleInputChange}
-                value={data.languageRadio}
-                name="languageRadio"
-              >
-                <Radio value="English">English</Radio>
-                <Radio value="Serbian">Serbian</Radio>
-              </RadioGroup>
-            </GridItem>
+
             <GridItem col={6} s={12}>
               <Box marginTop="1rem">
                 <TextInput
@@ -179,7 +182,7 @@ const Gmail = () => {
                 )}
               </Box>
             </GridItem>
-          </Grid>
+
           <GridItem col={6} s={12}>
             <Box marginTop="1rem">
               <TextInput
@@ -217,7 +220,8 @@ const Gmail = () => {
               )}
             </Box>
           </GridItem>
-          <Button onClick={() => saveGmail(data)} variant="secondary">
+          </Grid>
+          <Button size="L" onClick={() => saveGmail(data)} variant="secondary">
             Save
           </Button>
         </Box>

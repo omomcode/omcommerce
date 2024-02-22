@@ -8,7 +8,7 @@
         "description": ""
     },
     "options": {
-        "draftAndPublish": true
+        "draftAndPublish": false
     },
     "pluginOptions": {
         "content-manager": {
@@ -25,8 +25,7 @@
         },
         "slug": {
             "type": "uid",
-            "targetField": "title",
-            "required": true
+            "targetField": "title"
         },
         "description": {
             "type": "string"
@@ -64,8 +63,7 @@
         },
         "chargeTax": {
             "type": "boolean",
-            "default": false,
-            "required": true
+            "default": false
         },
         "Quantity": {
             "type": "integer",
@@ -78,13 +76,11 @@
         },
         "showQuantity": {
             "type": "boolean",
-            "default": false,
-            "required": true
+            "default": false
         },
         "weight": {
             "type": "decimal",
             "default": 0,
-            "required": true,
             "min": 0
         },
         "measurement_unit": {

@@ -21,6 +21,7 @@ import subcategory from "./subcategory";
 import conversionrate from "./conversionrate";
 import gmail from "./gmail";
 import paypal from "./paypal";
+import productcms from "./productcms";
 
 export default {
   myService,
@@ -45,5 +46,6 @@ export default {
   social,
   subcategory,
   conversionrate,
-  gmail
+  gmail,
+  productcms
 };

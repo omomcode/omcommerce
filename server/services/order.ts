@@ -81,10 +81,14 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       if (
           id
       ) {
+        const orderExists = await strapi.entityService.findOne("plugin::omcommerce.order", id);
+        if(!orderExists) {throw new Error("Order does not exist");}
+
         const order = await strapi.entityService.delete(
-            "plugin::omcommerce.order", id
+          "plugin::omcommerce.order", id
         );
 
+        console.log("orderdeleted", order)
         if (order) {
           return order;
         } else {

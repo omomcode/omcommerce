@@ -6,7 +6,7 @@ import Initializer from './components/Initializer';
 import PluginIcon from './components/PluginIcon';
 import getTrad from "./utils/getTrad";
 
-import {ChartPie, ShoppingCart} from '@strapi/icons';
+import {ChartPie, ShoppingCart, Folder, PriceTag, Heart} from '@strapi/icons';
 import React from "react";
 import CustomField from "./components/Input";
 import mutateEditViewHook from "./utils/mutateEditViewHook";
@@ -36,6 +36,26 @@ export default {
         return component;
       },
       permissions: [
+      ],
+    });
+
+    app.addMenuLink({
+      to: `/products/plugins/${pluginId}`,
+      icon: Folder,
+      intlLabel: {
+        id: `products.${pluginId}.plugin.name`,
+        defaultMessage: "Products",
+      },
+      Component: async () => {
+        const component = await import(/* webpackChunkName: "[request]" */ './pages/Products/index');
+        return component;
+      },
+      permissions: [
+        // Uncomment to set the permissions of the plugin here
+        // {
+        //   action: '', // the action name should be plugin::plugin-name.actionType
+        //   subject: null,
+        // },
       ],
     });
 
