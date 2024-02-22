@@ -10,6 +10,17 @@ const orderRequests = {
       throw error;
     }
   },
+  deleteOrder: async (id: number) => {
+    try {
+
+      return await request(`/omcommerce/order/delete/${id}`, {
+        method: "DELETE",
+      });
+    }
+    catch (error) {
+      console.error(error);
+    }
+  },
 };
 
 export default orderRequests;

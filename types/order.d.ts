@@ -12,6 +12,8 @@ export interface IOrder {
   address_line_1: string;
   postal_code: string;
   country_code: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface IParsedOrderItem {
@@ -26,6 +28,7 @@ export interface IParsedOrderItem {
 }
 
 export interface IOrderDataNoJSON {
+  id: number;
   order_id: string;
   amount: string;
   status: string;
@@ -39,4 +42,6 @@ export interface IOrderDataNoJSON {
   address_line_1: string;
   postal_code: string;
   country_code: string;
+  created_at: string;
+  updated_at: string;
 }

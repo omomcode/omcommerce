@@ -7,6 +7,7 @@ import {
   SingleSelect,
   SingleSelectOption,
   Button, TextInput,
+  Grid, GridItem
 } from "@strapi/design-system";
 import { LoadingIndicatorPage } from "@strapi/helper-plugin";
 import conversionRequests from "../../../api/conversionrate";
@@ -98,10 +99,12 @@ const Conversion = () => {
       console.error("Please fill in all required fields");
       return;
     }
-    if (!isNew) await conversionRequests.editConversion(data.id, data);
+    if (!isNew){
+      setNoSubmit(false);
+      await conversionRequests.editConversion(data.id, data);}
     else {
-      const conv = await conversionRequests.addConversion(data);
-
+      setNoSubmit(false);
+      await conversionRequests.addConversion(data);
       setIsNew(false)
     }
 
@@ -115,10 +118,11 @@ const Conversion = () => {
         {nosubmit &&<Alert closeLabel="Close" onClose={() => setNoSubmit(false)} title="Error" variant="danger">
           Fill all required fields.
         </Alert>}
-        <Box padding="3rem">
-          <Typography variant="title">Store conversion currency</Typography>
-
-          <Box marginTop="1rem">
+        <Box padding="3rem" background="neutral0" borderRadius="4px" style={{ boxShadow: "rgba(3, 3, 5, 0.35) 1px 1px 10px" }}>
+          <Typography variant="beta">Store conversion currency</Typography>
+          <Grid gap={5} marginBottom="2rem">
+            <GridItem col={4} m={6} s={12}>
+              <Box marginTop="1rem">
             <SingleSelect
               label="Conversion Currency"
               placeholder="Select a currency"
@@ -138,6 +142,10 @@ const Conversion = () => {
             {errors.conversion_currency && (
               <Typography textColor="danger600">{errors.conversion_currency}</Typography>
             )}
+          </Box>
+            </GridItem>
+            <GridItem col={4} m={6} s={12}>
+              <Box marginTop="1rem">
               <TextInput
               name="rate"
               value={data.rate}
@@ -148,6 +156,10 @@ const Conversion = () => {
               required
             />
             {errors.rate && <Typography textColor="danger600">{errors.rate}</Typography>}
+                </Box>
+            </GridItem>
+            <GridItem col={4} m={6} s={12}>
+              <Box marginTop="1rem">
             <TextInput
               name="spread"
               value={data.spread}
@@ -159,8 +171,9 @@ const Conversion = () => {
             />
             {errors.spread && <Typography textColor="danger600">{errors.spread}</Typography>}
           </Box>
-          <br/>
-          <Button onClick={() => saveCurrency(data)} variant="secondary">
+            </GridItem>
+          </Grid>
+          <Button size="L" onClick={() => saveCurrency(data)} variant="secondary">
             Save
           </Button>
         </Box>

@@ -1,4 +1,8 @@
+import {IShippingZone} from "./zonetable";
+import {ITaxes} from "./taxes";
+
 export interface IProduct {
+  id: number;
   title: string;
   slug: string;
   description?: string;
@@ -16,8 +20,8 @@ export interface IProduct {
   showQuantity: boolean;
   weight: number;
   measurement_unit?: string;
-  omcommerce_tax?: number;
-  omcommerce_shippingzones?: number[];
+  omcommerce_tax?: ITaxes;
+  omcommerce_shippingzones?: IShippingZone[];
   categories?: number[];
   subcategory?: number;
   amount_value_converted?: number;

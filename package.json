@@ -1,6 +1,6 @@
 {
   "name": "omcommerce",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "description": "The most customizable and user-friendly ecommerce plugin for Strapi.",
   "strapi": {
     "name": "omcommerce",
@@ -27,8 +27,10 @@
     "nodemailer": "^6.9.7",
     "prop-types": "^15.7.2",
     "react-faux-dom": "^4.5.0",
+    "slugify": "^1.6.6",
     "strapi-plugin-populate-deep": "^3.0.0",
-    "timezones.json": "^1.7.1"
+    "timezones.json": "^1.7.1",
+    "unique-slug": "^4.0.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",

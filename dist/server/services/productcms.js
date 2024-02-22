@@ -3,22 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ({ strapi }) => ({
     async find(query) {
         if (strapi.entityService) {
-            return await strapi.entityService.findMany("plugin::omcommerce.product", {
-                fields: [
-                    'id',
-                    'description',
-                    'amount_currency_code',
-                    'amount_value',
-                    'amount_value_converted',
-                    'Quantity',
-                    'weight',
-                    'measurement_unit',
-                    'title',
-                    'slug',
-                ],
-                populate: { media: true, categories: true },
-                filters: query.filters
-            });
+            return await strapi.entityService.findMany("plugin::omcommerce.product", query);
         }
         else {
             throw new Error('strapi.entityService is not defined');
@@ -33,15 +18,10 @@ exports.default = ({ strapi }) => ({
         }
     },
     async create(data) {
+        console.log("datacreateproductcms", data);
         if (strapi.entityService) {
-            console.log("prservicedata", data);
-            try {
-                const prod = await strapi.entityService.create("plugin::omcommerce.product", { data });
-                return prod;
-            }
-            catch (err) {
-                console.log(err);
-            }
+            const prod = await strapi.entityService.create("plugin::omcommerce.product", data);
+            return prod;
         }
         else {
             throw new Error('strapi.entityService is not defined');

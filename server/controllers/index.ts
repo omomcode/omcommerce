@@ -21,6 +21,7 @@ import social from "./social";
 import subcategory from "./subcategory";
 import conversionrate from "./conversionrate";
 import gmail from "./gmail";
+import productcms from "./productcms";
 
 export default {
   myController,
@@ -45,5 +46,6 @@ export default {
   social,
   subcategory,
   conversionrate,
-  gmail
+  gmail,
+  productcms
 };

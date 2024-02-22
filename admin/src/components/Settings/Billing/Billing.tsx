@@ -119,9 +119,12 @@ const Billing = () => {
       setNoSubmit(true);
       //console.error("Please fill in all required fields");
     }
-    if(!isNew)
-      await billingRequests.editBilling(data.id,data);
+    if(!isNew) {
+      setNoSubmit(false);
+      await billingRequests.editBilling(data.id, data);
+    }
     else {
+      setNoSubmit(false);
       await billingRequests.addBilling(data);
       setIsNew(false)
     }
@@ -133,12 +136,14 @@ const Billing = () => {
   return (
     <Layout>
       <ContentLayout>
-        {nosubmit &&<Alert closeLabel="Close" onClose={() => setNoSubmit(false)} title="Error" variant="danger">
+        {nosubmit &&<Alert marginBottom="2rem" closeLabel="Close" onClose={() => setNoSubmit(false)} title="Error" variant="danger">
           Fill all required fields.
         </Alert>}
-        <Box padding="3rem">
-          <Typography variant="title">Billing information</Typography>
-          <Box marginTop="2rem">
+        <Box padding="3rem" background="neutral0" borderRadius="4px" style={{ boxShadow: "rgba(3, 3, 5, 0.35) 1px 1px 10px" }}>
+          <Typography variant="beta">Billing information</Typography>
+          <Grid gap={5} marginBottom="2rem">
+            <GridItem col={6} s={12}>
+          <Box marginTop="1rem" >
             <TextInput
               name="name"
               value={data.name}
@@ -149,6 +154,8 @@ const Billing = () => {
             />
             {errors.name && <Typography textColor="danger600">{errors.name}</Typography>}
           </Box>
+            </GridItem>
+            <GridItem col={6} s={12}>
           <Box marginTop="1rem">
             <SingleSelect
               label="Country/region"
@@ -168,8 +175,9 @@ const Billing = () => {
             </SingleSelect>;
             {errors.country && <Typography textColor="danger600">{errors.country}</Typography>}
           </Box>
-
-          <Box>
+            </GridItem>
+            <GridItem col={6} s={12}>
+          <Box marginTop="1rem">
             <TextInput
               name="address"
               value={data.address}
@@ -180,7 +188,8 @@ const Billing = () => {
             />
             {errors.address && <Typography textColor="danger600">{errors.address}</Typography>}
           </Box>
-
+            </GridItem>
+            <GridItem col={6} s={12}>
           <Box marginTop="1rem">
             <TextInput
               name="apartment"
@@ -192,7 +201,7 @@ const Billing = () => {
             />
             {errors.apartment && <Typography textColor="danger600">{errors.apartment}</Typography>}
           </Box>
-          <Grid gap={5}>
+            </GridItem>
             <GridItem col={6} s={12}>
               <Box marginTop="1rem">
                 <TextInput
@@ -220,8 +229,7 @@ const Billing = () => {
               </Box>
             </GridItem>
           </Grid>
-          <br />
-          <Button onClick={() => saveBilling(data)} variant="secondary">
+          <Button size="L" onClick={() => saveBilling(data)} variant="secondary">
             Save
           </Button>
         </Box>

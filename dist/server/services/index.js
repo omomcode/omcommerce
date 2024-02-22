@@ -26,6 +26,7 @@ const subcategory_1 = __importDefault(require("./subcategory"));
 const conversionrate_1 = __importDefault(require("./conversionrate"));
 const gmail_1 = __importDefault(require("./gmail"));
 const paypal_1 = __importDefault(require("./paypal"));
+const productcms_1 = __importDefault(require("./productcms"));
 exports.default = {
     myService: my_service_1.default,
     settings: settings_1.default,
@@ -49,5 +50,6 @@ exports.default = {
     social: social_1.default,
     subcategory: subcategory_1.default,
     conversionrate: conversionrate_1.default,
-    gmail: gmail_1.default
+    gmail: gmail_1.default,
+    productcms: productcms_1.default
 };

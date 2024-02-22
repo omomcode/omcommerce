@@ -83,17 +83,31 @@ const Timezone = () => {
     setUnit('');
   };
 
-  const options = timezones.map((timezone) => ({
-    value: timezone.value,
-    label: `${timezone.text} (UTC ${timezone.offset >= 0 ? '+' : ''}${timezone.offset}:00)`,
-    key: `${timezone.text} (UTC ${timezone.offset >= 0 ? '+' : ''}${timezone.offset}:00)`
-  }));
+  const options = timezones.map((timezone) => {
+    let value: string;
+    if (timezone.text[4] === ')') {
+      value = "0" + " " + timezone.value;
+    } else {
+      value = timezone.text.substring(4,7) + timezone.text.substring(7) + " " + timezone.value;
+    }
+    return {
+      value: value,
+      label: `${timezone.text}`,
+      key: `${timezone.text}`
+    };
+  });
+
+  console.log("timezonnneeese", timezones);
+
+  console.log("options", options);
 
   const fetchData = async () => {
     setIsLoading(true);
 
     try {
       const timezone: any = await timezoneRequests.getAllTimezone();
+      console.log("timezone", timezone)
+
       if(timezone !== undefined) {
         setIsNew(false);
         setData(timezone);
@@ -110,11 +124,13 @@ const Timezone = () => {
   };
 
   const saveTimezone = async (data: IZoneData) => {
-    if (!isNew)
+    if (!isNew){
+      setNoSubmit(false);
       await timezoneRequests.editTimezone(data.id, data);
+      }
     else {
-      const timezone = await timezoneRequests.addTimezone(data);
-
+      setNoSubmit(false);
+      await timezoneRequests.addTimezone(data);
       setIsNew(false)
     }
     await fetchData();
@@ -183,8 +199,10 @@ const Timezone = () => {
         {nosubmit &&<Alert closeLabel="Close" onClose={() => setNoSubmit(false)} title="Error" variant="danger">
           Fill all required fields.
         </Alert>}
-        <Box padding="3rem">
-          <Typography variant="title">Time zone and units of measurement</Typography>
+        <Box padding="3rem" background="neutral0" borderRadius="4px" style={{ boxShadow: "rgba(3, 3, 5, 0.35) 1px 1px 10px" }}>
+          <Typography variant="beta">Time zone and units of measurement</Typography>
+          <Grid gap={5} marginBottom="2rem">
+            <GridItem col={6} s={12}>
           <Box marginTop="1rem">
             <SingleSelect
               label="Timezone"
@@ -204,8 +222,7 @@ const Timezone = () => {
             </SingleSelect>
             {errors.timezone && <Typography textColor="danger600">{errors.timezone}</Typography>}
           </Box>
-
-          <Grid gap={5}>
+            </GridItem>
             <GridItem col={6} s={12}>
               <Box marginTop="1rem">
                 <SingleSelect
@@ -264,8 +281,7 @@ const Timezone = () => {
               </Box>
             </GridItem>
           </Grid>
-          <br />
-          <Button onClick={() => saveTimezone(data)} variant="secondary">
+          <Button size="L" onClick={() => saveTimezone(data)} variant="secondary">
             Save
           </Button>
         </Box>

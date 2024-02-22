@@ -13,13 +13,17 @@ const productRequests = {
   },
 
   addProduct: async (data: any) => {
+    console.log("dejtra", data)
     try {
+      if (Object.keys(data).length === 0) {
+        throw new Error("Data object is empty");
+      }
+      const requestData = JSON.parse(JSON.stringify(data));
       return await request('/omcommerce/product/create', {
         method: "POST",
-        body: JSON.parse(JSON.stringify(data)),
+        body: requestData,
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.error(error);
     }
   },

@@ -272,6 +272,47 @@ export default [
   },
   {
     method: "GET",
+    path: "/productcms/find",
+    handler: "productcms.find",
+    config: {
+      policies: [],
+      auth: false
+    },
+  },
+  {
+    method: "GET",
+    path: "/productcms/find/:id",
+    handler: "productcms.findOne",
+    config: {
+      policies: []
+    },
+  },
+  {
+    method: "POST",
+    path: "/productcms/create",
+    handler: "productcms.create",
+    config: {
+      policies: [],
+    },
+  },
+  {
+    method: "PUT",
+    path: "/productcms/update/:id",
+    handler: "productcms.update",
+    config: {
+      policies: [],
+    },
+  },
+  {
+    method: "DELETE",
+    path: "/productcms/delete/:id",
+    handler: "productcms.delete",
+    config: {
+      policies: [],
+    },
+  },
+  {
+    method: "GET",
     path: "/product/find",
     handler: "product.find",
     config: {
@@ -312,6 +353,7 @@ export default [
       policies: [],
     },
   },
+
   {
     method: "GET",
     path: "/order/find",

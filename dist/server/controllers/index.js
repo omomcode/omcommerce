@@ -26,6 +26,7 @@ const social_1 = __importDefault(require("./social"));
 const subcategory_1 = __importDefault(require("./subcategory"));
 const conversionrate_1 = __importDefault(require("./conversionrate"));
 const gmail_1 = __importDefault(require("./gmail"));
+const productcms_1 = __importDefault(require("./productcms"));
 exports.default = {
     myController: my_controller_1.default,
     settings: settings_1.default,
@@ -49,5 +50,6 @@ exports.default = {
     social: social_1.default,
     subcategory: subcategory_1.default,
     conversionrate: conversionrate_1.default,
-    gmail: gmail_1.default
+    gmail: gmail_1.default,
+    productcms: productcms_1.default
 };

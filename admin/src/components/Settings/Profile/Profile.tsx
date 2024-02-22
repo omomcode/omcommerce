@@ -102,7 +102,7 @@ const Profile = () => {
     try {
       const newErrors: Record<string, string> = {};
       if (!data.name) {
-        newErrors.name = "Legal business name is required";
+        newErrors.name = "Store name is required";
       }
       if (!data.phone) {
         newErrors.phone = "Phone number is required";
@@ -124,11 +124,12 @@ const Profile = () => {
       if (Object.keys(newErrors).length > 0) {
         setNoSubmit(true);
       }
-      if (!isNew) {
+      else if (!isNew) {
+        setNoSubmit(false);
         await profileRequests.editProfile(data.id, data);
       } else {
-        const profile = await profileRequests.addProfile(data);
-
+        setNoSubmit(false);
+        await profileRequests.addProfile(data);
         setIsNew(false)
       }
 
@@ -146,9 +147,9 @@ const Profile = () => {
         {nosubmit &&<Alert closeLabel="Close" onClose={() => setNoSubmit(false)} title="Error" variant="danger">
           Fill all required fields.
         </Alert>}
-        <Box padding="3rem">
-          <Typography variant="title">Profile</Typography>
-          <Grid gap={5}>
+        <Box padding="3rem" marginTop="3rem" background="neutral0" borderRadius="4px" style={{ boxShadow: "rgba(3, 3, 5, 0.35) 1px 1px 10px" }}>
+          <Typography variant="beta">Profile</Typography>
+          <Grid gap={5} marginBottom="2rem">
             <GridItem col={6} s={12}>
               <Box marginTop="1rem">
                 <TextInput
@@ -176,33 +177,36 @@ const Profile = () => {
                 {errors.phone && <Typography textColor="danger600">{errors.phone}</Typography>}
               </Box>
             </GridItem>
+            <GridItem col={6} s={12}>
+              <Box marginTop="1rem">
+                <TextInput name="email" label= "Store Email" aria-label="storeEmail" value={data.email} onChange={handleInputChange} fullWidth placeholder="Store Email" />
+                {errors.email && <Typography textColor="danger600">{errors.email}</Typography>}
+              </Box>
+            </GridItem>
+            <GridItem col={6} s={12}>
+              <Box marginTop="1rem">
+                <SingleSelect
+                  label="Domestic region"
+                  placeholder="Select a home country/region"
+                  hint="Will be used as a domestic country for shipping zone"
+                  onClear={() => {
+                    handleSingleSelectChange(undefined);
+                  }}
+                  value={value}
+                  onChange={handleSingleSelectChange}
+                  required
+                >
+                  {options.map((option) => (
+                    <SingleSelectOption key={option.key} value={option.value}>
+                      {option.label}
+                    </SingleSelectOption>
+                  ))}
+                </SingleSelect>
+                {errors.region && <Typography textColor="danger600">{errors.region}</Typography>}
+              </Box>
+            </GridItem>
           </Grid>
-          <Box marginTop="1rem">
-            <TextInput name="email" aria-label="storeEmail" value={data.email} onChange={handleInputChange} fullWidth placeholder="Store Email" />
-            {errors.email && <Typography textColor="danger600">{errors.email}</Typography>}
-          </Box>
-
-          <Box marginTop="1rem">
-            <SingleSelect
-              label="Domestic region"
-              placeholder="Select a home country/region"
-              hint="Will be used as a domestic country for shipping zone"
-              onClear={() => {
-                handleSingleSelectChange(undefined);
-              }}
-              value={value}
-              onChange={handleSingleSelectChange}
-              required
-            >
-              {options.map((option) => (
-                <SingleSelectOption key={option.key} value={option.value}>
-                  {option.label}
-                </SingleSelectOption>
-              ))}
-            </SingleSelect>
-            {errors.region && <Typography textColor="danger600">{errors.region}</Typography>}
-          </Box>
-          <Button onClick={() => saveProfile(data)} variant="secondary">
+          <Button size="L" onClick={() => saveProfile(data)} variant="secondary">
             Save
           </Button>
         </Box>

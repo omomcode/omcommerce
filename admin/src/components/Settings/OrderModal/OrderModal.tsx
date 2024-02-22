@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React from "react";
 import {
   ModalLayout,
   ModalHeader,
@@ -7,10 +7,7 @@ import {
   Typography,
   Button,
   TextInput,
-  RadioGroup,
-  Radio,
-  NumberInput,
-  Box,
+
   Grid,
   GridItem, Thead, Tr, Th, Tbody, Td, Table
 } from "@strapi/design-system";
@@ -19,7 +16,7 @@ export default function OrderModal({showModal, order}) {
 
   return (
     <ModalLayout
-      onClose={() => showModal((prevState) => !prevState)}
+      onClose={() => showModal((prevState: any) => !prevState)}
     >
       <ModalHeader>
         <Typography fontWeight="bold" textColor="neutral800" as="h2" id="title">
@@ -80,7 +77,7 @@ export default function OrderModal({showModal, order}) {
                 </Tr>
               </Thead>
               <Tbody>
-                {order.items.map(entry => <Tr key={entry.SKU}>
+                {order.items.map((entry: { SKU: React.Key | null | undefined; name: any; quantity: any; description: any; unit_amount: { value: string; currency_code: string; }; }) => <Tr key={entry.SKU}>
 
                   <Td>
                     <Typography textColor="neutral800">{entry.SKU}</Typography>
@@ -108,7 +105,7 @@ export default function OrderModal({showModal, order}) {
 
       <ModalFooter
         startActions={
-          <Button onClick={() => showModal((prevState) => !prevState)} variant="tertiary">
+          <Button onClick={() => showModal((prevState: any) => !prevState)} variant="tertiary">
             Cancel
           </Button>
         }

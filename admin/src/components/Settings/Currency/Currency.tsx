@@ -7,6 +7,8 @@ import {
   SingleSelect,
   SingleSelectOption,
   Button,
+  Grid,
+  GridItem
 } from "@strapi/design-system";
 import { LoadingIndicatorPage } from "@strapi/helper-plugin";
 import currencyRequests from "../../../api/currency";
@@ -89,10 +91,13 @@ const Currency = () => {
       console.error("Please fill in all required fields");
       return;
     }
-    if (!isNew) await currencyRequests.editCurrency(data.id, data);
+    if (!isNew){
+      setNoSubmit(false);
+      await currencyRequests.editCurrency(data.id, data);
+    }
     else {
-      const curr = await currencyRequests.addCurrency(data);
-
+      setNoSubmit(false);
+      await currencyRequests.addCurrency(data)
       setIsNew(false)
     }
     await fetchData();
@@ -105,10 +110,11 @@ const Currency = () => {
         {nosubmit &&<Alert closeLabel="Close" onClose={() => setNoSubmit(false)} title="Error" variant="danger">
           Fill all required fields.
         </Alert>}
-        <Box padding="3rem">
-          <Typography variant="title">Store currency</Typography>
-
-          <Box marginTop="1rem">
+        <Box padding="3rem" background="neutral0" borderRadius="4px" style={{ boxShadow: "rgba(3, 3, 5, 0.35) 1px 1px 10px" }}>
+          <Typography variant="beta">Store currency</Typography>
+          <Grid gap={5} marginBottom="2rem">
+            <GridItem col={6} s={12}>
+              <Box marginTop="1rem">
             <SingleSelect
               label="Currency"
               placeholder="Select a currency"
@@ -129,8 +135,9 @@ const Currency = () => {
               <Typography textColor="danger600">{errors.currency}</Typography>
             )}
           </Box>
-          <br/>
-          <Button onClick={() => saveCurrency(data)} variant="secondary">
+            </GridItem>
+      </Grid>
+          <Button size="L" onClick={() => saveCurrency(data)} variant="secondary">
             Save
           </Button>
         </Box>
