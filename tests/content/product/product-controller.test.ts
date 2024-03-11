@@ -7,6 +7,7 @@ describe('Product Controller', () => {
 
   beforeEach(() => {
     productData = {
+      id: 1,
       title: 'Test Product',
       slug: 'test-product',
       description: 'This is a test product',
@@ -24,8 +25,22 @@ describe('Product Controller', () => {
       showQuantity: true,
       weight: 1.5,
       measurement_unit: 'kg',
-      omcommerce_tax: 1, // Assuming the ID of the associated tax record
-      omcommerce_shippingzones: [1, 2], // Assuming the IDs of the associated shipping zones
+      omcommerce_tax: {id: 1,country_code: "US",
+        state_code: "CA",
+        rate: 0,
+        name: "Domestic",
+        shipping: false}, // Replace with the actual tax ID
+      omcommerce_shippingzones: [{id: 1,
+        name: "Test Shipping Zone",
+        countries: [{code: "US",
+          name: "United States",
+          checked: true},],
+        shippingRatesData: [{
+          id: 1,
+          name: "Test Shipping Rate",
+          condition: "Test Condition",
+          price: 10.0
+        }]}],
       categories: [3, 4], // Assuming the IDs of the associated categories
       subcategory: 5, // Assuming the ID of the associated subcategory
       amount_value_converted: 25.0,

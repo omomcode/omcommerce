@@ -33,7 +33,7 @@ describe('Payment Service', () => {
             rate: 0,
             name: "Domestic",
             shipping: false}, // Replace with the actual tax ID
-          omcommerce_shippingzones: {id: 1,
+          omcommerce_shippingzones: [{id: 1,
           name: "Test Shipping Zone",
     countries: [{code: "US",
       name: "United States",
@@ -43,7 +43,7 @@ describe('Payment Service', () => {
       name: "Test Shipping Rate",
       condition: "Test Condition",
       price: 10.0
-    }]}
+    }]}]
         , // Replace with the actual shipping zone IDs
           categories: [1, 2], // Replace with the actual category IDs
           subcategory: 1, // Replace with the actual subcategory ID

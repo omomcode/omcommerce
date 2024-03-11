@@ -21,6 +21,8 @@ describe('Orders Service', () => {
       postal_code: '12345',
       country_code: 'US',
       status: 'PROCESSING',
+      created_at: "",
+      updated_at: "",
     };
 
     strapi = {

@@ -9,7 +9,6 @@ describe('Conversion Rate Controller', () => {
     conversionRateData = {
       id: 1,
       rate: 0.0082327,
-      spread: 0.025 / 100,
       conversion_currency: "RSD",
     };
 
@@ -110,7 +109,6 @@ describe('Conversion Rate Controller', () => {
       request: {
         body: {
           rate: 0.75,
-          spread: 0.02,
           conversion_currency: 'USD',
           // Include all required fields to simulate a successful create
         },
@@ -164,7 +162,6 @@ describe('Conversion Rate Controller', () => {
       request: {
         body: {
           rate: 0.5,
-          spread: 0.02,
           conversion_currency: 'USD',
           // Include all required fields
         },

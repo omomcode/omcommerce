@@ -14,6 +14,9 @@ describe('PayPal Setup Controller', () => {
       sandbox_paypal_client_id: 'UPDATED_SANDBOX_CLIENT_ID',
       sandbox_paypal_client_secret: 'UPDATED_SANDBOX_CLIENT_SECRET',
       live: true,
+      paypalSelected: true,
+      payProGlobalSelected: true,
+      paymentThreeSelected: false
     };
 
     strapi = {
@@ -74,6 +77,9 @@ describe('PayPal Setup Controller', () => {
       sandbox_paypal_client_id: 'UPDATED_SANDBOX_CLIENT_ID',
       sandbox_paypal_client_secret: 'UPDATED_SANDBOX_CLIENT_SECRET',
       live: true,
+      paypalSelected: true,
+      payProGlobalSelected: true,
+      paymentThreeSelected: false
     };
 
     const ctx: any = {
@@ -100,6 +106,9 @@ describe('PayPal Setup Controller', () => {
       sandbox_paypal_client_id: 'UPDATED_SANDBOX_CLIENT_ID',
       sandbox_paypal_client_secret: 'UPDATED_SANDBOX_CLIENT_SECRET',
       live: true,
+      paypalSelected: true,
+      payProGlobalSelected: true,
+      paymentThreeSelected: false
     };
 
     const ctx: any = {
@@ -148,6 +157,9 @@ describe('PayPal Setup Controller', () => {
       sandbox_paypal_client_id: 'UPDATED_SANDBOX_CLIENT_ID',
       sandbox_paypal_client_secret: 'UPDATED_SANDBOX_CLIENT_SECRET',
       live: true,
+      paypalSelected: true,
+      payProGlobalSelected: true,
+      paymentThreeSelected: false
     };
 
     const ctx: any = {

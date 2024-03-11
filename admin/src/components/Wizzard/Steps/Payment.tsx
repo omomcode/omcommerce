@@ -43,9 +43,6 @@ const Payment = ({handleSetSteps, st, steps} : {handleSetSteps: any, st: any, st
 
   const fetchData = async () => {
     if (!isLoading) setIsLoading(true);
-    console.log("steps", steps);
-    console.log(st === 1)
-    console.log("physical",st)
     try {
       const paypalS: any = await paypalSetupRequests.getAllPaypalSetups();
       if(st === 1 && !paypalS.paypalSelected){
@@ -152,7 +149,7 @@ const Payment = ({handleSetSteps, st, steps} : {handleSetSteps: any, st: any, st
                         <Checkbox id="payProGlobalSelected" name="payProGlobalSelected"
                                   onValueChange={(value: boolean) => setPayProGlobalSelected(value)}
                                   value={payProGlobalSelected}>
-                          PayPro Global
+                          Fast Spring
                         </Checkbox>
 
                       </li>
@@ -160,7 +157,7 @@ const Payment = ({handleSetSteps, st, steps} : {handleSetSteps: any, st: any, st
                         <Checkbox id="paymentThreeSelected" name="paymentThreeSelected"
                                   onValueChange={(value: boolean) => setPaymentThreeSelected(value)}
                                   value={paymentThreeSelected}>
-                          Payment 3
+                          Stripe
                         </Checkbox>
                       </li>
                     </ul>
