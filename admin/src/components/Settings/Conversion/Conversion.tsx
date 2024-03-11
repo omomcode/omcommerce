@@ -19,7 +19,6 @@ const initialData: IConversionRate = {
   id: 1,
   conversion_currency: "USD",
   rate: 0,
-  spread: 0
 };
 
 const Conversion = () => {
@@ -88,9 +87,6 @@ const Conversion = () => {
     if (!data.rate) {
       newErrors.rate = "Rate is required";
     }
-    if (!data.spread) {
-      newErrors.spread = "Spread is required";
-    }
 
     setErrors(newErrors);
 
@@ -124,8 +120,9 @@ const Conversion = () => {
             <GridItem col={4} m={6} s={12}>
               <Box marginTop="1rem">
             <SingleSelect
-              label="Conversion Currency"
+              label="Store Currency"
               placeholder="Select a currency"
+              hint="Currency to be shown on your store website"
               onClear={() => {
                 handleSingleSelectChange(undefined);
               }}
@@ -157,20 +154,6 @@ const Conversion = () => {
             />
             {errors.rate && <Typography textColor="danger600">{errors.rate}</Typography>}
                 </Box>
-            </GridItem>
-            <GridItem col={4} m={6} s={12}>
-              <Box marginTop="1rem">
-            <TextInput
-              name="spread"
-              value={data.spread}
-              onChange={handleInputChange}
-              fullWidth
-              placeholder="Spread"
-              label="Spread"
-              required
-            />
-            {errors.spread && <Typography textColor="danger600">{errors.spread}</Typography>}
-          </Box>
             </GridItem>
           </Grid>
           <Button size="L" onClick={() => saveCurrency(data)} variant="secondary">

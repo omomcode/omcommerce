@@ -82,7 +82,7 @@ const Taxes = () => {
     <Layout>
       <ContentLayout>
         <Box padding="2rem">
-          <Typography variant="alpha">Taxes</Typography>
+          <Typography variant="beta">Taxes</Typography>
           <Box>
             <Typography variant="omega">Create a shipping zone first then find the region in this to manage its tax settings</Typography>
           </Box>

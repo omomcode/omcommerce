@@ -13,7 +13,6 @@ const productRequests = {
   },
 
   addProduct: async (data: any) => {
-    console.log("dejtra", data)
     try {
       if (Object.keys(data).length === 0) {
         throw new Error("Data object is empty");

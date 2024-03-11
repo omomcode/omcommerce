@@ -72,8 +72,6 @@ export default function NewProductModal({showModal, handleCreateProduct}: {showM
     try {
       tax = await taxRequests.getAllTaxes();
       sh = await shippingZoneRequests.getAllShippingZones();
-      console.log("taxes", tax);
-      console.log("sh", sh);
 
      const arr: IShippingZone[] = [];
      const arrtax: ITaxes[] = [];
@@ -98,11 +96,9 @@ export default function NewProductModal({showModal, handleCreateProduct}: {showM
     }
   };
 
-  console.log("newmodalproduct")
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log("handleinputchange", name, value)
     setData({
       ...data,
       [name]: value,
@@ -116,9 +112,7 @@ export default function NewProductModal({showModal, handleCreateProduct}: {showM
   };
 
   const handleMultiInputChange = (shids: string[]) => {
-    console.log("handlemultiinputchange", shids)
     const selectedObjects = shippingZones.filter((item: any) => shids.includes(item.id.toString()));
-    console.log("selectedObject", selectedObjects)
     setData({
       ...data,
       omcommerce_shippingzones: selectedObjects,
@@ -148,7 +142,6 @@ export default function NewProductModal({showModal, handleCreateProduct}: {showM
   }
 
   const handleSave = (data: any) => {
-    console.log("handleCreateProduct", data)
     try {
       const newErrors: Record<string, string> = {};
       if (!data.title || data.title === "") {

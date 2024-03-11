@@ -11,7 +11,6 @@ exports.default = ({ strapi }) => ({
     },
     async create(ctx) {
         try {
-            console.log("legalcreatecontroller", ctx.request.body);
             ctx.body = await strapi
                 .plugin("omcommerce")
                 .service("legal")

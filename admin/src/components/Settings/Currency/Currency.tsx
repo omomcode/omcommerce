@@ -13,7 +13,7 @@ import {
 import { LoadingIndicatorPage } from "@strapi/helper-plugin";
 import currencyRequests from "../../../api/currency";
 import { ICurrency } from "../../../../../types/currency";
-import { currencies } from "currencies.json";
+import currencies from "../../../data/paypalcurrencies.json";
 import { Alert } from '@strapi/design-system';
 
 const initialData: ICurrency = {
@@ -29,10 +29,11 @@ const Currency = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [nosubmit, setNoSubmit] = useState<boolean>(false);
 
-  const options = currencies.map((currency) => ({
-    value: currency.code,
-    label: `${currency.name} (${currency.code})`,
+  const options = currencies.map((currency: { label: any; value: any; }) => ({
+    value: currency.value,
+    label: `${currency.label} (${currency.value})`,
   }));
+
 
   useEffect(() => {
     fetchData();
@@ -77,6 +78,7 @@ const Currency = () => {
     }
   };
 
+
   const saveCurrency = async (data: ICurrency) => {
     // Validate if all required fields are filled
     const newErrors: Record<string, string> = {};
@@ -111,13 +113,14 @@ const Currency = () => {
           Fill all required fields.
         </Alert>}
         <Box padding="3rem" background="neutral0" borderRadius="4px" style={{ boxShadow: "rgba(3, 3, 5, 0.35) 1px 1px 10px" }}>
-          <Typography variant="beta">Store currency</Typography>
+          <Typography variant="beta">Paypal currency</Typography>
           <Grid gap={5} marginBottom="2rem">
             <GridItem col={6} s={12}>
               <Box marginTop="1rem">
             <SingleSelect
               label="Currency"
               placeholder="Select a currency"
+              hint="Currency used in paypal payment"
               onClear={() => {
                 handleSingleSelectChange(undefined);
               }}
@@ -125,7 +128,7 @@ const Currency = () => {
               onChange={handleSingleSelectChange}
               required
             >
-              {options.map((option) => (
+              {options.map((option : any) => (
                 <SingleSelectOption key={option.value} value={option.value}>
                   {option.label}
                 </SingleSelectOption>

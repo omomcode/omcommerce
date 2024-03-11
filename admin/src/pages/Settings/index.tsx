@@ -4,7 +4,6 @@ import Currency from "../../components/Settings/Currency/Currency";
 import Timezone from "../../components/Settings/Timezone/Timezone";
 import Gmail from "../../components/Settings/Gmail/Gmail";
 import Conversion from "../../components/Settings/Conversion/Conversion";
-import { Divider, Box } from '@strapi/design-system';
 
 const SettingsPage = () => {
 

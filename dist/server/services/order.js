@@ -76,7 +76,6 @@ exports.default = ({ strapi }) => ({
                     throw new Error("Order does not exist");
                 }
                 const order = await strapi.entityService.delete("plugin::omcommerce.order", id);
-                console.log("orderdeleted", order);
                 if (order) {
                     return order;
                 }

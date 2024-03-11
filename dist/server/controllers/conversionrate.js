@@ -13,7 +13,6 @@ exports.default = ({ strapi }) => ({
         try {
             if (!ctx.request.body ||
                 !ctx.request.body.rate ||
-                !ctx.request.body.spread ||
                 !ctx.request.body.conversion_currency) {
                 // If any of the required fields is missing, throw a 500 error
                 ctx.throw(400, "Invalid data");
@@ -34,7 +33,6 @@ exports.default = ({ strapi }) => ({
             if (!ctx.params.id ||
                 !ctx.request.body ||
                 !ctx.request.body.rate ||
-                !ctx.request.body.spread ||
                 !ctx.request.body.conversion_currency) {
                 // If any of the required fields is missing, throw a 400 error
                 ctx.throw(400, "Invalid data");

@@ -35,6 +35,15 @@
             "type": "boolean",
             "default": false,
             "required": true
+        },
+        "paypalSelected": {
+            "type": "boolean"
+        },
+        "payProGlobalSelected": {
+            "type": "boolean"
+        },
+        "paymentThreeSelected": {
+            "type": "boolean"
         }
     }
 }

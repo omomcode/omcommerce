@@ -34,6 +34,7 @@ const SetupPage = () => {
   const [steps, setSteps] = useState([]);
   const [selected, setSelected] = useState("pGood");
   const [showHome, setShowHome] = useState(false);
+  const [st, setSt] = useState(0);
   useEffect(() => {
     fetchData().then((r) => console.log(r));
   }, []);
@@ -51,12 +52,13 @@ const SetupPage = () => {
       {
         // @ts-ignore
         setSteps(stepsPsychical)
+        setSt(1);
       }
       else if (s.product_type === 2)
       {
         // @ts-ignore
         setSteps(stepsTechnical)
-
+        setSt(2);
       }
       // setIsLoading(false);
     } catch (error) {
@@ -85,7 +87,7 @@ const SetupPage = () => {
       case 1:
         return <General/>;
       case 2:
-        return <Payment/>;
+        return <Payment handleSetSteps={handleSetSteps} st={st} steps={steps}/>
       case 3:
         return <Shipment/>;
       case 4:
@@ -102,7 +104,9 @@ const SetupPage = () => {
       case 1:
         return <General/>;
       case 2:
-        return <Payment/>;
+        let st = 0;
+        if(steps)
+        return <Payment handleSetSteps={handleSetSteps} st={st} steps={steps}/>;
       case 3:
         return <Final/>;
       default:
@@ -161,6 +165,10 @@ const SetupPage = () => {
     fetchData();
   }
 
+  const handleSetSteps = (steps: any) => {
+    setSteps(steps);
+  }
+
   return (
     <>
       { !setup  ? (
@@ -181,13 +189,14 @@ const SetupPage = () => {
             <Layout>
               <ContentLayout justifyContent="center" textAlign="center">
                 <Flex padding="1rem" direction="column">
-                  <Box padding="1rem" justifyContent="center" textAlign="center">
+                  <Typography>What are you selling?</Typography>
+                  <Box margin="1rem" justifyContent="center" textAlign="center">
                     <RadioGroup labelledBy="trophy-champions" onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setSelected(e.target.value)} value={selected} name="goods">
-                      <Radio value="pGood">Psychical goods</Radio>
-                      <Radio value="dGood">Digital goods</Radio>
+                      <Radio marginBottom="1rem" marginTop="1rem" value="pGood">Psychical goods (This will include Taxes and Shipping if you choose Paypal)  </Radio>
+                      <Radio marginBottom="1rem" marginTop="1rem" value="dGood">Digital goods</Radio>
                     </RadioGroup>
 
-                    <Button onClick={() => setSetupState(1)} variant="tertiary">
+                    <Button marginTop="1rem" onClick={() => setSetupState(1)} variant="tertiary">
                       Continue
                     </Button>
                   </Box>

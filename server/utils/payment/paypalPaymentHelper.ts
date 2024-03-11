@@ -17,7 +17,6 @@ export const capturePayment = async (orderID: string, strapi : any) => {
     try {
       for (const obj of combinedObject) {
         const { id, ...updatedObject } = obj;
-        console.log("updatedObject", updatedObject)
         //await strapi.entityService.update("plugin::omcommerce.product", id, updatedObject)
         await strapi.plugin("omcommerce").service("product").update(id, updatedObject)
       }
@@ -70,7 +69,6 @@ export const capturePayment = async (orderID: string, strapi : any) => {
           return null;
         })
         .filter((obj: null) => obj !== null);
-      console.log("combinedObject", combinedObject)
 
       if(combinedObject) {
         combinedObject.map((prod: any) => {
@@ -151,6 +149,10 @@ export async function handleResponse(response : any) {
 
   const errorMessage = await response.text();
   throw new Error(errorMessage);
+}
+interface Currency {
+  code: string;
+  // Add other properties if needed
 }
 
 export const createOrder = async (data : any,strapi : any) => {

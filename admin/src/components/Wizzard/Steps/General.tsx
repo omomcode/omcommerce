@@ -25,7 +25,6 @@ export const General = () => {
   return (
     <Layout>
       <Profile/>
-      <Currency/>
       <Timezone/>
     </Layout>
   )

@@ -118,55 +118,44 @@ export default {
           },
           //NEXT TIME -> permissions: pluginPermissions.settings,
         },
-        {
-          intlLabel: {
-            id: getTrad("plugin.settings.help.title"),
-            defaultMessage: "Shipping"
-          },
-          id: 'settings',
-          to: `/settings/${pluginId}/shipping`,
-          Component: async () => {
-            return import("./pages/Shipping/index");
-          },
-          //NEXT TIME -> permissions: pluginPermissions.settings,
-        },
-        {
-          intlLabel: {
-            id: getTrad("plugin.settings.help.title"),
-            defaultMessage: "Taxes"
-          },
-          id: 'settings',
-          to: `/settings/${pluginId}/taxes`,
-          Component: async () => {
-            return import("./pages/Taxes/index");
-          },
-          //NEXT TIME -> permissions: pluginPermissions.settings,
-        },
+        // {
+        //   intlLabel: {
+        //     id: getTrad("plugin.settings.help.title"),
+        //     defaultMessage: "Shipping"
+        //   },
+        //   id: 'settings',
+        //   to: `/settings/${pluginId}/shipping`,
+        //   Component: async () => {
+        //     return import("./pages/Shipping/index");
+        //   },
+        //   //NEXT TIME -> permissions: pluginPermissions.settings,
+        // },
+        // {
+        //   intlLabel: {
+        //     id: getTrad("plugin.settings.help.title"),
+        //     defaultMessage: "Taxes"
+        //   },
+        //   id: 'settings',
+        //   to: `/settings/${pluginId}/taxes`,
+        //   Component: async () => {
+        //     return import("./pages/Taxes/index");
+        //   },
+        //   //NEXT TIME -> permissions: pluginPermissions.settings,
+        // },
 
-        {
-          intlLabel: {
-            id: getTrad("plugin.settings.help.title"),
-            defaultMessage: "Legal pages"
-          },
-          id: 'settings',
-          to: `/settings/${pluginId}/legal`,
-          Component: async () => {
-            return import("./pages/Legal/index");
-          },
-          //NEXT TIME -> permissions: pluginPermissions.settings,
-        },
-        {
-          intlLabel: {
-            id: getTrad("plugin.settings.help.title"),
-            defaultMessage: "Orders"
-          },
-          id: 'settings',
-          to: `/settings/${pluginId}/order`,
-          Component: async () => {
-            return import("./pages/Order/index");
-          },
-          //NEXT TIME -> permissions: pluginPermissions.settings,
-        },
+
+        // {
+        //   intlLabel: {
+        //     id: getTrad("plugin.settings.help.title"),
+        //     defaultMessage: "Orders"
+        //   },
+        //   id: 'settings',
+        //   to: `/settings/${pluginId}/order`,
+        //   Component: async () => {
+        //     return import("./pages/Order/index");
+        //   },
+        //   //NEXT TIME -> permissions: pluginPermissions.settings,
+        // },
         {
           intlLabel: {
             id: getTrad("plugin.settings.help.title"),
@@ -179,19 +168,42 @@ export default {
           },
           //NEXT TIME -> permissions: pluginPermissions.settings,
         },
-
         {
           intlLabel: {
             id: getTrad("plugin.settings.help.title"),
-            defaultMessage: "Analytics"
+            defaultMessage: "Additional Settings"
           },
           id: 'settings',
-          to: `/settings/${pluginId}/analytics`,
+          to: `/settings/${pluginId}/additional`,
           Component: async () => {
-            return import("./components/Analytics/Analytics/Analytics");
+            return import("./pages/AdditionalSettings/index");
           },
           //NEXT TIME -> permissions: pluginPermissions.settings,
         },
+        // {
+        //   intlLabel: {
+        //     id: getTrad("plugin.settings.help.title"),
+        //     defaultMessage: "Analytics"
+        //   },
+        //   id: 'settings',
+        //   to: `/settings/${pluginId}/analytics`,
+        //   Component: async () => {
+        //     return import("./components/Analytics/Analytics/Analytics");
+        //   },
+        //   //NEXT TIME -> permissions: pluginPermissions.settings,
+        // },
+        // {
+        //   intlLabel: {
+        //     id: getTrad("plugin.settings.help.title"),
+        //     defaultMessage: "Legal pages"
+        //   },
+        //   id: 'settings',
+        //   to: `/settings/${pluginId}/legal`,
+        //   Component: async () => {
+        //     return import("./pages/Legal/index");
+        //   },
+        //   //NEXT TIME -> permissions: pluginPermissions.settings,
+        // },
       ]
     );
 
@@ -208,8 +220,8 @@ export default {
 
   bootstrap(app: any) {
     app.registerHook(
-        "Admin/CM/pages/EditView/mutate-edit-view-layout",
-        mutateEditViewHook
+      "Admin/CM/pages/EditView/mutate-edit-view-layout",
+      mutateEditViewHook
     )
 
   },

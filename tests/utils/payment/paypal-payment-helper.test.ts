@@ -2,7 +2,11 @@ import axios from 'axios';
 import { capturePayment, createOrder, generateAccessToken, handleResponse} from '../../../server/utils/payment/paypalPaymentHelper'
 import {sendMail} from "../../../server/services/sendmail";
 import {IProduct} from "../../../types/product";
+import {ITaxes} from "../../../types/taxes";
+import {IShippingZone} from "../../../types/zonetable";
 import productService from "../../../server/services/product";
+import {IShippingRate} from "../../../types/rate";
+import Countries from "../../../admin/src/components/Shipping/Countries/Countries";
 // Import other dependencies or mocks as needed
 
 jest.mock('axios');
@@ -11,7 +15,8 @@ describe('Payment Service', () => {
   let strapi: { entityService: any, plugin: any };
   let productData: IProduct;
   beforeEach(() => {
-      productData = {
+      // @ts-ignore
+    productData = {
           title: 'Test Product',
           slug: 'test-product',
           description: 'This is a test product',
@@ -23,8 +28,23 @@ describe('Payment Service', () => {
           Quantity: 50,
           showQuantity: true,
           weight: 1.5,
-          omcommerce_tax: 1, // Replace with the actual tax ID
-          omcommerce_shippingzones: [1, 2], // Replace with the actual shipping zone IDs
+          omcommerce_tax: {id: 1,country_code: "US",
+            state_code: "CA",
+            rate: 0,
+            name: "Domestic",
+            shipping: false}, // Replace with the actual tax ID
+          omcommerce_shippingzones: {id: 1,
+          name: "Test Shipping Zone",
+    countries: [{code: "US",
+      name: "United States",
+      checked: true},],
+    shippingRatesData: [{
+      id: 1,
+      name: "Test Shipping Rate",
+      condition: "Test Condition",
+      price: 10.0
+    }]}
+        , // Replace with the actual shipping zone IDs
           categories: [1, 2], // Replace with the actual category IDs
           subcategory: 1, // Replace with the actual subcategory ID
       };

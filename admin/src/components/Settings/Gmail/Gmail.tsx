@@ -44,7 +44,6 @@ const Gmail = () => {
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log("name and value", name + " " + value)
     setData({
       ...data,
       [name]: value,

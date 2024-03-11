@@ -38,6 +38,8 @@ import ProductsModal from "../ProductsModal/ProductsModal";
 import productRequests from "../../../api/product";
 import NewProductModal from "../NewProductModal/NewProductModal";
 import profileRequests from "../../../api/profile";
+import paypalSetupRequests from "../../../api/paypalsetup";
+import {IPaypalSetup} from "../../../../../types/paypalsetup";
 
 const initialData: IProduct = {
   id: 0,
@@ -61,6 +63,18 @@ const initialData: IProduct = {
   omcommerce_tax: {} as ITaxes,
   omcommerce_shippingzones: [],
 }
+
+const initialPaymentData: IPaypalSetup = {
+  id: 1,
+  live_paypal_client_id: '',
+  live_paypal_client_secret: '',
+  sandbox_paypal_client_id: '',
+  sandbox_paypal_client_secret: '',
+  live: false,
+  paypalSelected: false,
+  payProGlobalSelected: false,
+  paymentThreeSelected: false
+};
 
 const InitialData: IProduct[] = [{
   id: 0,
@@ -101,6 +115,7 @@ const Products = () => {
   const [nosubmit, setNoSubmit] = useState<boolean>(false);
   const [newProductModalShow, setNewProductModalShow] = useState(false);
   const [sortOrder, setSortOrder] = useState("asc");
+  const [payments, setPayments] = useState<IPaypalSetup>(initialPaymentData);
 
   useEffect(() => {
     fetchData().then((r) => console.log(r));
@@ -114,8 +129,9 @@ const Products = () => {
       const pr: any = await productcmsRequests.getAllProductscms();
       const tax: any = await taxRequests.getAllTaxes();
       const sh: any = await shippingZoneRequests.getAllShippingZones();
-      console.log("taxes", tax);
-      console.log("sh", sh);
+      const pays: any = await paypalSetupRequests.getAllPaypalSetups();
+
+      setPayments(pays);
 
       let arr = new Array<IProduct>()
 
@@ -168,7 +184,6 @@ const Products = () => {
           amount_value_converted: entry.amount_value_converted,
           amount_value_converted_currency_code: entry.amount_value_converted_currency_code
         }))
-      console.log("arr", arr)
         setProducts(arr);
 
     } catch (error) {
@@ -222,7 +237,6 @@ const Products = () => {
   };
 
   const handleCreateProduct = async (data: IProduct) => {
-    console.log("handleCreateProductproduct")
     try {
       setNoSubmit(false);
       await productRequests.addProduct(data)
@@ -234,7 +248,6 @@ const Products = () => {
   };
 
   const handleUpdateProduct = async (data: IProduct) => {
-    console.log("handleUpdateProductproduct")
     try {
       setNoSubmit(false);
 
@@ -250,7 +263,6 @@ const Products = () => {
   }
 
   const handleSort = async () => {
-    console.log("handlesort", sortOrder)
     if (sortOrder === "asc") {
       setProducts(products.sort((a, b) => a.id - b.id));
       setSortOrder("desc");
@@ -263,9 +275,12 @@ const Products = () => {
 
   return (
     <Box padding={8} background="neutral100">
-      <BaseHeaderLayout navigationAction={<Link startIcon={<ArrowLeft />} to="/">
+      {payments?.paypalSelected && <BaseHeaderLayout navigationAction={<Link startIcon={<ArrowLeft />} to="/">
         Go back
-      </Link>} primaryAction={<Button onClick={() => setNewProductModalShow(true)} startIcon={<Plus />}>Add an entry</Button>} title="Products" subtitle={products.length + " entries found"} as="h2" />
+      </Link>} primaryAction={<Button onClick={() => setNewProductModalShow(true)} startIcon={<Plus />}>Add an entry</Button>} title="Products" subtitle={products.length + " entries found"} as="h2" />}
+      {!payments?.paypalSelected && <BaseHeaderLayout navigationAction={<Link startIcon={<ArrowLeft />} to="/">
+        Go back
+      </Link>}  title="Products" subtitle={products.length + " entries found"} as="h2" />}
       <Table colCount={4}>
         <Thead>
           <Tr>
@@ -313,38 +328,38 @@ const Products = () => {
       </Table>
 
       {modalShow && <GridItem>
-        <ProductsModal showModal={setModalShow} product={currentProduct} handleUpdateProduct={handleUpdateProduct}/>
+        <ProductsModal showModal={setModalShow} paypalSelected={payments?.paypalSelected} product={currentProduct} handleUpdateProduct={handleUpdateProduct}/>
       </GridItem>}
       {newProductModalShow && <GridItem>
         <NewProductModal showModal={setNewProductModalShow} handleCreateProduct={handleCreateProduct}/>
       </GridItem>
       }
 
-      <Box paddingTop={4}>
-        <Flex alignItems="stretch" justifyContent="space-between" gap={11}>
-          <Flex>
-            <SingleSelect value={'10'} >
-              <SingleSelectOption value="10">10</SingleSelectOption>
-              <SingleSelectOption value="20">20</SingleSelectOption>
-              <SingleSelectOption value="50">50</SingleSelectOption>
-              <SingleSelectOption value="100">100</SingleSelectOption>
-            </SingleSelect>
-            <Box paddingLeft={2}>
-              <Typography textColor="neutral600">Entries per page</Typography>
-            </Box>
-          </Flex>
-          <Flex>
-            <Pagination activePage={1} pageCount={26}>
-              <PreviousLink to="/1">Go to previous page</PreviousLink>
-              <PageLink number={1} to="/1">
-                Go to page 1
-              </PageLink>
-              <NextLink to="/3">Go to next page</NextLink>
-            </Pagination>,
-          </Flex>
+      {/*<Box paddingTop={4}>*/}
+      {/*  <Flex alignItems="stretch" justifyContent="space-between" gap={11}>*/}
+      {/*    <Flex>*/}
+      {/*      <SingleSelect value={'10'} >*/}
+      {/*        <SingleSelectOption value="10">10</SingleSelectOption>*/}
+      {/*        <SingleSelectOption value="20">20</SingleSelectOption>*/}
+      {/*        <SingleSelectOption value="50">50</SingleSelectOption>*/}
+      {/*        <SingleSelectOption value="100">100</SingleSelectOption>*/}
+      {/*      </SingleSelect>*/}
+      {/*      <Box paddingLeft={2}>*/}
+      {/*        <Typography textColor="neutral600">Entries per page</Typography>*/}
+      {/*      </Box>*/}
+      {/*    </Flex>*/}
+      {/*    <Flex>*/}
+      {/*      <Pagination activePage={1} pageCount={26}>*/}
+      {/*        <PreviousLink to="/1">Go to previous page</PreviousLink>*/}
+      {/*        <PageLink number={1} to="/1">*/}
+      {/*          Go to page 1*/}
+      {/*        </PageLink>*/}
+      {/*        <NextLink to="/3">Go to next page</NextLink>*/}
+      {/*      </Pagination>,*/}
+      {/*    </Flex>*/}
 
-        </Flex>
-      </Box>
+      {/*  </Flex>*/}
+      {/*</Box>*/}
     </Box>
   )
 };
