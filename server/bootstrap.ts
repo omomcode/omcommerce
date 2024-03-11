@@ -77,12 +77,8 @@ const createConversionRate = async (data) => {
   return await strapi.entityService.create("plugin::omcommerce.conversionrate", {data});
 }
 
-const convertFromEURtoRSD = async (rate: any, spreadPercentage: any,amount: any) => {
-  // const spreadPercentage = 0.025 / 100;
-  // const rate = 0.0082327;
-  //
-  const spread = amount * spreadPercentage;
-  const amountWithoutSpread = amount + spread;
+const convertFromEURtoRSD = async (rate: any,amount: any) => {
+  const amountWithoutSpread = amount;
   return amountWithoutSpread / rate;
 }
 
@@ -97,12 +93,9 @@ const createGmail = async (data) => {
   return await strapi.entityService.create("plugin::omcommerce.gmail", {data});
 }
 
-const convertFromRSDtoEUR = async (rate: any, spreadPercentage: any,amount: any) => {
-  // const spreadPercentage = 0.025 / 100;
-  // const rate = 0.0082327;
+const convertFromRSDtoEUR = async (rate: any,amount: any) => {
   const amountWithoutSpread = amount*rate;
-  const spread = amountWithoutSpread*spreadPercentage;
-  return amountWithoutSpread - spread;
+  return amountWithoutSpread;
 }
 
 type ZoneSeed = {
@@ -237,7 +230,6 @@ export default async ({strapi}: { strapi: Strapi }) => {
         {
           const conversionRate = {
             rate: 0.0082327,
-            spread: 0,
             conversion_currency: "RSD"
           }
           await createConversionRate(conversionRate);
@@ -256,7 +248,6 @@ export default async ({strapi}: { strapi: Strapi }) => {
     async beforeCreate(event: any) {
       const {data, where, select, populate} = event.params;
 
-      console.log("beforecreate", data);
 
       const randomSlug = uniqueSlug();
 
@@ -282,10 +273,10 @@ export default async ({strapi}: { strapi: Strapi }) => {
         data.amount_value = 0;
       }
       if (cr.rate !== null || cr.rate !== undefined) {
-        val = await convertFromEURtoRSD(cr.rate, cr.spread, data.amount_value);
+        val = await convertFromEURtoRSD(cr.rate, data.amount_value);
       }
       else {
-        val = await convertFromEURtoRSD( 0.0082327, cr.spread, data.amount_value)
+        val = await convertFromEURtoRSD( 0.0082327, data.amount_value)
       }
       await findShippingZone(query);
       const currency = await findCurrency({});
@@ -325,12 +316,12 @@ export default async ({strapi}: { strapi: Strapi }) => {
       let val;
       if(data.amount_value) {
         if (cr.rate !== null || cr.rate !== undefined) {
-          val = await convertFromEURtoRSD(cr.rate, cr.spread, data.amount_value);
+          val = await convertFromEURtoRSD(cr.rate, data.amount_value);
           data.amount_value_converted = parseFloat(val).toFixed(2);
           data.amount_value_converted_currency_code = cr.conversion_currency;
         }
         else{
-          val = await convertFromEURtoRSD( 0.0082327, cr.spread, data.amount_value)
+          val = await convertFromEURtoRSD( 0.0082327,  data.amount_value)
           data.amount_value_converted = parseFloat(val).toFixed(2);
           data.amount_value_converted_currency_code = cr.conversion_currency;
         }
@@ -348,7 +339,6 @@ export default async ({strapi}: { strapi: Strapi }) => {
     async beforeCreate(event: any) {
       const {data, where, select, populate} = event.params;
 
-      console.log("beforecreateprcms", data);
 
       if(data.title) {
         data.slug = slugify(data.title, {lower: true});
@@ -365,10 +355,10 @@ export default async ({strapi}: { strapi: Strapi }) => {
 
       const cr = await findConversionRate({});
       if (cr.rate !== null || cr.rate !== undefined) {
-        val = await convertFromEURtoRSD(cr.rate, cr.spread, data.amount_value);
+        val = await convertFromEURtoRSD(cr.rate, data.amount_value);
       }
       else {
-        val = await convertFromEURtoRSD( 0.0082327, cr.spread, data.amount_value)
+        val = await convertFromEURtoRSD( 0.0082327, data.amount_value)
       }
       await findShippingZone(query);
       const currency = await findCurrency({});
@@ -397,7 +387,6 @@ export default async ({strapi}: { strapi: Strapi }) => {
       }
     },
     async beforeUpdate(event: any) {
-      console.log("beforeupdateprcms")
       const {data, where, select, populate} = event.params;
       const cr = await findConversionRate({});
 
@@ -407,12 +396,12 @@ export default async ({strapi}: { strapi: Strapi }) => {
       let val;
       if(data.amount_value) {
         if (cr.rate !== null || cr.rate !== undefined) {
-          val = await convertFromEURtoRSD(cr.rate, cr.spread, data.amount_value);
+          val = await convertFromEURtoRSD(cr.rate, data.amount_value);
           data.amount_value_converted = parseFloat(val).toFixed(2);
           data.amount_value_converted_currency_code = cr.conversion_currency;
         }
         else{
-          val = await convertFromEURtoRSD( 0.0082327, cr.spread, data.amount_value)
+          val = await convertFromEURtoRSD( 0.0082327,  data.amount_value)
           data.amount_value_converted = parseFloat(val).toFixed(2);
           data.amount_value_converted_currency_code = cr.conversion_currency;
         }

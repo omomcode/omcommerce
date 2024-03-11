@@ -4,8 +4,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async find(ctx : any) {
     try {
-      console.log("productcmscontroller")
-      console.log("ctxrequestbody",ctx.request.body)
       return await strapi.plugin("omcommerce").service("productcms").find(ctx.query);
     } catch (err) {
       ctx.throw(500, err);

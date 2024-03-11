@@ -16,13 +16,14 @@ import {IShippingZone} from "../../../../../types/zonetable";
 import {ITaxes} from "../../../../../types/taxes";
 import taxRequests from "../../../api/tax";
 import shippingZoneRequests from "../../../api/shippingzone";
+import NoPaypalProduct from "../NoPaypalProduct/NoPaypalProduct";
 
 
 
 
 
 
-export default function ProductsModal({showModal, product, handleUpdateProduct} : {showModal: any, product: any, handleUpdateProduct : any}) {
+export default function ProductsModal({showModal, product, handleUpdateProduct, paypalSelected} : {showModal: any, product: any, handleUpdateProduct : any, paypalSelected: any}) {
   const [isLoading, setIsLoading] = useState(true);
   const [isNew, setIsNew] = useState(true);
   const [data, setData] = useState<IProduct>(product);
@@ -33,9 +34,6 @@ export default function ProductsModal({showModal, product, handleUpdateProduct} 
   const [multiValue, setMultiValue] = useState<string[] | undefined>(product.omcommerce_shippingzones);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [nosubmit, setNoSubmit] = useState<boolean>(false);
-  console.log("modalproduct", product)
-  console.log("value", product.omcommerce_tax)
-  console.log("multivalue", product.omcommerce_shippingzones)
 
 
   useEffect(() => {
@@ -49,15 +47,12 @@ export default function ProductsModal({showModal, product, handleUpdateProduct} 
     if (!isLoading) setIsLoading(true);
 
     const ids = product.omcommerce_shippingzones.map((item: any) => item.id.toString());
-    console.log("ids", ids);
 
     setMultiValue(ids)
 
     try {
       tax = await taxRequests.getAllTaxes();
       sh = await shippingZoneRequests.getAllShippingZones();
-      console.log("taxes", tax);
-      console.log("sh", sh);
 
       const arr: IShippingZone[] = [];
       const arrtax: ITaxes[] = [];
@@ -85,7 +80,6 @@ export default function ProductsModal({showModal, product, handleUpdateProduct} 
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log("handleinputchange", name, value)
     setData({
       ...data,
       [name]: value,
@@ -99,9 +93,7 @@ export default function ProductsModal({showModal, product, handleUpdateProduct} 
   };
 
   const handleMultiInputChange = (shids: string[]) => {
-    console.log("handlemultiinputchange", shids)
     const selectedObjects = shippingZones.filter((item: any) => shids.includes(item.id.toString()));
-    console.log("selectedObject", selectedObjects)
     setData({
       ...data,
       omcommerce_shippingzones: selectedObjects,
@@ -131,7 +123,6 @@ export default function ProductsModal({showModal, product, handleUpdateProduct} 
   }
 
   const handleSave = (data: any) => {
-    console.log("handleCreateProduct", data)
     try {
       const newErrors: Record<string, string> = {};
       if (!data.title || data.title === "") {
@@ -166,7 +157,7 @@ export default function ProductsModal({showModal, product, handleUpdateProduct} 
         </Typography>
       </ModalHeader>
       <ModalBody>
-        <Grid gap={5} marginBottom="2rem">
+        {paypalSelected ? <Grid gap={5} marginBottom="2rem">
           <GridItem padding={1} col={6}>
             <TextInput label="ID" disabled name="id" value={product.id}/>
           </GridItem>
@@ -329,9 +320,11 @@ export default function ProductsModal({showModal, product, handleUpdateProduct} 
             </Box>
           </GridItem>
         </Grid>
-        <Button size="L" onClick={() => handleSave(data)} variant="secondary">
+          :
+          <NoPaypalProduct showModal={showModal} product={product}/>}
+        {paypalSelected && <Button size="L" onClick={() => handleSave(data)} variant="secondary">
           Save
-        </Button>
+        </Button>}
       </ModalBody>
 
       <ModalFooter

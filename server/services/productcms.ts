@@ -19,7 +19,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   },
 
   async create(data: any) {
-    console.log("datacreateproductcms", data)
     if (strapi.entityService) {
       const prod =  await strapi.entityService.create("plugin::omcommerce.product", data);
       return prod;
@@ -29,8 +28,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   },
 
   async update(id: any, data: any) {
-    console.log("id", id)
-    console.log("data", data)
     if (strapi.entityService) {
       return await strapi.entityService.update("plugin::omcommerce.product", id, {data});
     } else {

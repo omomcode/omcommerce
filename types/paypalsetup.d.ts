@@ -5,4 +5,7 @@ export interface IPaypalSetup {
   sandbox_paypal_client_id: string;
   sandbox_paypal_client_secret: string;
   live: boolean;
+  paypalSelected: boolean;
+  payProGlobalSelected: boolean;
+  paymentThreeSelected: boolean;
 }

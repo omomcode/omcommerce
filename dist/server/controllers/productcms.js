@@ -3,8 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ({ strapi }) => ({
     async find(ctx) {
         try {
-            console.log("productcmscontroller");
-            console.log("ctxrequestbody", ctx.request.body);
             return await strapi.plugin("omcommerce").service("productcms").find(ctx.query);
         }
         catch (err) {

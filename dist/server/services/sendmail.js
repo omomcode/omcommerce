@@ -9,18 +9,12 @@ const sendMail = async (order, message, strapi, gmail) => {
     }
     const oAuth2Client = new googleapis_1.google.auth.OAuth2(gmail.client_id, gmail.client_secret, "https://developers.google.com/oauthplayground");
     oAuth2Client.setCredentials({ refresh_token: gmail.refresh_token });
-    const convertFromEURtoRSD = (rate, spreadPercentage, amount) => {
-        // const spreadPercentage = 0.025 / 100;
-        // const rate = 0.0082327;
-        //
-        const spread = amount * spreadPercentage;
-        const amountWithoutSpread = amount + spread;
+    const convertFromEURtoRSD = (rate, amount) => {
+        const amountWithoutSpread = amount;
         return amountWithoutSpread / rate;
     };
-    console.log("gmail", gmail);
     try {
         const accessToken = await oAuth2Client.getAccessToken();
-        console.log("accessToken", accessToken);
         const transport = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -40,8 +34,7 @@ const sendMail = async (order, message, strapi, gmail) => {
         if (cr === undefined || !cr) {
             throw new Error("Invalid conversion rate data!");
         }
-        console.log("conversionrate", cr);
-        const rsd_value = convertFromEURtoRSD(cr.rate, cr.spread, order.amount);
+        const rsd_value = convertFromEURtoRSD(cr.rate, order.amount);
         const messageText = `Dear ${order.customer_name},\n\n`;
         if (order.discount === null) {
             order.discount = 0;
@@ -51,7 +44,7 @@ const sendMail = async (order, message, strapi, gmail) => {
         const ordert = order.items.map((entry) => {
             return {
                 ...entry,
-                unit_amount: { value: convertFromEURtoRSD(cr.rate, cr.spread, parseFloat(entry.unit_amount.value)).toFixed(2), currency_code: entry.unit_amount.currency_code }
+                unit_amount: { value: convertFromEURtoRSD(cr.rate, parseFloat(entry.unit_amount.value)).toFixed(2), currency_code: entry.unit_amount.currency_code }
             };
         });
         order.items = ordert;
@@ -517,7 +510,6 @@ justify-content:space-between;
 </div>`;
         }
         //'Lucida Console', 'Courier New', monospace
-        console.log("order", order);
         const mailOptions = {
             from: {
                 name: profile === null || profile === void 0 ? void 0 : profile.name,

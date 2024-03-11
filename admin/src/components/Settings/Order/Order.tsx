@@ -9,11 +9,11 @@ import {
   Td, GridItem,
   Button,
   VisuallyHidden,
-  IconButton
+  IconButton, Link, BaseHeaderLayout
 
 } from '@strapi/design-system';
 
-import {Trash} from '@strapi/icons';
+import {ArrowLeft, Trash} from '@strapi/icons';
 
 import orderRequests from "../../../api/order";
 import timezoneRequests from "../../../api/timezone";
@@ -137,6 +137,9 @@ const Order = () => {
 
   return (
     <Box padding={8} background="neutral100">
+      <BaseHeaderLayout navigationAction={<Link startIcon={<ArrowLeft />} to="/">
+        Go back
+      </Link>}  title="Orders" subtitle={orders.length + " entries found"} as="h2" />
       <Table colCount={6}>
         <Thead>
           <Tr>

@@ -88,7 +88,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
           "plugin::omcommerce.order", id
         );
 
-        console.log("orderdeleted", order)
         if (order) {
           return order;
         } else {

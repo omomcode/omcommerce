@@ -6,7 +6,7 @@ import {
   GridItem,
   Layout,
   Checkbox,
-  Textarea
+  Textarea, Typography
 } from '@strapi/design-system';
 import React, {ChangeEvent, useEffect, useState} from "react";
 
@@ -167,20 +167,21 @@ const Legal = () => {
 
     <Layout>
       <ContentLayout>
-        <Box padding={10}>
-          <Grid paddingTop={10}>
+        <Box padding="2rem">
+          <Typography variant="beta">Legal</Typography>
+          <br/>
+          <br/>
+          <Grid paddingTop={5} gap={5} spacing={5}>
             <GridItem padding={1} col={8}>
               <Checkbox id="enable" onValueChange={handleCheckboxChange} value={checked}>
-                Enable return rules
+                Enable return and refund policy
               </Checkbox>
             </GridItem>
-            <GridItem padding={1} col={4}>
-              <Button variant="default" onClick={handleSave}>Save</Button>
-            </GridItem>
+
             {checked && !isLoading && (<><GridItem padding={1} col={12}>
             </GridItem>
               <GridItem padding={1} col={12}>
-                <Button variant="default" onClick={handleRulesShow}>Return Rules</Button>
+                <Button variant="secondary" onClick={handleRulesShow}>Return Rules</Button>
               </GridItem>
               {modalShow && <GridItem>
                 <ReturnRulesModal handleRulesShow={handleRulesShow} setRadioOne={setRadioOne} setRadioTwo={setRadioTwo}
@@ -194,7 +195,7 @@ const Legal = () => {
                   value={returnPolicy}
                   onChange={handleReturnPolicyInputChange}
                 />
-              </GridItem>
+              </GridItem></>)}
               <GridItem padding={1} col={12}>
                 <Textarea
                   label="Privacy Policy"
@@ -227,7 +228,10 @@ const Legal = () => {
                   onChange={handleOnline}
                 />
               </GridItem>
-            </>)}
+              <GridItem padding={1} col={12}>
+                <Button variant="secondary" onClick={handleSave}>Save</Button>
+              </GridItem>
+            )
           </Grid>
         </Box>
       </ContentLayout>

@@ -97,16 +97,11 @@ const Timezone = () => {
     };
   });
 
-  console.log("timezonnneeese", timezones);
-
-  console.log("options", options);
-
   const fetchData = async () => {
     setIsLoading(true);
 
     try {
       const timezone: any = await timezoneRequests.getAllTimezone();
-      console.log("timezone", timezone)
 
       if(timezone !== undefined) {
         setIsNew(false);

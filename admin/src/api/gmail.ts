@@ -31,7 +31,6 @@ const gmailRequests = {
   },
 
   editGmail: async (id: number, data: any) => {
-    console.log("emaildataapi", data)
     try {
        return await request(`/omcommerce/gmail/update/${id}`, {
          method: 'PUT',

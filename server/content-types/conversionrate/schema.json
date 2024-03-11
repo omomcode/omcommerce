@@ -22,9 +22,6 @@
     "rate": {
       "type": "float"
     },
-    "spread": {
-      "type": "float"
-    },
     "conversion_currency": {
       "type": "string"
     }

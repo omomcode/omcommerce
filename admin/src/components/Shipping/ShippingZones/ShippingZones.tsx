@@ -397,7 +397,7 @@ try{
 
           <Box padding="2rem">
             <Typography variant="beta">Packages</Typography>
-            <Box padding="1rem">
+            <Box>
               <Typography variant="omega">Used to calculate shipping rates at checkout</Typography>
             </Box>
             {errors.packages &&<Alert closeLabel="Close" onClose={() => setErrors({})} title="Error" variant="danger">

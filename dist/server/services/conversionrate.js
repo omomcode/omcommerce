@@ -11,8 +11,7 @@ exports.default = ({ strapi }) => ({
     },
     async create(data) {
         if (strapi.entityService) {
-            if (data && data.rate
-                && data.spread && data.conversion_currency) {
+            if (data && data.rate && data.conversion_currency) {
                 const conversion = await strapi.entityService.create("plugin::omcommerce.profile", data);
                 if (conversion) {
                     return conversion;
@@ -31,8 +30,7 @@ exports.default = ({ strapi }) => ({
     },
     async update(id, data) {
         if (strapi.entityService) {
-            if (id && data && data.rate
-                && data.spread && data.conversion_currency) {
+            if (id && data && data.rate && data.conversion_currency) {
                 const conversion = await strapi.entityService.update("plugin::omcommerce.conversionrate", id, { data });
                 if (conversion) {
                     return conversion;
