@@ -12,7 +12,6 @@ const SettingsPage = () => {
    <>
      <Profile />
      <Billing />
-     <Currency />
      <Conversion/>
      <Timezone />
      <Gmail/>

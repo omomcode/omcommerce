@@ -7,6 +7,7 @@ describe('Product Service', () => {
 
   beforeEach(() => {
     productData = {
+      id: 1,
       title: 'Test Product',
       slug: 'test-product',
       description: 'This is a test product',
@@ -18,8 +19,22 @@ describe('Product Service', () => {
       Quantity: 50,
       showQuantity: true,
       weight: 1.5,
-      omcommerce_tax: 1, // Replace with the actual tax ID
-      omcommerce_shippingzones: [1, 2], // Replace with the actual shipping zone IDs
+      omcommerce_tax: {id: 1,country_code: "US",
+        state_code: "CA",
+        rate: 0,
+        name: "Domestic",
+        shipping: false}, // Replace with the actual tax ID
+      omcommerce_shippingzones: [{id: 1,
+        name: "Test Shipping Zone",
+        countries: [{code: "US",
+          name: "United States",
+          checked: true},],
+        shippingRatesData: [{
+          id: 1,
+          name: "Test Shipping Rate",
+          condition: "Test Condition",
+          price: 10.0
+        }]}], // Replace with the actual shipping zone IDs
       categories: [1, 2], // Replace with the actual category IDs
       subcategory: 1, // Replace with the actual subcategory ID
     };
@@ -29,7 +44,7 @@ describe('Product Service', () => {
         findMany: jest.fn().mockReturnValue([productData]),
         findOne: jest.fn().mockReturnValue(productData),
         create: jest.fn().mockImplementation((model: string, data: any) => {
-          return { data: { ...productData, ...data } };
+          return { data: { ...data } };
         }),
         update: jest.fn().mockImplementation((model: string, id: any, data: any) => {
           return { data: { ...productData, ...data } };
@@ -99,7 +114,7 @@ describe('Product Service', () => {
     const createdProduct: any = await productService({ strapi }).create(productData);
 
     expect(strapi.entityService.create).toBeCalledTimes(1);
-    expect(createdProduct.data).toEqual({ ...productData });
+    expect(createdProduct.data.data).toEqual({ ...productData });
   });
 
   it('should throw an error when strapi.entityService is not defined (create)', async () => {
