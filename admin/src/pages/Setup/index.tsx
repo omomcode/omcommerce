@@ -16,15 +16,10 @@ import {UseContextProvider} from "../../contexts/StepperContext";
 import StepperControl from "../../components/Wizzard/StepperControl";
 import Shipment from "../../components/Wizzard/Steps/Shipment";
 import TaxStep from "../../components/Wizzard/Steps/TaxStep";
-;
 import setupRequests from "../../api/setup";
 import {ISetup} from "../../../../types/setup";
-import {LoadingIndicatorPage} from "@strapi/helper-plugin";
 import Home from "../Home";
-import shippingZoneRequests from "../../api/shippingzone";
-import {findShippingZoneBasedOnCountry} from "../../utils/country-helper/country-helper";
-import {IShippingZone} from "../../../../types/zonetable";
-import shippingcalclulatorRequests from "../../api/shippingcalculator";
+import paypalSetupRequests from "../../api/paypalsetup";
 
 
 const SetupPage = () => {
@@ -35,6 +30,7 @@ const SetupPage = () => {
   const [selected, setSelected] = useState("pGood");
   const [showHome, setShowHome] = useState(false);
   const [st, setSt] = useState(0);
+  const [paypalS, setPaypalS] = useState(false);
   useEffect(() => {
     fetchData().then((r) => console.log(r));
   }, []);
@@ -42,7 +38,15 @@ const SetupPage = () => {
   const fetchData = async () => {
 
     try {
-
+      try {
+        const p : any = await paypalSetupRequests.getAllPaypalSetups();
+        if(p && p.paypalSelected){
+          setPaypalS(true);
+        }
+      } catch (error) {
+        // Handle the error gracefully, e.g., log the error
+        console.error('Error fetching PayPal setups:', error);
+      }
       const s : any = await setupRequests.getAllSetups();
       setSetup(s);
       setShowHome(!s.wizard_open);
@@ -51,7 +55,7 @@ const SetupPage = () => {
       if(s.product_type === 1)
       {
         // @ts-ignore
-        setSteps(stepsPsychical)
+        setSteps(stepsTechnical)
         setSt(1);
       }
       else if (s.product_type === 2)
@@ -87,7 +91,7 @@ const SetupPage = () => {
       case 1:
         return <General/>;
       case 2:
-        return <Payment handleSetSteps={handleSetSteps} st={st} steps={steps}/>
+        return <Payment handleSetSteps={handleSetSteps} st={st} steps={steps} pp={handleSetPaypal}/>
       case 3:
         return <Shipment/>;
       case 4:
@@ -106,7 +110,7 @@ const SetupPage = () => {
       case 2:
         let st = 0;
         if(steps)
-        return <Payment handleSetSteps={handleSetSteps} st={st} steps={steps}/>;
+        return <Payment handleSetSteps={handleSetSteps} st={st} steps={steps} pp={handleSetPaypal}/>;
       case 3:
         return <Final/>;
       default:
@@ -169,6 +173,10 @@ const SetupPage = () => {
     setSteps(steps);
   }
 
+  const handleSetPaypal = (pp: any) => {
+    setPaypalS(pp);
+  }
+
   return (
     <>
       { !setup  ? (
@@ -211,7 +219,7 @@ const SetupPage = () => {
                   <Stepper steps={steps} currentStep={currentStep}/>
                   <Box padding="1rem" style={{width: "100%", paddingLeft: 0, paddingRight: 0}}>
                     <UseContextProvider>
-                      {setup?.product_type===1? displayStepPsychical(currentStep) : displayStepDigital(currentStep)}
+                      {(setup?.product_type===1 && paypalS)? displayStepPsychical(currentStep) : displayStepDigital(currentStep)}
                     </UseContextProvider>
                   </Box>
                 </Flex>
