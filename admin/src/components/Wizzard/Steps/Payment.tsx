@@ -16,7 +16,7 @@ import Currency from "../../Settings/Currency/Currency";
 import {LoadingIndicatorPage} from "@strapi/helper-plugin";
 // import {decryptData, encryptData} from "../../../../../server/utils/payment/paypalPaymentSettings";
 
-const Payment = ({handleSetSteps, st, steps} : {handleSetSteps: any, st: any, steps: any}) => {
+const Payment = ({handleSetSteps, st, steps, pp} : {handleSetSteps: any, st: any, steps: any, pp: any}) => {
 
   const initialData: IPaypalSetup = {
     id: 1,
@@ -138,8 +138,8 @@ const Payment = ({handleSetSteps, st, steps} : {handleSetSteps: any, st: any, st
                       <li>
                         <Checkbox id="paypalSelected" name="paypalSelected"
                                   onValueChange={(value: boolean) => {setPaypalSelected(value); if (value && st === 1)
-                                    handleSetSteps(stepsPsychical)
-                                  else if (!value && st === 1) handleSetSteps(stepsTechnical)
+                                  {handleSetSteps(stepsPsychical); pp(true)}
+                                  else if (!value && st === 1) {handleSetSteps(stepsTechnical); pp(false)}
                                   ;}}
                                   value={paypalSelected}>
                           Paypal

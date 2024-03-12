@@ -108,7 +108,7 @@ exports.default = async ({ strapi }) => {
                     const profile = {
                         name: '',
                         phone: '',
-                        email: '',
+                        email: 'email@email.com',
                         region: '',
                     };
                     await createProfile(profile);
