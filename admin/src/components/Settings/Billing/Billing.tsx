@@ -172,7 +172,7 @@ const Billing = () => {
                   {option.label}
                 </SingleSelectOption>
               ))}
-            </SingleSelect>;
+            </SingleSelect>
             {errors.country && <Typography textColor="danger600">{errors.country}</Typography>}
           </Box>
             </GridItem>

@@ -231,12 +231,11 @@ const Legal = () => {
               <GridItem padding={1} col={12}>
                 <Button variant="secondary" onClick={handleSave}>Save</Button>
               </GridItem>
-            )
           </Grid>
         </Box>
       </ContentLayout>
     </Layout>
-  )
+  );
 }
 
 export default Legal

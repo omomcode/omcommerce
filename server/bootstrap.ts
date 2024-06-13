@@ -245,6 +245,24 @@ export default async ({strapi}: { strapi: Strapi }) => {
           await createConversionRate(conversionRate);
         }
 
+        const scl = await findSocial({});
+        if(scl === null)
+        {
+          const social = {
+            facebook: "",
+            instagram: "",
+            pinterest: "",
+            x: "",
+            tiktok: "",
+            instagram_enabled: false,
+            facebook_enabled: false,
+            pinterest_enabled: false,
+            x_enabled: false,
+            tiktok_enabled: false
+          }
+          await createSocial(social);
+        }
+
       }
     }
   });
