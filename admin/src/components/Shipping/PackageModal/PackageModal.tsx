@@ -148,7 +148,7 @@ export default function PackageModal({setShowPackageModal, addPackage, packageId
                 {option.label}
               </SingleSelectOption>
             ))}
-          </SingleSelect>;
+          </SingleSelect>
         </Box>
 
         <Grid gap={5}>
