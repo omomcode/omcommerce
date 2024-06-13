@@ -182,14 +182,14 @@ const SetupPage = () => {
       { !setup  ? (
         <Layout>
           <ContentLayout justifyContent="center" textAlign="center">
-            <Box padding="1rem">
-              <Flex>
-                <Typography> Initialize setup </Typography>
-                <Button onClick={() => initializeSetup()} variant="tertiary">
-                  Initialize
-                </Button>
+            <Flex padding="1rem" direction="column">
+                <Typography variant="beta"> Initialize setup </Typography>
+                <Box margin="1rem" justifyContent="center" textAlign="center">
+                  <Button marginTop="1rem" onClick={() => initializeSetup()} variant="beta">
+                    Initialize
+                  </Button>
+                </Box>
               </Flex>
-            </Box>
           </ContentLayout>
         </Layout>
       ) : (
@@ -197,14 +197,14 @@ const SetupPage = () => {
             <Layout>
               <ContentLayout justifyContent="center" textAlign="center">
                 <Flex padding="1rem" direction="column">
-                  <Typography>What are you selling?</Typography>
+                  <Typography variant="beta">What are you selling?</Typography>
                   <Box margin="1rem" justifyContent="center" textAlign="center">
                     <RadioGroup labelledBy="trophy-champions" onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setSelected(e.target.value)} value={selected} name="goods">
                       <Radio marginBottom="1rem" marginTop="1rem" value="pGood">Psychical goods (This will include Taxes and Shipping if you choose Paypal)  </Radio>
                       <Radio marginBottom="1rem" marginTop="1rem" value="dGood">Digital goods</Radio>
                     </RadioGroup>
 
-                    <Button marginTop="1rem" onClick={() => setSetupState(1)} variant="tertiary">
+                    <Button marginTop="1rem" onClick={() => setSetupState(1)} variant="beta">
                       Continue
                     </Button>
                   </Box>

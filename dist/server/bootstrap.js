@@ -70,6 +70,12 @@ const findGmail = async (query) => {
 const createGmail = async (data) => {
     return await strapi.entityService.create("plugin::omcommerce.gmail", { data });
 };
+const findSocial = async (query) => {
+    return await strapi.entityService.findOne("plugin::omcommerce.social", query);
+};
+const createSocial = async (data) => {
+    return await strapi.entityService.create("plugin::omcommerce.social", { data });
+};
 const convertFromRSDtoEUR = async (rate, amount) => {
     const amountWithoutSpread = amount * rate;
     return amountWithoutSpread;
@@ -137,8 +143,8 @@ exports.default = async ({ strapi }) => {
                     const gmail = {
                         client_id: "CLIENTID",
                         client_secret: "CLIENTSECRET",
-                        refresh_token: "SECRETREFRESHCODE",
-                        from: "info@example.com"
+                        refresh_token: "REFRESHTOKEN",
+                        from: "email@email.com"
                     };
                     await createGmail(gmail);
                 }
@@ -176,8 +182,8 @@ exports.default = async ({ strapi }) => {
                 const cr = await findConversionRate({});
                 if (cr === null) {
                     const conversionRate = {
-                        rate: 0.0082327,
-                        conversion_currency: "RSD"
+                        rate: 1,
+                        conversion_currency: "EUR"
                     };
                     await createConversionRate(conversionRate);
                 }
@@ -214,7 +220,7 @@ exports.default = async ({ strapi }) => {
                 val = await convertFromEURtoRSD(cr.rate, data.amount_value);
             }
             else {
-                val = await convertFromEURtoRSD(0.0082327, data.amount_value);
+                val = await convertFromEURtoRSD(1, data.amount_value);
             }
             await findShippingZone(query);
             const currency = await findCurrency({});
@@ -256,7 +262,7 @@ exports.default = async ({ strapi }) => {
                     data.amount_value_converted_currency_code = cr.conversion_currency;
                 }
                 else {
-                    val = await convertFromEURtoRSD(0.0082327, data.amount_value);
+                    val = await convertFromEURtoRSD(1, data.amount_value);
                     data.amount_value_converted = parseFloat(val).toFixed(2);
                     data.amount_value_converted_currency_code = cr.conversion_currency;
                 }
@@ -286,7 +292,7 @@ exports.default = async ({ strapi }) => {
                 val = await convertFromEURtoRSD(cr.rate, data.amount_value);
             }
             else {
-                val = await convertFromEURtoRSD(0.0082327, data.amount_value);
+                val = await convertFromEURtoRSD(1, data.amount_value);
             }
             await findShippingZone(query);
             const currency = await findCurrency({});
@@ -325,7 +331,7 @@ exports.default = async ({ strapi }) => {
                     data.amount_value_converted_currency_code = cr.conversion_currency;
                 }
                 else {
-                    val = await convertFromEURtoRSD(0.0082327, data.amount_value);
+                    val = await convertFromEURtoRSD(1, data.amount_value);
                     data.amount_value_converted = parseFloat(val).toFixed(2);
                     data.amount_value_converted_currency_code = cr.conversion_currency;
                 }
